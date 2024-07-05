@@ -1,35 +1,28 @@
 # This script will test the memory usage and executive time for
 # RFMix-reader.
+import pynvml
 from time import time
 from pyhere import here
 from cupy import ndarray
-from functools import wraps
 from typing import Callable, List
+from torch.cuda import is_available
+from contextlib import contextmanager
 from rfmix_reader import get_prefixes
 from collections import OrderedDict as odict
 from cudf import DataFrame, read_csv, concat
-from torch.cuda import (
-    synchronize,
-    is_available,
-    max_memory_allocated,
-    reset_peak_memory_stats
-)
 
+@contextmanager
+def gpu_memory_usage():
+    pynvml.nvmlInit()
+    handle = pynvml.nvmlDeviceGetHandleByIndex(0)  # Change the index if you have multiple GPUs
+    info_start = pynvml.nvmlDeviceGetMemoryInfo(handle)
+    yield
+    info_end = pynvml.nvmlDeviceGetMemoryInfo(handle)
+    used_memory = info_end.used - info_start.used
+    print(f"GPU memory usage: {used_memory / 1024**2:.2f} MiB")
+    pynvml.nvmlShutdown()
+    
 
-def measure_gpu_memory(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        reset_peak_memory_stats()
-        synchronize()
-        results = func(*args, **kwargs)
-        synchronize()
-        max_memory = max_memory_allocated() / 1024**2 # Convert to MiB
-        print(f"Peak GPU memory usage: {max_memory:.2f} MiB")
-        return results
-    return wrapper
-
-
-@measure_gpu_memory
 def read_data(prefix_path, verbose=True):
     fn = get_prefixes(prefix_path, verbose)
     rf_q = _read_file(fn, lambda f: _read_Q(f["rfmix.Q"]))
@@ -78,8 +71,7 @@ def _read_Q(fn: str) -> DataFrame:
     -------
     DataFrame: The Q matrix with the chromosome information added.
     """
-    from re import search
-    
+    from re import search    
     header = odict(_types(fn))
     df = _read_csv(fn, header)
     match = search(r'chr(\d+)', fn)
@@ -151,7 +143,6 @@ def _types(fn: str, Q: bool = True) -> dict:
     dict : Dictionary mapping column names to their inferred data types.
     """
     from pandas import StringDtype
-
     if is_available():
         df = read_csv(fn,sep="\t",nrows=2,skiprows=1)
     else:
@@ -178,7 +169,6 @@ def _subset_populations(X: ndarray, npops: int) -> ndarray:
     dask.array: Processed array with adjacent columns summed for each population subset.
     """
     from cupy import concatenate
-
     pop_subset = []
     pop_start = 0
     ncols = X.shape[1]
@@ -197,7 +187,8 @@ def _subset_populations(X: ndarray, npops: int) -> ndarray:
 def main():
     prefix_path = here("input/simulations/two_populations/_m/")
     start_time = time()
-    _ = read_data(prefix_path)
+    with gpu_memory_usage():
+        _ = read_data(prefix_path)
     end_time = time()
     print(f"Execution time: {end_time - start_time} seconds")
 
