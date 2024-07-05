@@ -8,16 +8,15 @@ from memory_profiler import profile
 
 @profile
 def read_data(prefix_path, BINARIES):
-    loci, rf_q, admix = read_rfmix(str(prefix_path),
-                                   generate_binary_files=BINARIES)
-    return None
+    loci, rf_q, admix = read_rfmix(prefix_path, generate_binary=BINARIES)
+    admix = admix.compute()
 
 
 def main():
     # Set up argument parsing
     parser = argparse.ArgumentParser(
         description='Measure memory usage and execution time.')
-    parser.add_argument('--binaries', type=bool, default=True,
+    parser.add_argument('--binaries',  action="store_true",
                         help='Create binaries')
     # Parse the arguments
     args = parser.parse_args()

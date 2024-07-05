@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --partition=bluejay,shared
-#SBATCH --job-name=rfmix_cpu
+#SBATCH --job-name=pandas_cpu
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=jbenja13@jh.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=5gb
-#SBATCH --output=cpu_usage.no_binaries.log
+#SBATCH --mem=50gb
+#SBATCH --output=cpu_usage.pandas.log
 #SBATCH --time=01:30:00
 
 echo "**** Job starts ****"
@@ -26,7 +26,7 @@ module list
 
 ## Run job
 
-python ../_h/01.rfmix_reader.py
+python ../_h/02.pandas.py
 
 echo "**** Job ends ****"
 date

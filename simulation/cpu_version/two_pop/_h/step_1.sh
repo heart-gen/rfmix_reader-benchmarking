@@ -5,7 +5,7 @@
 #SBATCH --mail-user=jbenja13@jh.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=50gb
+#SBATCH --mem=10gb
 #SBATCH --output=cpu_usage.create_binaries.log
 #SBATCH --time=03:00:00
 
@@ -26,7 +26,7 @@ module list
 
 ## Run job
 
-python ../_h/01.rfmix_reader.py --binaries True
+python ../_h/01.rfmix_reader.py --binaries
 
 echo "**** Job ends ****"
 date
