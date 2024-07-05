@@ -1,0 +1,46 @@
+**** Job starts ****
+Mon Jul  1 08:08:40 PM EDT 2024
+**** JHPCE info ****
+User: jbenjami
+Job id: 8051224
+Job name: rfmix_cpu
+Node name: 
+Hostname: compute-095
+Task id: 
+
+Currently Loaded Modules:
+  1) JHPCE_ROCKY9_DEFAULT_ENV   2) JHPCE_tools/3.0
+
+ 
+
+Multiple files read in this order: ['chr20', 'chr21', 'chr22']
+Mapping loci files:   0%|          | 0/3 [00:00<?, ?it/s]Mapping loci files:  33%|███▎      | 1/3 [00:21<00:43, 21.85s/it]Mapping loci files:  67%|██████▋   | 2/3 [00:35<00:16, 16.88s/it]Mapping loci files: 100%|██████████| 3/3 [00:49<00:00, 15.54s/it]Mapping loci files: 100%|██████████| 3/3 [00:49<00:00, 16.40s/it]
+Mapping Q files:   0%|          | 0/3 [00:00<?, ?it/s]Mapping Q files: 100%|██████████| 3/3 [00:00<00:00, 31.08it/s]
+Created binary files at: ./binary_files
+Converting fb files to binary!
+  0%|          | 0/3 [00:00<?, ?it/s] 33%|███▎      | 1/3 [03:13<06:27, 193.97s/it]100%|██████████| 3/3 [03:13<00:00, 64.66s/it] 
+Successfully converted 3 files to binary format.
+Mapping fb files:   0%|          | 0/3 [00:00<?, ?it/s]Mapping fb files:  33%|███▎      | 1/3 [00:01<00:03,  1.58s/it]Mapping fb files:  67%|██████▋   | 2/3 [00:02<00:01,  1.15s/it]Mapping fb files: 100%|██████████| 3/3 [00:03<00:00,  1.03s/it]Mapping fb files: 100%|██████████| 3/3 [00:03<00:00,  1.11s/it]
+Filename: /dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/simulation/cpu_version/three_pop/_m/../_h/01.rfmix_reader.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+     9    467.6 MiB    467.6 MiB           1   @profile
+    10                                         def read_data(prefix_path, BINARIES):
+    11    501.8 MiB     34.2 MiB           1       loci, rf_q, admix = read_rfmix(prefix_path, generate_binary=BINARIES)
+    12   1336.2 MiB    834.4 MiB           1       admix = admix.compute()
+
+
+Execution time: 281.70976638793945 seconds
+**** Job ends ****
+Mon Jul  1 08:14:01 PM EDT 2024
+Job ID: 8051224
+Cluster: jhpce3
+User/Group: jbenjami/users
+State: COMPLETED (exit code 0)
+Cores: 1
+CPU Utilized: 00:05:36
+CPU Efficiency: 104.67% of 00:05:21 core-walltime
+Job Wall-clock time: 00:05:21
+Memory Utilized: 324.07 MB
+Memory Efficiency: 6.33% of 5.00 GB
