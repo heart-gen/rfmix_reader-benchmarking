@@ -3,14 +3,33 @@
 from time import time
 from pyhere import here
 from cupy import ndarray
+from functools import wraps
 from typing import Callable, List
-from torch.cuda import is_available
-from memory_profiler import profile
 from rfmix_reader import get_prefixes
 from collections import OrderedDict as odict
 from cudf import DataFrame, read_csv, concat
+from torch.cuda import (
+    synchronize,
+    is_available,
+    max_memory_allocated,
+    reset_peak_memory_stats
+)
 
-@profile
+
+def measure_gpu_memory(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        reset_peak_memory_stats()
+        synchronize()
+        results = func(*args, **kwargs)
+        synchronize()
+        max_memory = max_memory_allocated() / 1024**2 # Convert to MiB
+        print(f"Peak GPU memory usage: {max_memory:.2f} MiB")
+        return results
+    return wrapper
+
+
+@measure_gpu_memory
 def read_data(prefix_path, verbose=True):
     fn = get_prefixes(prefix_path, verbose)
     rf_q = _read_file(fn, lambda f: _read_Q(f["rfmix.Q"]))
