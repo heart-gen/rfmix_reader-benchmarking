@@ -1,0 +1,20 @@
+**** Job starts ****
+Thu Jul  4 09:32:44 PM EDT 2024
+**** JHPCE info ****
+User: jbenjami
+Job id: 8237217
+Job name: cudf_gpu
+Node name: 
+Hostname: compute-126
+Task id: 
+
+Currently Loaded Modules:
+  1) JHPCE_ROCKY9_DEFAULT_ENV   2) JHPCE_tools/3.0
+
+ 
+
+Multiple files read in this order: ['chr20', 'chr21', 'chr22']
+GPU memory usage: 427.56 MiB
+Execution time: 7.772935152053833 seconds
+**** Job ends ****
+Thu Jul  4 09:32:57 PM EDT 2024
