@@ -1,0 +1,37 @@
+**** Job starts ****
+Thu Jul  4 09:08:40 PM EDT 2024
+**** JHPCE info ****
+User: jbenjami
+Job id: 8236592
+Job name: cudf_gpu
+Node name: 
+Hostname: compute-126
+Task id: 
+
+Currently Loaded Modules:
+  1) JHPCE_ROCKY9_DEFAULT_ENV   2) JHPCE_tools/3.0
+
+ 
+
+Multiple files read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
+Traceback (most recent call last):
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/03.cudf.py", line 197, in <module>
+    main()
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/03.cudf.py", line 191, in main
+    _ = read_data(prefix_path)
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/03.cudf.py", line 32, in read_data
+    X = concat(X, axis=0, ignore_index=True)
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/cudf/core/reshape.py", line 489, in concat
+    result = cudf.DataFrame._concat(
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/nvtx/nvtx.py", line 116, in inner
+    result = func(*args, **kwargs)
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/cudf/core/dataframe.py", line 1755, in _concat
+    *libcudf.concat.concat_tables(
+  File "/usr/lib64/python3.9/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "concat.pyx", line 31, in cudf._lib.concat.concat_tables
+  File "concatenate.pyx", line 17, in cudf._lib.pylibcudf.concatenate.concatenate
+  File "concatenate.pyx", line 44, in cudf._lib.pylibcudf.concatenate.concatenate
+MemoryError: std::bad_alloc: out_of_memory: CUDA error at: /__w/cudf/cudf/python/cudf/build/cp39-cp39-linux_x86_64/_deps/rmm-src/include/rmm/mr/device/cuda_memory_resource.hpp:60: cudaErrorMemoryAllocation out of memory
+**** Job ends ****
+Thu Jul  4 09:10:26 PM EDT 2024

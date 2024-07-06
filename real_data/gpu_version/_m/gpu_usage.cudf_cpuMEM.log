@@ -1,0 +1,44 @@
+**** Job starts ****
+Tue Jul  2 04:58:32 PM EDT 2024
+**** JHPCE info ****
+User: jbenjami
+Job id: 8125567
+Job name: cudf_gpu
+Node name: 
+Hostname: compute-126
+Task id: 
+
+Currently Loaded Modules:
+  1) JHPCE_ROCKY9_DEFAULT_ENV   2) JHPCE_tools/3.0
+
+ 
+
+Multiple files read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
+Traceback (most recent call last):
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/02.cudf.py", line 187, in <module>
+    main()
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/02.cudf.py", line 181, in main
+    _ = read_data(prefix_path)
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/memory_profiler.py", line 1188, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/memory_profiler.py", line 761, in f
+    return func(*args, **kwds)
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/02.cudf.py", line 19, in read_data
+    X = _read_file(fn, lambda f: _read_fb(f["fb.tsv"]))
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/02.cudf.py", line 41, in _read_file
+    data.append(read_func(file_name))
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/02.cudf.py", line 19, in <lambda>
+    X = _read_file(fn, lambda f: _read_fb(f["fb.tsv"]))
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/02.cudf.py", line 47, in _read_fb
+    return _read_tsv(fn, header)
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/real_data/gpu_version/_m/../_h/02.cudf.py", line 111, in _read_tsv
+    df = read_csv(fn,sep="\t",header=0, names=list(header.keys()),
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/nvtx/nvtx.py", line 116, in inner
+    result = func(*args, **kwargs)
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/cudf/io/csv.py", line 96, in read_csv
+    df = libcudf.csv.read_csv(
+  File "csv.pyx", line 426, in cudf._lib.csv.read_csv
+MemoryError: std::bad_alloc: out_of_memory: CUDA error at: /__w/cudf/cudf/python/cudf/build/cp39-cp39-linux_x86_64/_deps/rmm-src/include/rmm/mr/device/cuda_memory_resource.hpp:60: cudaErrorMemoryAllocation out of memory
+**** Job ends ****
+Tue Jul  2 04:58:48 PM EDT 2024
+NVIDIA A100 80GB PCIe
