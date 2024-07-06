@@ -1,0 +1,105 @@
+**** Job starts ****
+Wed Jul  3 03:07:29 PM EDT 2024
+**** JHPCE info ****
+User: jbenjami
+Job id: 8194750
+Job name: visualization
+Node name: 
+Hostname: compute-126
+Task id: 
+
+Currently Loaded Modules:
+  1) JHPCE_ROCKY9_DEFAULT_ENV   2) JHPCE_tools/3.0
+
+ 
+
+**** Run visualization ****
+'../_h/01.visualization.ipynb' -> './01.visualization.ipynb'
+
+Starting python3 kernel...Done
+
+Executing '01.visualization.ipynb'
+  Cell 1/18: ''...Done
+  Cell 2/18: ''...Done
+  Cell 3/18: ''...Done
+  Cell 4/18: ''...Done
+  Cell 5/18: ''...Done
+  Cell 6/18: ''...Done
+  Cell 7/18: ''...Done
+  Cell 8/18: ''...Done
+  Cell 9/18: ''...Done
+  Cell 10/18: ''...Done
+  Cell 11/18: ''...Done
+  Cell 12/18: ''...Done
+  Cell 13/18: ''...Done
+  Cell 14/18: ''...Done
+  Cell 15/18: ''...Done
+  Cell 16/18: ''...Done
+  Cell 17/18: ''...Done
+  Cell 18/18: ''...Done
+
+[1mpandoc [22m
+  to: ipynb
+  output-file: visualization.ipynb
+  standalone: true
+  default-image-extension: png
+  number-sections: true
+  
+[1mmetadata[22m
+  ipynb-title-block: /dcs05/lieber/hanlab/jbenjami/opt/quarto-1.4.552/share/formats/ipynb/templates/title-block.md
+  title: 'Visualize local ancestry: chromosome section'
+  author: Kynon J Benjamin
+  date: 7/3/2024
+  jupyter: python3
+  
+
+Starting python3 kernel...Done
+
+Executing '01.visualization.ipynb'
+  Cell 1/18: ''...Done
+  Cell 2/18: ''...Done
+  Cell 3/18: ''...Done
+  Cell 4/18: ''...Done
+  Cell 5/18: ''...Done
+  Cell 6/18: ''...Done
+  Cell 7/18: ''...Done
+  Cell 8/18: ''...Done
+  Cell 9/18: ''...Done
+  Cell 10/18: ''...Done
+  Cell 11/18: ''...Done
+  Cell 12/18: ''...Done
+  Cell 13/18: ''...Done
+  Cell 14/18: ''...Done
+  Cell 15/18: ''...Done
+  Cell 16/18: ''...Done
+  Cell 17/18: ''...Done
+  Cell 18/18: ''...Done
+
+[1mpandoc [22m
+  to: html
+  output-file: visualization.html
+  standalone: true
+  section-divs: true
+  html-math-method: mathjax
+  wrap: none
+  default-image-extension: png
+  toc: true
+  toc-depth: 3
+  number-sections: true
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Visualize local ancestry: chromosome section'
+  author: Kynon J Benjamin
+  date: 7/3/2024
+  jupyter: python3
+  toc-location: right-body
+  theme: darkly
+  
+Output created: visualization.ipynb
+
+**** Job ends ****
+Wed Jul  3 03:11:51 PM EDT 2024
