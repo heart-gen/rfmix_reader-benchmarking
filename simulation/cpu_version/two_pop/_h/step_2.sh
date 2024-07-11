@@ -5,7 +5,7 @@
 #SBATCH --mail-user=jbenja13@jh.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=5gb
+#SBATCH --mem=25gb
 #SBATCH --output=cpu_usage.no_binaries.log
 #SBATCH --time=01:30:00
 

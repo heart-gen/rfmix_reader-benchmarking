@@ -5,9 +5,9 @@
 #SBATCH --mail-user=jbenja13@jh.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=50gb
+#SBATCH --mem=300gb
 #SBATCH --output=cpu_usage.pandas.log
-#SBATCH --time=01:30:00
+#SBATCH --time=06:00:00
 
 echo "**** Job starts ****"
 date
