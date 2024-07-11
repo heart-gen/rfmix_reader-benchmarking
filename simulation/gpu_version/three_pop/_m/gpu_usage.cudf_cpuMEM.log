@@ -1,11 +1,11 @@
 **** Job starts ****
-Tue Jul  2 12:37:16 PM EDT 2024
+Sat Jul  6 05:32:04 PM EDT 2024
 **** JHPCE info ****
 User: jbenjami
-Job id: 8107974
+Job id: 8280559
 Job name: cudf_gpu
 Node name: 
-Hostname: compute-117
+Hostname: compute-126
 Task id: 
 
 Currently Loaded Modules:
@@ -13,34 +13,29 @@ Currently Loaded Modules:
 
  
 
-Multiple files read in this order: ['chr20', 'chr21', 'chr22']
-Filename: /dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/simulation/gpu_version/three_pop/_m/../_h/02.cudf.py
-
-Line #    Mem usage    Increment  Occurrences   Line Contents
-=============================================================
-    13    614.1 MiB    614.1 MiB           1   @profile
-    14                                         def read_data(prefix_path, verbose=True):
-    15    614.1 MiB      0.0 MiB           1       fn = get_prefixes(prefix_path, verbose)
-    16    886.3 MiB    272.2 MiB           7       rf_q = _read_file(fn, lambda f: _read_Q(f["rfmix.Q"]))
-    17    886.6 MiB      0.3 MiB           1       pops = rf_q[0].drop(["sample_id", "chrom"], axis=1).columns.values
-    18    890.2 MiB      3.6 MiB           1       rf_q = concat(rf_q, axis=0, ignore_index=True)
-    19    901.3 MiB     11.1 MiB           7       X = _read_file(fn, lambda f: _read_fb(f["fb.tsv"]))
-    20    904.7 MiB      3.4 MiB           1       X = concat(X, axis=0, ignore_index=True)
-    21    904.8 MiB      0.1 MiB           1       loci = X.loc[:, ["chromosome", "physical_position"]]
-    22    905.5 MiB      0.7 MiB           1       X = X.iloc[:, 4:].values
-    23    948.3 MiB     42.8 MiB           1       admix = _subset_populations(X, len(pops))
-
-
-Execution time: 14.925415754318237 seconds
+Multiple files read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
+Traceback (most recent call last):
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/simulation/gpu_version/three_pop/_m/../_h/02.cudf.py", line 187, in <module>
+    main()
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/simulation/gpu_version/three_pop/_m/../_h/02.cudf.py", line 181, in main
+    _ = read_data(prefix_path)
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/memory_profiler.py", line 1188, in wrapper
+    val = prof(func)(*args, **kwargs)
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/memory_profiler.py", line 761, in f
+    return func(*args, **kwds)
+  File "/dcs05/lieber/hanlab/jbenjami/projects/software_manuscripts/rfmix_reader/simulation/gpu_version/three_pop/_m/../_h/02.cudf.py", line 20, in read_data
+    X = concat(X, axis=0, ignore_index=True)
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/cudf/core/reshape.py", line 489, in concat
+    result = cudf.DataFrame._concat(
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/nvtx/nvtx.py", line 116, in inner
+    result = func(*args, **kwargs)
+  File "/users/jbenjami/.local/lib/python3.9/site-packages/cudf/core/dataframe.py", line 1755, in _concat
+    *libcudf.concat.concat_tables(
+  File "/usr/lib64/python3.9/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "concat.pyx", line 31, in cudf._lib.concat.concat_tables
+  File "concatenate.pyx", line 17, in cudf._lib.pylibcudf.concatenate.concatenate
+  File "concatenate.pyx", line 44, in cudf._lib.pylibcudf.concatenate.concatenate
+MemoryError: std::bad_alloc: out_of_memory: CUDA error at: /__w/cudf/cudf/python/cudf/build/cp39-cp39-linux_x86_64/_deps/rmm-src/include/rmm/mr/device/cuda_memory_resource.hpp:60: cudaErrorMemoryAllocation out of memory
 **** Job ends ****
-Tue Jul  2 12:37:41 PM EDT 2024
-Job ID: 8107974
-Cluster: jhpce3
-User/Group: jbenjami/users
-State: COMPLETED (exit code 0)
-Cores: 1
-CPU Utilized: 00:00:16
-CPU Efficiency: 64.00% of 00:00:25 core-walltime
-Job Wall-clock time: 00:00:25
-Memory Utilized: 24.00 KB
-Memory Efficiency: 0.00% of 30.00 GB
+Sat Jul  6 05:33:59 PM EDT 2024
