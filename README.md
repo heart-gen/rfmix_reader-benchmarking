@@ -13,6 +13,9 @@ freely available on PyPI at [https://pypi.org/project/rfmix-reader/](https://pyp
 Mac OS.<br /> **Contact:** [KynonJade.Benjamin@libd.org](KynonJade.Benjamin@libd.org)<br /> **Supplementary information:** Supplementary data are available at 
 [https://rfmix-reader.readthedocs.io/en/latest/](https://rfmix-reader.readthedocs.io/en/latest/).
 
+## Data availability
+Due to the size of the simulated data, these files are hosted on [Synapse](synapse.org), synapse ID: [syn61691567](https://www.synapse.org/Synapse:syn61691567/wiki/628940).
+
 ## Authors
 * [Kynon JM Benjamin](https://github.com/Krotosbenjamin)
 
