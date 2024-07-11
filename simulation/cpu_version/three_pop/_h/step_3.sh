@@ -1,13 +1,13 @@
 #!/bin/bash
 #SBATCH --partition=bluejay,shared
-#SBATCH --job-name=pandas_cpu
+#SBATCH --job-name=pandas_3cpu
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=jbenja13@jh.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=30gb
+#SBATCH --mem=150gb
 #SBATCH --output=cpu_usage.pandas.log
-#SBATCH --time=01:30:00
+#SBATCH --time=03:00:00
 
 echo "**** Job starts ****"
 date

@@ -1,14 +1,15 @@
 #!/bin/bash
-#SBATCH --partition=gpu,caracol
+#SBATCH --partition=gpu
 #SBATCH --gpus=1
 #SBATCH --job-name=cudf_gpu
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=jbenja13@jh.edu
 #SBATCH --nodes=1
+#SBATCH --nodelist=compute-126
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=50gb
 #SBATCH --output=gpu_usage.cudf_cpuMEM.log
-#SBATCH --time=01:30:00
+#SBATCH --time=03:00:00
 
 echo "**** Job starts ****"
 date
