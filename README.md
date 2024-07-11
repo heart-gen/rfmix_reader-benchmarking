@@ -14,7 +14,9 @@ Mac OS.<br /> **Contact:** [KynonJade.Benjamin@libd.org](KynonJade.Benjamin@libd
 [https://rfmix-reader.readthedocs.io/en/latest/](https://rfmix-reader.readthedocs.io/en/latest/).
 
 ## Data availability
-Due to the size of the simulated data, these files are hosted on [Synapse](synapse.org), synapse ID: [syn61691567](https://www.synapse.org/Synapse:syn61691567/wiki/628940).
+Due to the size of the simulated data, these files are hosted on [Synapse](synapse.org), synapse ID: [syn61691659](https://www.synapse.org/Synapse:syn61691659). The real 
+data will be shared with researchers who obtain access to the genotype data 
+[phs000979.v3.p2](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000979.v3.p2) upon request.
 
 ## Authors
 * [Kynon JM Benjamin](https://github.com/Krotosbenjamin)
@@ -25,7 +27,7 @@ This work was supported by grants from the National Institutes of Health, Nation
 
 ## Citation
 
-If you the `RFMix-reader` software or anything in this repository please cite the following pre-print:
+If you the `RFMix-reader` software or anything in this repository please cite the following pre-print: XXXX.
 
 ## License
 
