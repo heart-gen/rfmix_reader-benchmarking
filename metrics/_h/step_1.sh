@@ -1,13 +1,13 @@
 #!/bin/bash
 #SBATCH --partition=bluejay,shared
-#SBATCH --job-name=rfmix_cpu
+#SBATCH --job-name=visualization
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=jbenja13@jh.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=100gb
-#SBATCH --output=cpu_usage.no_binaries.log
-#SBATCH --time=06:00:00
+#SBATCH --mem=2gb
+#SBATCH --output=summary.log
+#SBATCH --time=01:00:00
 
 echo "**** Job starts ****"
 date
@@ -22,11 +22,12 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID}"
 
 ## List current modules for reproducibility
 
+module load R
 module list
 
-## Run job
+echo "**** Run visualization ****"
 
-python ../_h/01.rfmix_reader.py
+Rscript ../_h/01.plotting.R
 
 echo "**** Job ends ****"
 date

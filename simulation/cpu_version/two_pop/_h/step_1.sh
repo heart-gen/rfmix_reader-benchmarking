@@ -5,9 +5,9 @@
 #SBATCH --mail-user=jbenja13@jh.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=25gb
+#SBATCH --mem=100gb
 #SBATCH --output=cpu_usage.create_binaries.log
-#SBATCH --time=03:00:00
+#SBATCH --time=06:00:00
 
 echo "**** Job starts ****"
 date
