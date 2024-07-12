@@ -1,5 +1,8 @@
 # Jupyter Notebook
 .ipynb_checkpoints
+jupyterlab.slurm
+
+# Input data
 input/*
 
 # Project specific
