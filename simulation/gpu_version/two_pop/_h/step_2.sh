@@ -6,9 +6,9 @@
 #SBATCH --mail-user=jbenja13@jh.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=25gb
+#SBATCH --mem=125gb
 #SBATCH --output=gpu_usage.no_binaries.log
-#SBATCH --time=01:00:00
+#SBATCH --time=03:00:00
 
 echo "**** Job starts ****"
 date
