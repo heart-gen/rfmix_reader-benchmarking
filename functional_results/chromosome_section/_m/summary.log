@@ -1,8 +1,8 @@
 **** Job starts ****
-Wed Jul  3 03:07:29 PM EDT 2024
+Fri Jul 12 08:29:01 AM EDT 2024
 **** JHPCE info ****
 User: jbenjami
-Job id: 8194750
+Job id: 8573929
 Job name: visualization
 Node name: 
 Hostname: compute-126
@@ -102,4 +102,4 @@ Executing '01.visualization.ipynb'
 Output created: visualization.ipynb
 
 **** Job ends ****
-Wed Jul  3 03:11:51 PM EDT 2024
+Fri Jul 12 08:58:21 AM EDT 2024
