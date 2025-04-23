@@ -43,7 +43,7 @@ CHROM=${SLURM_ARRAY_TASK_ID}
 
 haptools simgenotype \
          --model AFR_admixed.dat \
-         --mapdir ${ONE_K}/genetic_maps/_m/ \
+         --mapdir ${ONE_K}/genetic_maps/ \
          --chroms ${CHROM} \
          --seed 20240126 \
          --ref_vcf ${ONE_K}/GRCh38_phased_vcf/raw/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz \

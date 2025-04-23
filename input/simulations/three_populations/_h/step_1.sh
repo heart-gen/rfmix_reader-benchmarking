@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=short
+#SBATCH --account=b1042
+#SBATCH --partition=genomics
 #SBATCH --job-name=simu_3pops
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
@@ -42,8 +42,8 @@ ONE_K="/projects/b1213/resources/1kGP/"
 CHROM=${SLURM_ARRAY_TASK_ID}
 
 haptools simgenotype \
-         --model AFR_admixed.dat \
-         --mapdir ${ONE_K}/genetic_maps/_m/ \
+         --model AFR_washington.dat \
+         --mapdir ${ONE_K}/genetic_maps/ \
          --chroms ${CHROM} \
          --seed 20240126 \
          --ref_vcf ${ONE_K}/GRCh38_phased_vcf/raw/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz \
@@ -52,5 +52,5 @@ haptools simgenotype \
 
 tabix -f chr${CHROM}.vcf.gz
 
-deactivate conda
+conda deactivate
 log_message "**** Job ends ****"
