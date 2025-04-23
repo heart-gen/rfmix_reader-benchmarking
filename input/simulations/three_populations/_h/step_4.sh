@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=p32505
-#SBATCH --partition=normal
+#SBATCH --partition=short
 #SBATCH --job-name=flare_model
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=16gb
 #SBATCH --output=logs/flare.%j.log
-#SBATCH --time=24:00:00
+#SBATCH --time=01:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
