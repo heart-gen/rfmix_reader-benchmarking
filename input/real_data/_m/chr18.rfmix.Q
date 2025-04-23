@@ -1,0 +1,1 @@
+/projects/b1213/resources/processed-data/local-ancestry/rfmix-version/_m/chr18.rfmix.Q
