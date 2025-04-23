@@ -54,7 +54,7 @@ java -Xmx16g -jar $SOFTWARE/flare.jar \
      ref-panel="./temp/samples_id2" \
      map="./temp/plink.chr${CHROM}.GRCh38.reformatted.map" \
      gt="chr${CHROM}.vcf.gz" nthreads=$THREADS \
-     seed=13131313 em=false model="${OUTPUT}/simu_3pop.model" \
+     seed=13131313 em=false model="${OUTDIR}/simu_3pop.model" \
      array=true out="${OUTPUT_PREFIX}"
 
 log_message "**** Job ends ****"
