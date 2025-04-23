@@ -28,21 +28,32 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 ## List current modules for reproducibility
 
 module purge
+module load htslib/1.16
 module list
 
 ## Job commands here
 CHROM=1
+OUTDIR="flare-out"
 THREADS=${SLURM_CPUS_PER_TASK}
-OUTPUT_PREFIX="simu_3pop"
+OUTPUT_PREFIX="${flare-out}/simu_3pop"
 SOFTWARE="/projects/p32505/opt/bin"
 MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
+
+mkdir -p $OUTDIR
+
+log_message "**** Index reference VCF files ****"
+tabix -f ./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz
+
+log_message "**** Fix PLINK map file ****"
+awk '{if(NR>0) $1="chr"$1; print}' "${MAP_DIR}/plink.chr${CHROM}.GRCh38.map" \
+    > ./temp/plink.chr${CHROM}.GRCh38.reformatted.map
 
 log_message "**** FLARE Local Ancestry Analysis ****"
 
 java -Xmx16g -jar $SOFTWARE/flare.jar \
      ref="./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz" \
      ref-panel="./temp/samples_id2" \
-     map="${MAP_DIR}/plink.chr${CHROM}.GRCh38.map" \
+     map="./temp/plink.chr${CHROM}.GRCh38.reformatted.map" \
      gt="chr${CHROM}.vcf.gz" nthreads=$THREADS \
      seed=13131313 array=true out="${OUTPUT_PREFIX}"
 
