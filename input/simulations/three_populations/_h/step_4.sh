@@ -35,7 +35,7 @@ module list
 CHROM=1
 OUTDIR="flare-out"
 THREADS=${SLURM_CPUS_PER_TASK}
-OUTPUT_PREFIX="${flare-out}/simu_3pop"
+OUTPUT_PREFIX="${OUTDIR}/simu_3pop"
 SOFTWARE="/projects/p32505/opt/bin"
 MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
 
