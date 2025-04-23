@@ -52,5 +52,5 @@ haptools simgenotype \
 
 tabix -f chr${CHROM}.vcf.gz
 
-deactivate conda
+conda deactivate
 log_message "**** Job ends ****"
