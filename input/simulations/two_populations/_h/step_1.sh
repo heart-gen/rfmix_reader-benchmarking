@@ -6,10 +6,10 @@
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=50gb
+#SBATCH --mem=150gb
 #SBATCH --output=output.%A_%a.log
-#SBATCH --array=1-22
-#SBATCH --time=24:00:00
+#SBATCH --array=1-4
+#SBATCH --time=08:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
