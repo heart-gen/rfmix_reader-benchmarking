@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=5gb
 #SBATCH --output=samples_prep.log
-#SBATCH --time=1:00:00
+#SBATCH --time=00:10:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"

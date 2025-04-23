@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=50gb
 #SBATCH --output=prep.%A_%a.log
-#SBATCH --time=03:00:00
+#SBATCH --time=01:30:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -29,7 +29,7 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 log_message "**** Loading modules ****"
 
 module purge
-module load bcftools
+module load bcftools/1.10.1
 module list
 
 ## Edit with your job command
