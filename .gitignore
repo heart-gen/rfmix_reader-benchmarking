@@ -3,7 +3,7 @@
 jupyterlab.slurm
 
 # Input data
-input/*
+binary_files/*
 
 # Project specific
 *.fb.tsv
