@@ -10,7 +10,7 @@
 #SBATCH --mem=16gb
 #SBATCH --output=logs/flare.%A-%a.log
 #SBATCH --array=2-22
-#SBATCH --time=03:00:00
+#SBATCH --time=01:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -36,7 +36,6 @@ module list
 OUTDIR="flare-out"
 CHROM=${SLURM_ARRAY_TASK_ID}
 THREADS=${SLURM_CPUS_PER_TASK}
-OUTPUT_PREFIX="${OUTDIR}/simu_3pop"
 SOFTWARE="/projects/p32505/opt/bin"
 MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
 
@@ -54,7 +53,7 @@ java -Xmx16g -jar $SOFTWARE/flare.jar \
      ref-panel="./temp/samples_id2" \
      map="./temp/plink.chr${CHROM}.GRCh38.reformatted.map" \
      gt="chr${CHROM}.vcf.gz" nthreads=$THREADS \
-     seed=13131313 em=false model="${OUTDIR}/simu_3pop.model" \
-     array=true out="${OUTPUT_PREFIX}"
+     seed=13131313 em=false model="${OUTDIR}/chr1.model" \
+     array=true out="${OUTDIR}/chr${CHROM}"
 
 log_message "**** Job ends ****"

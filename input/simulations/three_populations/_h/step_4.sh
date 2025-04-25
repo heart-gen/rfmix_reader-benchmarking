@@ -35,7 +35,6 @@ module list
 CHROM=1
 OUTDIR="flare-out"
 THREADS=${SLURM_CPUS_PER_TASK}
-OUTPUT_PREFIX="${OUTDIR}/simu_3pop"
 SOFTWARE="/projects/p32505/opt/bin"
 MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
 
@@ -55,6 +54,6 @@ java -Xmx16g -jar $SOFTWARE/flare.jar \
      ref-panel="./temp/samples_id2" \
      map="./temp/plink.chr${CHROM}.GRCh38.reformatted.map" \
      gt="chr${CHROM}.vcf.gz" nthreads=$THREADS \
-     seed=13131313 array=true out="${OUTPUT_PREFIX}"
+     seed=13131313 array=true out="${OUTDIR}/chr${CHROM}"
 
 log_message "**** Job ends ****"
