@@ -6,9 +6,10 @@
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=10
-#SBATCH --mem=16gb
-#SBATCH --output=logs/flare.%j.log
+#SBATCH --cpus-per-task=24
+#SBATCH --mem=24gb
+#SBATCH --output=logs/flare.%A-%a.log
+#SBATCH --array=1-22
 #SBATCH --time=01:00:00
 
 log_message() {
@@ -32,28 +33,26 @@ module load htslib/1.16
 module list
 
 ## Job commands here
-CHROM=1
+TEMPDIR="temp"
+INPUTS="vcf-files"
 OUTDIR="flare-out"
+CHROM=${SLURM_ARRAY_TASK_ID}
 THREADS=${SLURM_CPUS_PER_TASK}
 SOFTWARE="/projects/p32505/opt/bin"
-MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
+MAPDIR="/projects/b1213/resources/1kGP/genetic_maps"
 
 mkdir -p $OUTDIR
 
 log_message "**** Index reference VCF files ****"
-tabix -f ./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz
-
-log_message "**** Fix PLINK map file ****"
-awk '{if(NR>0) $1="chr"$1; print}' "${MAP_DIR}/plink.chr${CHROM}.GRCh38.map" \
-    > ./temp/plink.chr${CHROM}.GRCh38.reformatted.map
+tabix -f -p vcf ${TEMPDIR}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz
 
 log_message "**** FLARE Local Ancestry Analysis ****"
 
-java -Xmx16g -jar $SOFTWARE/flare.jar \
-     ref="./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz" \
-     ref-panel="./temp/samples_id2" \
-     map="./temp/plink.chr${CHROM}.GRCh38.reformatted.map" \
-     gt="chr${CHROM}.vcf.gz" nthreads=$THREADS \
+java -Xmx24g -jar $SOFTWARE/flare.jar \
+     ref="${TEMPDIR}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz" \
+     ref-panel="${TEMPDIR}/samples_id2" nthreads=$THREADS \
+     map="${MAPDIR}/plink.chr${CHROM}.GRCh38.reformatted.map" \
+     gt="${INPUTS}/chr${CHROM}.vcf.gz" em=false gen=10 \
      seed=13131313 array=true out="${OUTDIR}/chr${CHROM}"
 
 log_message "**** Job ends ****"
