@@ -8,7 +8,7 @@
 #SBATCH --array=1-22
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=175gb
-#SBATCH --output=rfmix.%A_%a.log
+#SBATCH --output=logs/rfmix.%A_%a.log
 #SBATCH --time=72:00:00
 
 log_message() {
@@ -34,16 +34,19 @@ module list
 ## Edit with your job command
 CHROM=${SLURM_ARRAY_TASK_ID}
 SOFTWARE="/projects/p32505/opt/bin"
+OUTDIR="rfmix-files"
+VCFDIR="vcf-files"
+INPUTS="temp"
 
 log_message "**** Run RFMix ****"
 echo -e "Chromosome: ${CRHOM}"
 
 $SOFTWARE/rfmix \
-    -f chr${CHROM}.vcf.gz \
-    -r ./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz \
-    -m ./temp/samples_id2 \
-    -g ./temp/genetic_map38 \
-    -o chr${CHROM} \
+    -f ${VCFDIR}/chr${CHROM}.vcf.gz \
+    -r ${INPUTS}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz \
+    -m ${INPUTS}/samples_id2 \
+    -g ${INPUTS}/genetic_map38 \
+    -o ${OUTDIR}/chr${CHROM} \
     --chromosome=chr${CHROM}
 
 log_message "**** Job ends ****"
