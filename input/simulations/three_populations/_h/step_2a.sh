@@ -7,7 +7,7 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=2gb
-#SBATCH --output=samples_prep.log
+#SBATCH --output=logs/samples_prep.log
 #SBATCH --time=00:05:00
 
 log_message() {
