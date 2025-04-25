@@ -8,7 +8,7 @@
 #SBATCH --array=1-22
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=150gb
-#SBATCH --output=output.%A_%a.log
+#SBATCH --output=logs/output.%A_%a.log
 #SBATCH --time=03:00:00
 
 log_message() {
@@ -40,17 +40,20 @@ conda activate /projects/p32505/opt/env/AI_env
 echo "**** Run simulation ****"
 ONE_K="/projects/b1213/resources/1kGP/"
 CHROM=${SLURM_ARRAY_TASK_ID}
+INPUTS="simulation-files"
+VCFDIR="vcf-files"
 
 haptools simgenotype \
-         --model AFR_washington.dat \
+         --model ${INPUTS}/AFR_washington.dat \
          --mapdir ${ONE_K}/genetic_maps/ \
          --chroms ${CHROM} \
          --seed 20240126 \
          --ref_vcf ${ONE_K}/GRCh38_phased_vcf/raw/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz \
-         --sample_info 1k_sampleinfo.tsv \
-         --out ./chr${CHROM}.vcf.gz
+         --sample_info ${INPUTS}/1k_sampleinfo.tsv \
+         --out ${VCFDIR}/chr${CHROM}.vcf.gz
 
-tabix -f chr${CHROM}.vcf.gz
+tabix -p vcf ${VCFDIR}/chr${CHROM}.vcf.gz
+mv ${VCFDIR}/*bp ${INPUTS}/
 
 conda deactivate
 log_message "**** Job ends ****"
