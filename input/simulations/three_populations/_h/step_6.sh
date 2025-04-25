@@ -7,8 +7,8 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=2gb
-#SBATCH --output=clean.log
-#SBATCH --time=01:00:00
+#SBATCH --output=logs/clean.log
+#SBATCH --time=00:05:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -31,11 +31,15 @@ module list
 
 ## Edit with your job command
 log_message "**** Clean-up files ****"
+mkdir -p simulation-files
+mv -v *bp simulation-files/
+mv -v 1k_sampleinfo.tsv simulation-files/
+mv -v *dat simulation-files/
 
-rm out*log
-rm *bp *gz *tbi
-rm prep* sample*
-rm 1k_sampleinfo.tsv AFR_washington.dat
+mkdir -p vcf-files
+mv -v chr* vcf-files/
+
+log_message "**** Clean-up temporary ****"
 rm temp/*
 rmdir temp
 
