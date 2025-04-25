@@ -41,6 +41,8 @@ INPUTS="temp"
 log_message "**** Run RFMix ****"
 echo -e "Chromosome: ${CRHOM}"
 
+mkdir -p $OUTDIR
+
 $SOFTWARE/rfmix \
     -f ${VCFDIR}/chr${CHROM}.vcf.gz \
     -r ${INPUTS}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz \
