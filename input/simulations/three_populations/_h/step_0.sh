@@ -7,8 +7,8 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=2gb
-#SBATCH --output=output.%j.log
-#SBATCH --time=01:00:00
+#SBATCH --output=logs/output.%j.log
+#SBATCH --time=00:05:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -32,13 +32,16 @@ module list
 
 ## Edit with your job command
 ONE_K="/projects/b1213/resources/1kGP/data_raw"
+OUTDIR="simulation-files"
+
+mkdir -p ${OUTDIR}
 
 log_message "**** Generate admixture models ****"
 cut -f 1,2 ${ONE_K}/integrated_call_samples_v3.20130502.ALL.panel | \
-    sed '1d' | sed -e 's/ /\t/g' > 1k_sampleinfo.tsv
+    sed '1d' | sed -e 's/ /\t/g' > ${OUTDIR}/1k_sampleinfo.tsv
 
 # AFR washington
-echo -e "100\tAFR_washington\tCEU\tYRI\tPUR" >> AFR_washington.dat
-echo -e "10\t0\t0.34\t0.65\t0.01" >> AFR_washington.dat
+echo -e "100\tAFR_washington\tCEU\tYRI\tPUR" >> ${OUTDIR}/AFR_washington.dat
+echo -e "10\t0\t0.34\t0.65\t0.01" >> ${OUTDIR}/AFR_washington.dat
 
 log_message "**** Job ends ****"
