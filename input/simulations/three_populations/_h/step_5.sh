@@ -1,16 +1,14 @@
 #!/bin/bash
 #SBATCH --account=p32505
 #SBATCH --partition=short
-#SBATCH --job-name=flare_prep
+#SBATCH --job-name=clean_files
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=10
-#SBATCH --mem=16gb
-#SBATCH --output=logs/flare.%A-%a.log
-#SBATCH --array=2-22
-#SBATCH --time=01:00:00
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=2gb
+#SBATCH --output=logs/clean.log
+#SBATCH --time=00:05:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -29,31 +27,20 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 ## List current modules for reproducibility
 
 module purge
-module load htslib/1.16
 module list
 
-## Job commands here
-OUTDIR="flare-out"
-CHROM=${SLURM_ARRAY_TASK_ID}
-THREADS=${SLURM_CPUS_PER_TASK}
-SOFTWARE="/projects/p32505/opt/bin"
-MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
+## Edit with your job command
+log_message "**** Clean-up files ****"
+mkdir -p simulation-files
+mv -v *bp simulation-files/
+mv -v 1k_sampleinfo.tsv simulation-files/
+mv -v *dat simulation-files/
 
-log_message "**** Index reference VCF files ****"
-tabix -f ./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz
+mkdir -p vcf-files
+mv -v chr* vcf-files/
 
-log_message "**** Fix PLINK map file ****"
-awk '{if(NR>0) $1="chr"$1; print}' "${MAP_DIR}/plink.chr${CHROM}.GRCh38.map" \
-    > ./temp/plink.chr${CHROM}.GRCh38.reformatted.map
-
-log_message "**** FLARE Local Ancestry Analysis ****"
-
-java -Xmx16g -jar $SOFTWARE/flare.jar \
-     ref="./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz" \
-     ref-panel="./temp/samples_id2" \
-     map="./temp/plink.chr${CHROM}.GRCh38.reformatted.map" \
-     gt="chr${CHROM}.vcf.gz" nthreads=$THREADS \
-     seed=13131313 em=false model="${OUTDIR}/chr1.model" \
-     array=true out="${OUTDIR}/chr${CHROM}"
+log_message "**** Clean-up temporary ****"
+rm temp/*
+rmdir temp
 
 log_message "**** Job ends ****"
