@@ -8,7 +8,7 @@
 #SBATCH --array=1-22
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=50gb
-#SBATCH --output=prep.%A_%a.log
+#SBATCH --output=logs/prep.%A_%a.log
 #SBATCH --time=01:30:00
 
 log_message() {
@@ -35,12 +35,13 @@ module list
 ## Edit with your job command
 CHROM=${SLURM_ARRAY_TASK_ID}
 VCFDIR="/projects/b1213/resources/1kGP/GRCh38_phased_vcf/raw/"
+TEMPDIR="temp"
 
 log_message "**** Prepare samples ****"
 echo -e "Chromosome: ${CRHOM}"
 
-bcftools view -v snps -S ./temp/samples_id -Oz \
-         -o ./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz \
+bcftools view -v snps -S ${TEMPDIR}/samples_id -Oz \
+         -o ${TEMPDIR}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz \
          $VCFDIR/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz
 
 log_message "**** Job ends ****"
