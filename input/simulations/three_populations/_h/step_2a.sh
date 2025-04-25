@@ -6,9 +6,9 @@
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=5gb
+#SBATCH --mem=2gb
 #SBATCH --output=samples_prep.log
-#SBATCH --time=00:10:00
+#SBATCH --time=00:05:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -32,12 +32,15 @@ module list
 
 ## Edit with your job command
 REF="/projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref"
+INPUTS="simulation-files"
+OUTPUT="temp"
 
 log_message "**** Prepare samples ****"
 
-mkdir -p temp
-grep -E 'CEU|YRI|PUR' 1k_sampleinfo.tsv > temp/samples_id2
-cut -f1 temp/samples_id2 > temp/samples_id
-cp -v $REF/genetic_map38 temp/
+mkdir -p ${OUTPUT}
+
+grep -E 'CEU|YRI|PUR' ${INPUTS}/1k_sampleinfo.tsv > ${OUTPUT}/samples_id2
+cut -f1 ${OUTPUT}/samples_id2 > ${OUTPUT}/samples_id
+cp -v $REF/genetic_map38 ${OUTPUT}/
 
 log_message "**** Job ends ****"
