@@ -56,7 +56,8 @@ def main():
 
     # Write imputed data
     start_time = time()
-    write_imputed(rf_q, admix, variant_loci, z, prefix="imputed-ancestry")
+    write_imputed(rf_q, admix, variant_loci, z, target_rows=200_000,
+                  prefix="imputed-ancestry", verbose=True)
     end_time = time()
     print(f"Execution time: {end_time - start_time} seconds")
 
