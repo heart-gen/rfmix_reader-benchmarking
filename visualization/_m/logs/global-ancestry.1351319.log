@@ -1,63 +1,0 @@
-2025-05-01 07:39:33 - **** Job starts ****
-2025-05-01 07:39:33 - **** Quest info ****
-User: owb0346
-Job id: 1351319
-Job name: viz_global
-Node name: 
-Hostname: qgpu3017
-Task id: N/A
-2025-05-01 07:39:33 - **** Loading modules ****
-
-Currently Loaded Modules:
-  1) libiconv/1.17-gcc-12.3.0   4) libxml2/2.10.3-gcc-12.3.0
-  2) xz/5.4.1-gcc-12.3.0        5) cuda/12.4.1-gcc-12.3.0
-  3) zlib/1.2.13-gcc-12.3.0
-
- 
-
-2025-05-01 07:39:36 - **** Checking CUDA ****
-Thu May  1 07:39:36 2025       
-+-----------------------------------------------------------------------------------------+
-| NVIDIA-SMI 570.86.15              Driver Version: 570.86.15      CUDA Version: 12.8     |
-|-----------------------------------------+------------------------+----------------------+
-| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
-|                                         |                        |               MIG M. |
-|=========================================+========================+======================|
-|   0  NVIDIA H100 80GB HBM3          On  |   00000000:E6:00.0 Off |                    0 |
-| N/A   43C    P0             71W /  700W |       1MiB /  81559MiB |      0%      Default |
-|                                         |                        |             Disabled |
-+-----------------------------------------+------------------------+----------------------+
-                                                                                         
-+-----------------------------------------------------------------------------------------+
-| Processes:                                                                              |
-|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
-|        ID   ID                                                               Usage      |
-|=========================================================================================|
-|  No running processes found                                                             |
-+-----------------------------------------------------------------------------------------+
-2025-05-01 07:39:36 - **** Loading mamba environment ****
-GPU 0: NVIDIA H100 80GB HBM3
-  Total memory: 79.19 GB
-  CUDA capability: 9.0
-Multiple files read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
-Mapping loci files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping loci files:   5%|▍         | 1/22 [00:37<13:03, 37.31s/it]Mapping loci files:   9%|▉         | 2/22 [00:38<05:18, 15.94s/it]Mapping loci files:  14%|█▎        | 3/22 [00:39<02:56,  9.27s/it]Mapping loci files:  18%|█▊        | 4/22 [00:40<01:50,  6.12s/it]Mapping loci files:  23%|██▎       | 5/22 [00:41<01:12,  4.24s/it]Mapping loci files:  27%|██▋       | 6/22 [00:42<00:49,  3.08s/it]Mapping loci files:  32%|███▏      | 7/22 [00:43<00:34,  2.30s/it]Mapping loci files:  36%|███▋      | 8/22 [00:44<00:27,  1.94s/it]Mapping loci files:  41%|████      | 9/22 [00:45<00:20,  1.56s/it]Mapping loci files:  45%|████▌     | 10/22 [00:46<00:16,  1.34s/it]Mapping loci files:  50%|█████     | 11/22 [00:46<00:12,  1.14s/it]Mapping loci files:  55%|█████▍    | 12/22 [00:48<00:13,  1.38s/it]Mapping loci files:  59%|█████▉    | 13/22 [00:49<00:10,  1.19s/it]Mapping loci files:  64%|██████▎   | 14/22 [00:49<00:07,  1.04it/s]Mapping loci files:  68%|██████▊   | 15/22 [00:50<00:05,  1.25it/s]Mapping loci files:  73%|███████▎  | 16/22 [00:51<00:06,  1.04s/it]Mapping loci files:  77%|███████▋  | 17/22 [00:53<00:06,  1.23s/it]Mapping loci files:  82%|████████▏ | 18/22 [00:55<00:05,  1.46s/it]Mapping loci files:  86%|████████▋ | 19/22 [00:57<00:04,  1.53s/it]Mapping loci files:  91%|█████████ | 20/22 [00:58<00:02,  1.39s/it]Mapping loci files:  95%|█████████▌| 21/22 [01:00<00:01,  1.50s/it]Mapping loci files: 100%|██████████| 22/22 [01:01<00:00,  1.36s/it]Mapping loci files: 100%|██████████| 22/22 [01:01<00:00,  2.78s/it]
-Mapping Q files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping Q files:   5%|▍         | 1/22 [00:00<00:05,  4.18it/s]Mapping Q files:  32%|███▏      | 7/22 [00:00<00:00, 23.99it/s]Mapping Q files:  59%|█████▉    | 13/22 [00:00<00:00, 31.77it/s]Mapping Q files:  86%|████████▋ | 19/22 [00:00<00:00, 39.38it/s]Mapping Q files: 100%|██████████| 22/22 [00:00<00:00, 33.58it/s]
-Mapping fb files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping fb files:   5%|▍         | 1/22 [00:00<00:05,  3.59it/s]Mapping fb files:  14%|█▎        | 3/22 [00:00<00:02,  7.47it/s]Mapping fb files:  18%|█▊        | 4/22 [00:00<00:02,  7.08it/s]Mapping fb files:  27%|██▋       | 6/22 [00:00<00:01,  9.99it/s]Mapping fb files:  41%|████      | 9/22 [00:00<00:00, 13.68it/s]Mapping fb files:  50%|█████     | 11/22 [00:01<00:00, 12.45it/s]Mapping fb files:  59%|█████▉    | 13/22 [00:01<00:00, 12.11it/s]Mapping fb files:  73%|███████▎  | 16/22 [00:01<00:00, 14.00it/s]Mapping fb files:  82%|████████▏ | 18/22 [00:01<00:00,  9.71it/s]Mapping fb files:  91%|█████████ | 20/22 [00:01<00:00,  9.75it/s]Mapping fb files: 100%|██████████| 22/22 [00:02<00:00, 10.33it/s]Mapping fb files: 100%|██████████| 22/22 [00:02<00:00, 10.34it/s]
-GPU 0: NVIDIA H100 80GB HBM3
-  Total memory: 79.19 GB
-  CUDA capability: 9.0
-Multiple files read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
-Mapping loci files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping loci files:   5%|▍         | 1/22 [00:04<01:39,  4.72s/it]Mapping loci files:   9%|▉         | 2/22 [00:05<00:46,  2.34s/it]Mapping loci files:  14%|█▎        | 3/22 [00:06<00:34,  1.84s/it]Mapping loci files:  18%|█▊        | 4/22 [00:07<00:25,  1.41s/it]Mapping loci files:  23%|██▎       | 5/22 [00:07<00:18,  1.11s/it]Mapping loci files:  27%|██▋       | 6/22 [00:08<00:15,  1.01it/s]Mapping loci files:  32%|███▏      | 7/22 [00:09<00:13,  1.15it/s]Mapping loci files:  36%|███▋      | 8/22 [00:09<00:11,  1.26it/s]Mapping loci files:  41%|████      | 9/22 [00:10<00:09,  1.36it/s]Mapping loci files:  45%|████▌     | 10/22 [00:11<00:08,  1.48it/s]Mapping loci files:  50%|█████     | 11/22 [00:11<00:06,  1.63it/s]Mapping loci files:  55%|█████▍    | 12/22 [00:13<00:08,  1.17it/s]Mapping loci files:  59%|█████▉    | 13/22 [00:13<00:06,  1.31it/s]Mapping loci files:  64%|██████▎   | 14/22 [00:13<00:05,  1.54it/s]Mapping loci files:  68%|██████▊   | 15/22 [00:14<00:03,  1.76it/s]Mapping loci files:  73%|███████▎  | 16/22 [00:15<00:04,  1.25it/s]Mapping loci files:  77%|███████▋  | 17/22 [00:17<00:05,  1.14s/it]Mapping loci files:  82%|████████▏ | 18/22 [00:18<00:04,  1.13s/it]Mapping loci files:  86%|████████▋ | 19/22 [00:20<00:03,  1.18s/it]Mapping loci files:  91%|█████████ | 20/22 [00:21<00:02,  1.17s/it]Mapping loci files:  95%|█████████▌| 21/22 [00:22<00:01,  1.11s/it]Mapping loci files: 100%|██████████| 22/22 [00:22<00:00,  1.00it/s]Mapping loci files: 100%|██████████| 22/22 [00:22<00:00,  1.04s/it]
-Mapping Q files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping Q files: 100%|██████████| 22/22 [00:00<00:00, 310.89it/s]
-Mapping fb files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping fb files:   5%|▍         | 1/22 [00:00<00:03,  6.33it/s]Mapping fb files:  14%|█▎        | 3/22 [00:00<00:02,  8.98it/s]Mapping fb files:  18%|█▊        | 4/22 [00:00<00:04,  3.73it/s]Mapping fb files:  27%|██▋       | 6/22 [00:01<00:02,  5.94it/s]Mapping fb files:  36%|███▋      | 8/22 [00:01<00:01,  8.02it/s]Mapping fb files:  45%|████▌     | 10/22 [00:01<00:01, 10.06it/s]Mapping fb files:  55%|█████▍    | 12/22 [00:01<00:01,  9.81it/s]Mapping fb files:  68%|██████▊   | 15/22 [00:01<00:00, 13.49it/s]Mapping fb files:  77%|███████▋  | 17/22 [00:02<00:00,  5.62it/s]Mapping fb files:  86%|████████▋ | 19/22 [00:02<00:00,  6.16it/s]Mapping fb files:  95%|█████████▌| 21/22 [00:02<00:00,  6.79it/s]Mapping fb files: 100%|██████████| 22/22 [00:03<00:00,  7.24it/s]
------
-pyhere              1.0.3
-rfmix_reader        0.0.0
-session_info        1.0.0
------
-Python 3.12.9 | packaged by conda-forge | (main, Mar  4 2025, 22:48:41) [GCC 13.3.0]
-Linux-4.18.0-553.36.1.el8_10.x86_64-x86_64-with-glibc2.28
------
-Session information updated at 2025-05-01 07:42
-2025-05-01 07:42:31 - **** Job ends ****
