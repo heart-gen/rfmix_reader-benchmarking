@@ -35,14 +35,6 @@ def main():
     build = "hg38"; prefix = f"local_ancestry.{build}"
     verbose = True; force = True ## Overwrite
 
-    # Plot real data
-    loci, rf_q, admix = _load_real_data()
-    bed_df = generate_tagore_bed(loci, rf_q, admix, sample_num)
-    for oformat in ["png", "pdf"]:
-        out_prefix = f"{prefix}.real_data_2pop"
-        plot_local_ancestry_tagore(bed_df, out_prefix, build,
-                                   oformat, verbose, force)
-
     # Plot simulated data, three populations
     loci, rf_q, admix = _load_simu_data(3)
     bed_df = generate_tagore_bed(loci, rf_q, admix, sample_num)
