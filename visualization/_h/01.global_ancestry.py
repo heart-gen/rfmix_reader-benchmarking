@@ -32,16 +32,24 @@ def _load_simu_data(pop_num):
 def main():
     # Plot real data
     _, rf_q, _ = _load_real_data()
-    plot_global_ancestry(rf_q, dpi=300, bbox_inches="tight",
-                         save_path="global_ancestry.real_data_2pop")
-    plot_ancestry_by_chromosome(rf_q, dpi=300, bbox_inches="tight",
-                                save_path="chromosome_summary.real_data_2pop")
+    plot_global_ancestry(
+        rf_q, dpi=300, bbox_inches="tight", palette="Set1",
+        figsize=(6,6), save_path="global_ancestry.real_data_2pop"
+    )
+    plot_ancestry_by_chromosome(
+        rf_q, dpi=300, bbox_inches="tight", palette="Set1",
+        save_path="chromosome_summary.real_data_2pop"
+    )
     # Plot simulated data, three populations
     _, rf_q, _ = _load_simu_data(3)
-    plot_global_ancestry(rf_q, dpi=300, bbox_inches="tight",
-                         save_path="global_ancestry.simu_data_3pop")
-    plot_ancestry_by_chromosome(rf_q, dpi=300, bbox_inches="tight",
-                                save_path="chromosome_summary.simu_data_3pop")
+    plot_global_ancestry(
+        rf_q, dpi=300, bbox_inches="tight", palette="tab10",
+        figsize=(6,6), save_path="global_ancestry.simu_data_3pop"
+    )
+    plot_ancestry_by_chromosome(
+        rf_q, dpi=300, bbox_inches="tight", palette="tab10",
+        save_path="chromosome_summary.simu_data_3pop"
+    )
     # Session information
     session_info.show()
 
