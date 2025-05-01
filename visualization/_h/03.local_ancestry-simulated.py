@@ -32,16 +32,14 @@ def _load_simu_data(pop_num):
 def main():
     # General configuration
     sample_num = 12 ## This will be the 13th index
-    build = "hg38"; prefix = f"local_ancestry.{build}"
-    verbose = True; force = True ## Overwrite
+    build = "hg38"; prefix = f"../_m/local_ancestry.{build}"
 
     # Plot simulated data, three populations
     loci, rf_q, admix = _load_simu_data(3)
     bed_df = generate_tagore_bed(loci, rf_q, admix, sample_num)
+    out_prefix = f"{prefix}.simu_data_3pop"
     for oformat in ["png", "pdf"]:
-        out_prefix = f"{prefix}.simu_data_3pop"
-        plot_local_ancestry_tagore(bed_df, out_prefix, build,
-                                   oformat, verbose, force)
+        plot_local_ancestry_tagore(bed_df, out_prefix, build, oformat)
 
     # Session information
     session_info.show()

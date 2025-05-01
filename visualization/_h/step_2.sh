@@ -41,7 +41,7 @@ eval "$(mamba shell hook --shell bash)"
 ENV_PATH="/projects/p32505/opt/env/AI_env"
 
 mamba activate "$ENV_PATH"
-python ../_h/02.local_ancestry.py
+python ../_h/02.local_ancestry-real.py
 
 if [ $? -ne 0 ]; then
     log_message "Error: mamba or script execution failed"
