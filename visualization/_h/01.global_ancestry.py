@@ -2,7 +2,11 @@
 import session_info
 from pyhere import here
 from pathlib import Path
-from rfmix_reader import read_rfmix
+from rfmix_reader import (
+    read_rfmix,
+    plot_global_ancestry,
+    plot_ancestry_by_chromosome
+)
 
 def _load_real_data():
     prefix_path = Path(here("input/real_data/rfmix-version/_m/"))

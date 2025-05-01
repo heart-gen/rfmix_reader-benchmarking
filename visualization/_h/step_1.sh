@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=p32505
 #SBATCH --partition=gengpu
-#$BATCH --gres=gpu:h100:1
+#SBATCH --gres=gpu:h100:1
 #SBATCH --job-name=viz_global
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
@@ -32,6 +32,9 @@ log_message "**** Loading modules ****"
 module purge
 module load cuda/12.4.1-gcc-12.3.0
 module list
+
+log_message "**** Checking CUDA ****"
+nvidia-smi 
 
 # Set path variables
 log_message "**** Loading mamba environment ****"
