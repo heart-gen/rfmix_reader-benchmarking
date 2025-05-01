@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=40gb
 #SBATCH --output=logs/global-ancestry.%j.log
-#SBATCH --time=02:00:00
+#SBATCH --time=00:30:00
 
 # Function to echo with timestamp
 log_message() {
