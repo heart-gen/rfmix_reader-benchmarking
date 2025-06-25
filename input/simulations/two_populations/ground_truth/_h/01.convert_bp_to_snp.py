@@ -1,6 +1,6 @@
 import sys
+import gzip
 import pysam
-import pandas as pd
 
 def parse_bp_file(bp_file):
     ancestry_blocks = {}
@@ -17,48 +17,48 @@ def parse_bp_file(bp_file):
     return ancestry_blocks
 
 
-def get_snp_positions_from_vcf(vcf_file):
+def iter_snp_positions_vcf(vcf_file):
     vcf = pysam.VariantFile(vcf_file)
-    positions = [records.pos for records in vcf.fetch()]
-    return sorted(positions)
+    for record in vcf.fetch():
+        yield record.pos
 
 
-def assign_ancestry_to_snps(snp_positions, ancestry_blocks):
+
+def get_ancestry_positions(snp_pos, blocks):
+    block_idx = 0
+    while block_idx < len(blocks) and snp_pos > blocks[block_idx][0]:
+        block_idx += 1
+    if block_idx == 0:
+        return blocks[0][1]
+    else:
+        return blocks[block_idx - 1][1]
+
+
+def generate_ancestry_table(bp_file, vcf_file, output_file):
     """
     Assigns ancestry to each SNP based on the block breakpoint structure.
     """
-    ancestry_matrix = {}
-    for sample_hap, blocks in ancestry_blocks.items():
-        ancestry_per_snp = []
-        block_idx = 0
-        for snp in snp_positions:
-            while block_idx < len(blocks) and snp > blocks[block_idx][0]:
-                block_idx += 1
-            if block_idx == 0:
-                ancestry = blocks[0][1]
-            else:
-                ancestry = blocks[block_idx - 1][1]
-            ancestry_per_snp.append(ancestry)
-        ancestry_matrix[sample_hap] = ancestry_per_snp
-    results_df = pd.DataFrame.from_dict(ancestry_matrix, orient="columns")
-    results_df.index = snp_positions
-    results_df.index.name = "Position"
-    return results_df
-
-
-def main(bp_file, snp_file, output_file):
-    # Read SNP positions file (1 column, no header)
-    snp_positions = get_snp_positions_from_vcf(snp_file)
     ancestry_blocks = parse_bp_file(bp_file)
-    per_snp_ancestry = assign_ancestry_to_snps(snp_positions, ancestry_blocks)
-    per_snp_ancestry.to_csv(output_file, sep='\t')
+    haplotypes = list(ancestry_blocks.keys())
+    # Open output file
+    open_fn = gzip.open if output_file.endswith(".gz") else open
+    with open_fn(output_file, "wt") as out_f:
+        out_f.write("Position\t" + "\t".join(haplotypes) + "\n")
+        for snp_pos in iter_snp_positions_vcf(vcf_file):
+            row = [str(snp_pos)]
+            for hap in haplotypes:
+                ancestry = get_ancestry_positions(snp_pos, ancestry_blocks[hap])
+                row.append(ancestry)
+            out_f.write("\t".join(row) + "\n")
+
+
+def main(bp_file, vcf_file, output_file):
+    generate_ancestry_table(bp_file, vcf_file, output_file)
 
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:
-        print("Usage: python 01.convert_bp_to_snp.py <bp_file> <snp_file> <output_file>")
+        print("Usage: python 01.convert_bp_to_snp.py <bp_file> <vcf_file> <output_file>")
         sys.exit(1)
-    bp_file = sys.argv[1]
-    snp_file = sys.argv[2]
-    output_file = sys.argv[3]
-    main(bp_file, snp_file, output_file)
+
+    main(sys.argv[1], sys.argv[2], sys.argv[3])
