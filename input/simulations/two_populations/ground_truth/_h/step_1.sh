@@ -6,8 +6,8 @@
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=20gb
-#SBATCH --output=output.%A_%a.log
+#SBATCH --mem=50gb
+#SBATCH --output=log_files/output.%A_%a.log
 #SBATCH --array=1-22
 #SBATCH --time=01:00:00
 
