@@ -1,17 +1,17 @@
-import sys
+import session_info
 import pandas as pd
-import re
+from json import dumps
+import sys, re, gzip, csv
 from collections import defaultdict
 
 def group_haplotypes(columns):
     """
     Group haplotype columns into pairs per individual.
-    Assumes format: Sample_1_H1, Sample_1_H2, etc.
-    Returns a dict: {Sample_1: ('Sample_1_H1', 'Sample_1_H2'), ...}
+    Returns a dict: {Sample_1: ('Sample_1_1', 'Sample_1_2'), ...}
     """
     sample_pairs = defaultdict(list)
     for col in columns:
-        match = re.match(r"(Sample_\d+)_H\d+", col)
+        match = re.match(r"(Sample_\d+)_\d+", col)
         if match:
             sample_name = match.group(1)
             sample_pairs[sample_name].append(col)
@@ -19,58 +19,67 @@ def group_haplotypes(columns):
     return {k: v for k, v in sample_pairs.items() if len(v) == 2}
 
 
-def encode_biallelic_genotypes(df, ref_ancestry=None):
-    """
-    Convert haplotype ancestry calls to 0/1/2 per individual.
-    ref_ancestry defines which ancestry is coded as 0.
-    """
-    grouped = group_haplotypes(df.columns)
-    out_df = pd.DataFrame(index=df.index)
-    if not ref_ancestry:
-        # Automatically pick most frequent ancestry at the first position
-        ref_ancestry = df.iloc[0].value_counts().idxmax()
-    print(f"Using reference ancestry: {ref_ancestry}")
-    for sample, (hap1, hap2) in grouped.items():
-        def encode_pair(a1, a2):
-            if a1 == a2:
-                return 0 if a1 == ref_ancestry else 2
-            else:
-                return 1
-
-        encoded = [
-            encode_pair(h1, h2)
-            for h1, h2 in zip(df[hap1], df[hap2])
-        ]
-        out_df[sample] = encoded
-    return out_df
+def get_ref_ancestry_and_map(filename, nrows=1000):
+    sample_df = pd.read_csv(filename, sep="\t", nrows=nrows, index_col=0)
+    ref_ancestry = sample_df.iloc[0].value_counts().idxmax()
+    all_ancestries = sorted(set(sample_df.values.ravel()))
+    return ref_ancestry, {anc: i for i, anc in enumerate(all_ancestries)}
 
 
-def encode_multiallelic(df):
-    """
-    Encodes multiallelic ancestries as categorical integers.
-    Returns: DataFrame where each ancestry is encoded as an int sum per individual.
-    """
-    grouped = group_haplotypes(df.columns)
-    out_df = pd.DataFrame(index=df.index)
-    # Build consistent ancestry-to-int map
-    all_ancestries = sorted(set(df.values.ravel()))
-    ancestry_map = {anc: i for i, anc in enumerate(all_ancestries)}
-    print(f"Ancestry map: {ancestry_map}")
-    for sample, (hap1, hap2) in grouped.items():
-        encoded = [
-            ancestry_map[a1] + ancestry_map[a2]
-            for a1, a2 in zip(df[hap1], df[hap2])
-        ]
-        out_df[sample] = encoded
-    return out_df, ancestry_map
+def stream_encode(input_file, output_file, mode='auto', chunksize=1000,
+                  chrom="chr1"):
+    # Open output handle
+    open_fn = gzip.open if output_file.endswith('.gz') else open
+    with open_fn(output_file, 'wt', newline='') as out_f:
+        writer = csv.writer(out_f, delimiter='\t')
+
+        # Grab column names and ancestry map
+        sample_df = pd.read_csv(input_file, sep="\t", nrows=1)
+        hap_cols = sample_df.columns[1:]  # skip index
+        grouped = group_haplotypes(hap_cols)
+        if not grouped:
+            raise ValueError("No haplotype pairs found in input.")
+
+        # Determine reference ancestry and mapping
+        _, ancestry_map = get_ref_ancestry_and_map(input_file)
+        ancestries = sorted(ancestry_map.keys())
+
+        print(f"Ancestry map: {ancestry_map}")
+        print(f"Encoding format: presence/absence per ancestry: {'|'.join(ancestries)}")
+
+        # Write metadata comments
+        out_f.write(f"##ancestry_mapping={dumps(ancestries)}\n")
+
+        # Write header
+        writer.writerow(['#CHROM', 'POS'] + list(grouped.keys()))
+
+        # Stream SNP rows
+        for chunk in pd.read_csv(input_file, sep="\t", index_col=0,
+                                 chunksize=chunksize):
+            for pos, row in chunk.iterrows():
+                encoded_row = [chrom, pos]
+                for sample, (h1, h2) in grouped.items():
+                    a1 = row[h1]
+                    a2 = row[h2]
+                    present = {a1, a2}
+                    encoded_vec = [str(int(a in present)) for a in ancestries]
+                    encoded_row.append("|".join(encoded_vec))
+                writer.writerow(encoded_row)
 
 
-def main(input_file, output_file, mode='auto'):
-    df = pd.read_csv(input_file, sep='\t', index_col=0)
-    ancestries = sorted(set(df.values.ravel()))
-    print(f"Detected ancestries: {ancestries}")
-    if mode == 'biallelic' or (mode == 'auto' and len(ancestries
+def main(input_file, output_file, mode, chunksize, chrom):
+    stream_encode(input_file, output_file, mode, chunksize, chrom)
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    if len(sys.argv) < 4:
+        print("Usage: python 01.convert_hap_to_geno.py <chrom> <input_tsv[gz]> <output_tsv[gz]> [biallelic|multiallelic|auto] [chunksize]")
+        sys.exit(1)
+
+    chrom = f"chr{sys.argv[1]}"
+    input_file = sys.argv[2]
+    output_file = sys.argv[3]
+    mode = sys.argv[4] if len(sys.argv) >= 5 else 'auto'
+    chunksize = int(sys.argv[5]) if len(sys.argv) >= 6 else 1000
+
+    main(input_file, output_file, mode, chunksize, chrom)
