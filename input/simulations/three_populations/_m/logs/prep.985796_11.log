@@ -1,0 +1,18 @@
+2025-04-25 09:07:50 - **** Job starts ****
+2025-04-25 09:07:50 - **** Quest info ****
+User: owb0346
+Job id: 985818
+Job name: prep_data
+Node name: 
+Hostname: qnode0151
+Task id: 11
+2025-04-25 09:07:50 - **** Loading modules ****
+
+Currently Loaded Modules:
+  1) openssl/1.0.2k-gcc-4.8.5   2) bcftools/1.10.1
+
+ 
+
+2025-04-25 09:07:56 - **** Prepare samples ****
+Chromosome: 
+2025-04-25 09:30:23 - **** Job ends ****
