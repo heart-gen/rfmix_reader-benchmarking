@@ -38,9 +38,7 @@ CHROM=${SLURM_ARRAY_TASK_ID}
 THREADS=${SLURM_CPUS_PER_TASK}
 SOFTWARE="/projects/p32505/opt/bin"
 MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
-
-log_message "**** Index reference VCF files ****"
-tabix -f ./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz
+REF="/projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref"
 
 log_message "**** Fix PLINK map file ****"
 awk '{if(NR>0) $1="chr"$1; print}' "${MAP_DIR}/plink.chr${CHROM}.GRCh38.map" \
@@ -49,8 +47,8 @@ awk '{if(NR>0) $1="chr"$1; print}' "${MAP_DIR}/plink.chr${CHROM}.GRCh38.map" \
 log_message "**** FLARE Local Ancestry Analysis ****"
 
 java -Xmx16g -jar $SOFTWARE/flare.jar \
-     ref="./temp/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz" \
-     ref-panel="./temp/samples_id2" \
+     ref="$REF/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" \
+     ref-panel="$REF/samples_id2" \
      map="./temp/plink.chr${CHROM}.GRCh38.reformatted.map" \
      gt="chr${CHROM}.vcf.gz" nthreads=$THREADS \
      seed=13131313 em=false model="${OUTDIR}/chr1.model" \
