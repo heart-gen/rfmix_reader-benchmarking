@@ -1,0 +1,48 @@
+2025-04-23 13:51:00 - **** Job starts ****
+2025-04-23 13:51:00 - **** Quest info ****
+User: owb0346
+Job id: 758503
+Job name: flare_prep
+Node name: 
+Hostname: qnode0291
+Task id: 15
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   2) htslib/1.16
+
+ 
+
+2025-04-23 13:51:15 - **** Fix PLINK map file ****
+2025-04-23 13:51:15 - **** FLARE Local Ancestry Analysis ****
+Copyright (C) 2021-2023 Brian L. Browning
+Enter "java -jar flare.jar" to print a list of command line arguments
+
+Program             :  flare.jar  [ version 0.5.2, 29Oct24.cc6 ]
+Start Time          :  01:51 PM CDT on 23 Apr 2025
+Max Memory          :  16384 MB
+
+Parameters
+  ref               :  /projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/1kGP_high_coverage_Illumina.chr15.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz
+  ref-panel         :  /projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/samples_id2
+  gt                :  chr15.vcf.gz
+  map               :  ./temp/plink.chr15.GRCh38.reformatted.map
+  out               :  flare-out/chr15
+  array             :  true
+  min-maf           :  0.005
+  probs             :  false
+  model             :  flare-out/chr1.model
+  em                :  false
+  nthreads          :  10
+  seed              :  13131313
+
+
+Note: the minor allele count filter is not applied when 'array=true'
+
+Statistics
+  reference samples :  1211
+  target samples    :  500
+  markers           :  536991
+
+Wallclock Time      :  4 minutes 0 seconds
+End Time            :  01:55 PM CDT on 23 Apr 2025
+2025-04-23 13:55:16 - **** Job ends ****
