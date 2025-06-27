@@ -26,8 +26,7 @@ def get_ref_ancestry_and_map(filename, nrows=1000):
     return ref_ancestry, {anc: i for i, anc in enumerate(all_ancestries)}
 
 
-def stream_encode(input_file, output_file, mode='auto', chunksize=1000,
-                  chrom="chr1"):
+def stream_encode(input_file, output_file, chunksize=1000, chrom="chr1"):
     # Open output handle
     open_fn = gzip.open if output_file.endswith('.gz') else open
     with open_fn(output_file, 'wt', newline='') as out_f:
@@ -67,19 +66,18 @@ def stream_encode(input_file, output_file, mode='auto', chunksize=1000,
                 writer.writerow(encoded_row)
 
 
-def main(input_file, output_file, mode, chunksize, chrom):
-    stream_encode(input_file, output_file, mode, chunksize, chrom)
+def main(input_file, output_file, chunksize, chrom):
+    stream_encode(input_file, output_file, chunksize, chrom)
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
-        print("Usage: python 01.convert_hap_to_geno.py <chrom> <input_tsv[gz]> <output_tsv[gz]> [biallelic|multiallelic|auto] [chunksize]")
+        print("Usage: python 01.convert_hap_to_geno.py <chrom> <input_tsv[gz]> <output_tsv[gz]> [chunksize]")
         sys.exit(1)
 
     chrom = f"chr{sys.argv[1]}"
     input_file = sys.argv[2]
     output_file = sys.argv[3]
-    mode = sys.argv[4] if len(sys.argv) >= 5 else 'auto'
-    chunksize = int(sys.argv[5]) if len(sys.argv) >= 6 else 1000
+    chunksize = int(sys.argv[4]) if len(sys.argv) >= 5 else 1000
 
-    main(input_file, output_file, mode, chunksize, chrom)
+    main(input_file, output_file, chunksize, chrom)
