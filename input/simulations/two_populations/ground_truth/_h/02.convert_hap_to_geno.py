@@ -49,8 +49,7 @@ def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
 
         # Efficient ancestry map estimation
         _, ancestry_map = get_ref_ancestry_and_map(input_file, nrows=1000)
-        ancestries = list(ancestry_map.keys())
-        inv_ancestry_map = {v: k for k, v in ancestry_map.items()}
+        ancestries = list(sorted(ancestry_map.keys()))
         n_ancestries = len(ancestries)
 
         print(f"Ancestries: {ancestry_map.keys()}")
@@ -58,9 +57,8 @@ def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
 
         # Write metadata and header
         out_f.write(f"##Ancestries: {dumps(ancestries)}\n")
-        out_f.write(f"##Encoding locations: {dumps('|'.join(ancestries))}")
-        out_f.write(f"##Legend: 0 - absent; 1 - one allele; 2 - both alleles")
-        out_f.write(f"##YRI/YRI = 0|2 (2 ancestries); CEU/PUR = 1|0|1 (3 ancestries);")
+        out_f.write(f"##Encoding locations: {dumps('|'.join(ancestries))}\n")
+        out_f.write("##Legend: 0 - absent; 1 - one allele; 2 - both alleles\n")
         writer.writerow(['#CHROM', 'POS'] + list(grouped.keys()))
 
         # Define dtypes
