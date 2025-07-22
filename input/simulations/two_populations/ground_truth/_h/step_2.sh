@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=p32505
-#SBATCH --partition=short
+#SBATCH --partition=long
 #SBATCH --job-name=convert_int
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
@@ -9,7 +9,7 @@
 #SBATCH --mem=20gb
 #SBATCH --output=log_files/convert.%A_%a.log
 #SBATCH --array=1-22
-#SBATCH --time=02:00:00
+#SBATCH --time=06:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
