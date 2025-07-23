@@ -4,6 +4,7 @@ import pandas as pd
 from json import dumps
 from numba import njit
 import sys, re, gzip, csv
+from io import TextIOWrapper
 from collections import defaultdict
 
 def group_haplotypes(columns):
@@ -37,7 +38,8 @@ def encode_pairwise_numba(a1, a2, n_ancestries):
 
 def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
     open_fn = gzip.open if output_file.endswith('.gz') else open
-    with open_fn(output_file, 'wt', newline='') as out_f:
+    with open_fn(output_file, 'wt', newline='') as raw_out:
+        out_f = TextIOWrapper(raw_out) if isinstance(raw_out, gzip.GzipFile) else raw_out
         writer = csv.writer(out_f, delimiter='\t')
 
         # Read only column headers and determine haplotype groups
@@ -48,17 +50,12 @@ def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
             raise ValueError("No haplotype pairs found in input.")
 
         # Efficient ancestry map estimation
-        _, ancestry_map = get_ref_ancestry_and_map(input_file, nrows=1000)
+        _, ancestry_map = get_ref_ancestry_and_map(input_file)
         ancestries = list(sorted(ancestry_map.keys()))
         n_ancestries = len(ancestries)
 
-        print(f"Ancestries: {ancestry_map.keys()}")
-        print(f"Encoding: {n_ancestries} ancestries ({'|'.join(ancestries)})")
-
         # Write metadata and header
         out_f.write(f"##Ancestries: {dumps(ancestries)}\n")
-        out_f.write(f"##Encoding locations: {dumps('|'.join(ancestries))}\n")
-        out_f.write("##Legend: 0 - absent; 1 - one allele; 2 - both alleles\n")
         writer.writerow(['#CHROM', 'POS'] + list(grouped.keys()))
 
         # Define dtypes
@@ -66,20 +63,28 @@ def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
         dtype_dict = {col: 'category' for col in hap_cols}
 
         # Stream data
+        usecols = ["Position"] + hap_cols
         for chunk in pd.read_csv(input_file, sep="\t", index_col=0,
-                                 usecols=["Position"] + hap_cols,
-                                 chunksize=chunksize, dtype=dtype_dict):
+                                 usecols=usecols, chunksize=chunksize,
+                                 dtype=dtype_dict):
+
             # Convert ancestries to integer codes
-            chunk_int = chunk.apply(lambda col: col.astype('category').cat.codes)
-            for pos, row in chunk_int.iterrows():
-                encoded_row = [chrom, pos]
+            chunk_int = chunk.replace(ancestry_map)
+            rows_out = []
+            pos_array = chunk.index.to_numpy()
+
+            for i in range(len(chunk_int)):
+                encoded_row = [chrom, pos_array[i]]
+                row = chunk_int.iloc[i]
+
                 for sample, (h1, h2) in grouped.items():
                     a1 = row[h1]
                     a2 = row[h2]
                     counts = encode_pairwise_numba(a1, a2, n_ancestries)
-                    encoded = "|".join(str(c) for c in counts)
-                    encoded_row.append(encoded)
-                writer.writerow(encoded_row)
+                    encoded_row.append("|".join(map(str, counts)))
+                rows_out.append(encoded_row)
+
+            writer.writerows(rows_out)
 
 
 def main(input_file, output_file, chunksize, chrom):
