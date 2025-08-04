@@ -1,0 +1,13 @@
+2025-06-25 12:35:31 - **** Job starts ****
+2025-06-25 12:35:31 - **** Quest info ****
+User: owb0346
+Job id: 6630453
+Job name: convert_bp
+Node name: 
+Hostname: qnode0664
+Task id: 4
+2025-06-25 12:35:31 - **** Loading modules ****
+No modules loaded
+2025-06-25 12:35:32 - **** Loading mamba environment ****
+2025-06-25 12:35:44 - **** Run conversion ****
+slurmstepd: error: *** JOB 6630453 ON qnode0664 CANCELLED AT 2025-06-25T13:40:50 DUE TO TIME LIMIT ***

@@ -1,0 +1,14 @@
+2025-06-25 12:35:31 - **** Job starts ****
+2025-06-25 12:35:31 - **** Quest info ****
+User: owb0346
+Job id: 6630452
+Job name: convert_bp
+Node name: 
+Hostname: qnode0663
+Task id: 3
+2025-06-25 12:35:31 - **** Loading modules ****
+No modules loaded
+2025-06-25 12:35:33 - **** Loading mamba environment ****
+2025-06-25 12:35:45 - **** Run conversion ****
+[W::vcf_parse_info] INFO 'END' is not defined in the header, assuming Type=String
+slurmstepd: error: *** JOB 6630452 ON qnode0663 CANCELLED AT 2025-06-25T13:40:50 DUE TO TIME LIMIT ***
