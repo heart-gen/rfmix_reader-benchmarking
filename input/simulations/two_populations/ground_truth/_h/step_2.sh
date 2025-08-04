@@ -5,11 +5,11 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=20gb
 #SBATCH --output=log_files/convert.%A_%a.log
 #SBATCH --array=1-22
-#SBATCH --time=12:00:00
+#SBATCH --time=6:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -29,6 +29,7 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 log_message "**** Loading modules ****"
 
 module purge
+module load gcc/12.3.0-gcc
 module list
 
 ## Edit with your job command
@@ -40,7 +41,7 @@ log_message "**** Run conversion ****"
 CHROM=${SLURM_ARRAY_TASK_ID}
 
 python ../_h/02.convert_hap_to_geno.py ${CHROM} \
-       per_snp_ancestry.chr${CHROM}.tsv.gz chr${CHROM}.vcf.gz 5000
+       per_snp_ancestry.chr${CHROM}.tsv.gz chr${CHROM}.vcf.gz 10000
 
 conda deactivate
 log_message "**** Job ends ****"

@@ -2,9 +2,9 @@ import numpy as np
 import session_info
 import pandas as pd
 from json import dumps
-from numba import njit
 import sys, re, gzip, csv
 from io import TextIOWrapper
+from numba import njit, prange
 from collections import defaultdict
 
 def group_haplotypes(columns):
@@ -28,12 +28,17 @@ def get_ref_ancestry_and_map(filename, nrows=1000):
     return ref_ancestry, {anc: i for i, anc in enumerate(all_ancestries)}
 
 
-@njit
-def encode_pairwise_numba(a1, a2, n_ancestries):
-    counts = np.zeros(n_ancestries, dtype=np.uint8)
-    counts[a1] += 1
-    counts[a2] += 1
-    return counts
+@njit(parallel=True)
+def batch_encode_pairwise(a1, a2, n_ancestries):
+    n_rows, n_samples = a1.shape
+    result = np.zeros((n_rows, n_samples, n_ancestries), dtype=np.uint8)
+    for i in prange(n_rows):
+        for j in range(n_samples):
+            counts = np.zeros(n_ancestries, dtype=np.uint8)
+            counts[a1[i, j]] += 1
+            counts[a2[i, j]] += 1
+            result[i, j] = counts
+    return result
 
 
 def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
@@ -61,27 +66,29 @@ def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
         # Define dtypes
         hap_cols = [col for pair in grouped.values() for col in pair]
         dtype_dict = {col: 'category' for col in hap_cols}
+        usecols = ["Position"] + hap_cols
 
         # Stream data
-        usecols = ["Position"] + hap_cols
         for chunk in pd.read_csv(input_file, sep="\t", index_col=0,
                                  usecols=usecols, chunksize=chunksize,
                                  dtype=dtype_dict):
 
-            # Convert ancestries to integer codes
-            chunk_int = chunk.replace(ancestry_map)
-            rows_out = []
+            # Convert ot integer codes
+            for col in hap_cols:
+                chunk[col] = chunk[col].cat.codes.astype(np.uint8)
+
+            # Create arrays for both haplotype sets
+            a1_array = chunk[[pair[0] for pair in grouped.values()]].to_numpy()
+            a2_array = chunk[[pair[1] for pair in grouped.values()]].to_numpy()
+
+            encoded = batch_encode_pairwise(a1_array, a2_array, n_ancestries)
             pos_array = chunk.index.to_numpy()
 
-            for i in range(len(chunk_int)):
+            rows_out = []
+            for i in range(encoded.shape[0]):
                 encoded_row = [chrom, pos_array[i]]
-                row = chunk_int.iloc[i]
-
-                for sample, (h1, h2) in grouped.items():
-                    a1 = row[h1]
-                    a2 = row[h2]
-                    counts = encode_pairwise_numba(a1, a2, n_ancestries)
-                    encoded_row.append("|".join(map(str, counts)))
+                encoded_row += ["|".join(map(str, encoded[i, j]))
+                                for j in range(encoded.shape[1])]
                 rows_out.append(encoded_row)
 
             writer.writerows(rows_out)
