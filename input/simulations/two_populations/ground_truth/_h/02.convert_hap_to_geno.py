@@ -61,6 +61,7 @@ def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
 
         # Write metadata and header
         out_f.write(f"##Ancestries: {dumps(ancestries)}\n")
+        out_f.write(f"##AncestryMap: {dumps(ancestry_map)}\n")
         writer.writerow(['#CHROM', 'POS'] + list(grouped.keys()))
 
         # Define dtypes
@@ -73,8 +74,10 @@ def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
                                  usecols=usecols, chunksize=chunksize,
                                  dtype=dtype_dict):
 
-            # Convert ot integer codes
+            # Ensure category ordering matches ancestry_map
             for col in hap_cols:
+                chunk[col] = chunk[col].astype(pd.CategoricalDtype(categories=ancestries,
+                                                                   ordered=False))
                 chunk[col] = chunk[col].cat.codes.astype(np.uint8)
 
             # Create arrays for both haplotype sets
