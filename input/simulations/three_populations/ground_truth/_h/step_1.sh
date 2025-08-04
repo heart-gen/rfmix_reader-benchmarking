@@ -37,12 +37,12 @@ source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
 conda activate /projects/p32505/opt/env/AI_env
 
 log_message "**** Run conversion ****"
-INPUT="../../_m/simulation-files"
+INPUT="../../_m"
 CHROM=${SLURM_ARRAY_TASK_ID}
 
 python ../_h/01.convert_bp_to_snp.py \
-       ${INPUT}/chr${CHROM}.bp \
-       ${INPUT}/chr${CHROM}.vcf.gz \
+       ${INPUT}/simulation-files/chr${CHROM}.bp \
+       ${INPUT}/vcf-files/chr${CHROM}.vcf.gz \
        per_snp_ancestry.chr${CHROM}.tsv.gz
 
 conda deactivate
