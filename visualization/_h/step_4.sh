@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:h100:1
 #SBATCH --job-name=viz_local
 #SBATCH --mail-type=FAIL
-#SBATCH --mail-user=kynon.benjamin@northwestern.edu
+#SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=40gb
@@ -41,7 +41,7 @@ eval "$(mamba shell hook --shell bash)"
 ENV_PATH="/projects/p32505/opt/env/AI_env"
 
 mamba activate "$ENV_PATH"
-python ../_h/03.local_ancestry-simulated.py
+python ../_h/04.local_ancestry-ground_truth.py
 
 if [ $? -ne 0 ]; then
     log_message "Error: mamba or script execution failed"
