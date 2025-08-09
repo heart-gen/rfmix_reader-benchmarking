@@ -1,35 +1,0 @@
-2025-05-01 12:06:01 - **** Job starts ****
-2025-05-01 12:06:01 - **** Quest info ****
-User: owb0346
-Job id: 1403783
-Job name: viz_local
-Node name: 
-Hostname: qgpu3021
-Task id: N/A
-2025-05-01 12:06:01 - **** Loading modules ****
-
-Currently Loaded Modules:
-  1) libiconv/1.17-gcc-12.3.0   4) libxml2/2.10.3-gcc-12.3.0
-  2) xz/5.4.1-gcc-12.3.0        5) cuda/12.4.1-gcc-12.3.0
-  3) zlib/1.2.13-gcc-12.3.0
-
- 
-
-2025-05-01 12:06:16 - **** Loading mamba environment ****
-GPU 0: NVIDIA H100 80GB HBM3
-  Total memory: 79.19 GB
-  CUDA capability: 9.0
-Multiple files read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
-Mapping loci files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping loci files:   5%|▍         | 1/22 [00:34<12:11, 34.83s/it]Mapping loci files:   9%|▉         | 2/22 [00:35<04:58, 14.91s/it]Mapping loci files:  14%|█▎        | 3/22 [00:36<02:42,  8.56s/it]Mapping loci files:  18%|█▊        | 4/22 [00:37<01:39,  5.55s/it]Mapping loci files:  23%|██▎       | 5/22 [00:38<01:05,  3.84s/it]Mapping loci files:  27%|██▋       | 6/22 [00:39<00:44,  2.76s/it]Mapping loci files:  32%|███▏      | 7/22 [00:39<00:30,  2.05s/it]Mapping loci files:  36%|███▋      | 8/22 [00:40<00:22,  1.59s/it]Mapping loci files:  41%|████      | 9/22 [00:41<00:17,  1.36s/it]Mapping loci files:  45%|████▌     | 10/22 [00:41<00:13,  1.12s/it]Mapping loci files:  50%|█████     | 11/22 [00:42<00:10,  1.05it/s]Mapping loci files:  55%|█████▍    | 12/22 [00:43<00:11,  1.12s/it]Mapping loci files:  59%|█████▉    | 13/22 [00:44<00:08,  1.06it/s]Mapping loci files:  64%|██████▎   | 14/22 [00:44<00:06,  1.27it/s]Mapping loci files:  68%|██████▊   | 15/22 [00:45<00:04,  1.48it/s]Mapping loci files:  73%|███████▎  | 16/22 [00:46<00:05,  1.13it/s]Mapping loci files:  77%|███████▋  | 17/22 [00:48<00:05,  1.03s/it]Mapping loci files:  82%|████████▏ | 18/22 [00:49<00:04,  1.10s/it]Mapping loci files:  86%|████████▋ | 19/22 [00:50<00:03,  1.14s/it]Mapping loci files:  91%|█████████ | 20/22 [00:51<00:02,  1.14s/it]Mapping loci files:  95%|█████████▌| 21/22 [00:52<00:01,  1.14s/it]Mapping loci files: 100%|██████████| 22/22 [00:53<00:00,  1.08s/it]Mapping loci files: 100%|██████████| 22/22 [00:53<00:00,  2.44s/it]
-Mapping Q files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping Q files:   5%|▍         | 1/22 [00:00<00:04,  4.42it/s]Mapping Q files:  45%|████▌     | 10/22 [00:00<00:00, 36.98it/s]Mapping Q files: 100%|██████████| 22/22 [00:00<00:00, 53.81it/s]
-Mapping fb files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping fb files:   5%|▍         | 1/22 [00:00<00:05,  4.03it/s]Mapping fb files:  14%|█▎        | 3/22 [00:00<00:02,  7.80it/s]Mapping fb files:  18%|█▊        | 4/22 [00:00<00:02,  7.00it/s]Mapping fb files:  27%|██▋       | 6/22 [00:00<00:01,  9.89it/s]Mapping fb files:  41%|████      | 9/22 [00:00<00:00, 13.60it/s]Mapping fb files:  50%|█████     | 11/22 [00:01<00:00, 11.94it/s]Mapping fb files:  59%|█████▉    | 13/22 [00:01<00:00, 11.80it/s]Mapping fb files:  73%|███████▎  | 16/22 [00:01<00:00, 13.40it/s]Mapping fb files:  82%|████████▏ | 18/22 [00:01<00:00,  9.34it/s]Mapping fb files:  91%|█████████ | 20/22 [00:02<00:00,  9.45it/s]Mapping fb files: 100%|██████████| 22/22 [00:02<00:00,  9.87it/s]Mapping fb files: 100%|██████████| 22/22 [00:02<00:00, 10.08it/s]
-Processing Chromosomes:   0%|          | 0/22 [00:00<?, ?it/s]Processing Chromosomes:   5%|▍         | 1/22 [02:48<58:53, 168.24s/it]Processing Chromosomes:   9%|▉         | 2/22 [03:40<33:26, 100.30s/it]Processing Chromosomes:  14%|█▎        | 3/22 [04:33<24:48, 78.33s/it] Processing Chromosomes:  18%|█▊        | 4/22 [05:24<20:20, 67.78s/it]Processing Chromosomes:  23%|██▎       | 5/22 [06:16<17:31, 61.85s/it]Processing Chromosomes:  27%|██▋       | 6/22 [07:07<15:32, 58.26s/it]Processing Chromosomes:  32%|███▏      | 7/22 [07:58<13:59, 55.98s/it]Processing Chromosomes:  36%|███▋      | 8/22 [08:50<12:43, 54.51s/it]Processing Chromosomes:  41%|████      | 9/22 [09:41<11:35, 53.52s/it]Processing Chromosomes:  45%|████▌     | 10/22 [10:32<10:32, 52.72s/it]Processing Chromosomes:  50%|█████     | 11/22 [11:22<09:31, 51.92s/it]Processing Chromosomes:  55%|█████▍    | 12/22 [12:15<08:43, 52.40s/it]Processing Chromosomes:  59%|█████▉    | 13/22 [13:07<07:48, 52.08s/it]Processing Chromosomes:  64%|██████▎   | 14/22 [13:56<06:49, 51.25s/it]Processing Chromosomes:  68%|██████▊   | 15/22 [14:46<05:55, 50.82s/it]Processing Chromosomes:  73%|███████▎  | 16/22 [15:38<05:07, 51.19s/it]Processing Chromosomes:  77%|███████▋  | 17/22 [16:31<04:19, 51.81s/it]Processing Chromosomes:  82%|████████▏ | 18/22 [17:24<03:27, 51.98s/it]Processing Chromosomes:  86%|████████▋ | 19/22 [18:16<02:36, 52.17s/it]Processing Chromosomes:  91%|█████████ | 20/22 [19:09<01:44, 52.31s/it]Processing Chromosomes:  95%|█████████▌| 21/22 [20:02<00:52, 52.45s/it]Processing Chromosomes: 100%|██████████| 22/22 [20:53<00:00, 52.14s/it]Processing Chromosomes: 100%|██████████| 22/22 [20:53<00:00, 56.98s/it]
-Traceback (most recent call last):
-  File "/gpfs/projects/p32505/projects/rfmix_reader-benchmarking/visualization/_m/../_h/02.local_ancestry.py", line 59, in <module>
-    main()
-  File "/gpfs/projects/p32505/projects/rfmix_reader-benchmarking/visualization/_m/../_h/02.local_ancestry.py", line 43, in main
-    plot_local_ancestry_tagore(bed_df, out_prefix, build,
-  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/rfmix_reader/_tagore.py", line 192, in plot_local_ancestry_tagore
-    raise RuntimeError("\033[91mCould not find `rsvg` or `rsvg-convert` in PATH.\033[0m")
-RuntimeError: [91mCould not find `rsvg` or `rsvg-convert` in PATH.[0m
-2025-05-01 12:29:41 - Error: mamba or script execution failed
