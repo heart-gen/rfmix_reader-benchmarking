@@ -1,0 +1,4 @@
+visualization/_m/local_ancestry.hg38.real_data_2pop.pdf filter=lfs diff=lfs merge=lfs -text
+visualization/_m/local_ancestry.hg38.simu_data_3pop.pdf filter=lfs diff=lfs merge=lfs -text
+visualization/_m/local_ancestry.hg38.real_data_2pop.svg filter=lfs diff=lfs merge=lfs -text
+visualization/_m/local_ancestry.hg38.simu_data_3pop.svg filter=lfs diff=lfs merge=lfs -text
