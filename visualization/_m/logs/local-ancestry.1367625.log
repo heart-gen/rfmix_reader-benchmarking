@@ -1,0 +1,64 @@
+2025-08-11 13:39:27 - **** Job starts ****
+2025-08-11 13:39:27 - **** Quest info ****
+User: mhi573
+Job id: 1367625
+Job name: viz_local
+Node name: 
+Hostname: qgpu3006
+Task id: N/A
+2025-08-11 13:39:27 - **** Loading modules ****
+
+Currently Loaded Modules:
+  1) libiconv/1.17-gcc-12.3.0   4) libxml2/2.10.3-gcc-12.3.0
+  2) xz/5.4.1-gcc-12.3.0        5) cuda/12.4.1-gcc-12.3.0
+  3) zlib/1.2.13-gcc-12.3.0
+
+ 
+
+2025-08-11 13:39:31 - **** Loading mamba environment ****
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.19 GB
+  CUDA capability: 9.0
+Multiple files read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
+Mapping loci files:   0%|          | 0/22 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/rfmix_reader/_read_rfmix.py", line 153, in _read_tsv
+    df = read_csv(
+         ^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/cudf/utils/performance_tracking.py", line 51, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/cudf/io/csv.py", line 97, in read_csv
+    filepath_or_buffer = ioutils.get_reader_filepath_or_buffer(
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/cudf/utils/ioutils.py", line 1861, in get_reader_filepath_or_buffer
+    raise FileNotFoundError(
+FileNotFoundError: ['/gpfs/projects/p32505/users/manuel/rfmix_reader-benchmarking/input/simulations/two_populations/ground_truth/_m/chr1.fb.tsv'] could not be resolved to any files
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/gpfs/projects/p32505/users/manuel/rfmix_reader-benchmarking/visualization/_m/../_h/04.local_ancestry-ground_truth.py", line 49, in <module>
+    main()
+  File "/gpfs/projects/p32505/users/manuel/rfmix_reader-benchmarking/visualization/_m/../_h/04.local_ancestry-ground_truth.py", line 33, in main
+    loci, rf_q, admix = _load_two_pop_ground_truth()
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/users/manuel/rfmix_reader-benchmarking/visualization/_m/../_h/04.local_ancestry-ground_truth.py", line 20, in _load_two_pop_ground_truth
+    return read_rfmix(
+           ^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/rfmix_reader/_read_rfmix.py", line 82, in read_rfmix
+    loci = _read_file(fn, lambda f: _read_loci(f["fb.tsv"]), pbar)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/rfmix_reader/_read_rfmix.py", line 130, in _read_file
+    data.append(read_func(file_name))
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/rfmix_reader/_read_rfmix.py", line 82, in <lambda>
+    loci = _read_file(fn, lambda f: _read_loci(f["fb.tsv"]), pbar)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/rfmix_reader/_read_rfmix.py", line 204, in _read_loci
+    df = _read_tsv(fn)
+         ^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/env/AI_env/lib/python3.12/site-packages/rfmix_reader/_read_rfmix.py", line 178, in _read_tsv
+    raise FileNotFoundError(f"File {fn} not found.")
+FileNotFoundError: File /gpfs/projects/p32505/users/manuel/rfmix_reader-benchmarking/input/simulations/two_populations/ground_truth/_m/chr1.fb.tsv not found.
+Mapping loci files:   0%|          | 0/22 [00:00<?, ?it/s]
+2025-08-11 13:40:32 - Error: mamba or script execution failed
