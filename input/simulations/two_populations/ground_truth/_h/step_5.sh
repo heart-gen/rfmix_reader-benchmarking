@@ -35,17 +35,22 @@ CHROM=1
 OUTDIR="flare-out"
 THREADS=${SLURM_CPUS_PER_TASK}
 SOFTWARE="/projects/p32505/opt/bin"
-TEMP_MAP_DIR="/projects/p32505/users/manuel/rfmix_reader-benchmarking/input/simulations/two_populations/_m/temp"
+MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
 REF="/projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref"
 
 mkdir -p $OUTDIR
+mkdir -p temp
+
+log_message "**** Fix PLINK map file ****"
+awk '{if(NR>0) $1="chr"$1; print}' "${MAP_DIR}/plink.chr${CHROM}.GRCh38.map" \
+    > ./temp/plink.chr${CHROM}.GRCh38.reformatted.map
 
 log_message "**** FLARE Local Ancestry Analysis ****"
 
 java -Xmx16g -jar $SOFTWARE/flare.jar \
      ref="$REF/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" \
      ref-panel="$REF/samples_id2" \
-     map="$TEMP_MAP_DIR/plink.chr${CHROM}.GRCh38.reformatted.map" \
+     map="./temp/plink.chr${CHROM}.GRCh38.reformatted.map" \
      gt="chr${CHROM}.vcf.gz" nthreads=$THREADS \
      seed=13131313 array=true out="${OUTDIR}/chr${CHROM}"
 
