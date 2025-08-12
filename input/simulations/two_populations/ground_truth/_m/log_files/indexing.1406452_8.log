@@ -1,0 +1,19 @@
+2025-08-12 13:57:50 - **** Job starts ****
+2025-08-12 13:57:50 - **** Quest info ****
+User: mhi573
+Job id: 1406462
+Job name: index_chr
+Node name: 
+Task id: 8
+2025-08-12 13:57:50 - **** Loading modules ****
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   2) htslib/1.16
+
+ 
+
+2025-08-12 13:57:58 - Run job for ground-truth chromosome: 8
+2025-08-12 13:57:58 - *** Checking compression format for chr8.vcf.gz ***
+2025-08-12 13:57:58 - chr8.vcf.gz is not BGZF — re-compressing...
+2025-08-12 14:00:29 - *** Indexing VCF ***
+2025-08-12 14:00:58 - **** Job ends ****
