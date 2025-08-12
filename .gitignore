@@ -11,3 +11,15 @@ binary_files/*
 *.sis.tsv
 *.bin
 cufile.log
+*.vcf
+*.vcf.gz
+*.vcf.gz.tbi
+*.bim
+*.bed
+*.fam
+*.tmp
+*.bak
+*.rfmix.Q
+*txt.gz
+*tsv.gz
+*.RData
