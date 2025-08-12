@@ -1,0 +1,58 @@
+2025-08-12 16:24:55 - **** Job starts ****
+2025-08-12 16:24:55 - **** Quest info ****
+User: mhi573
+Job id: 1411932
+Job name: flare_model
+Node name: 
+Hostname: qnode0017
+Task id: N/A
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   2) htslib/1.16
+
+ 
+
+2025-08-12 16:25:19 - **** Fix PLINK map file ****
+2025-08-12 16:25:20 - **** FLARE Local Ancestry Analysis ****
+Copyright (C) 2021-2023 Brian L. Browning
+Enter "java -jar flare.jar" to print a list of command line arguments
+
+Program             :  flare.jar  [ version 0.5.2, 29Oct24.cc6 ]
+Start Time          :  04:25 PM CDT on 12 Aug 2025
+Max Memory          :  16384 MB
+
+Parameters
+  ref               :  /projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/1kGP_high_coverage_Illumina.chr1.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz
+  ref-panel         :  /projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/samples_id2
+  gt                :  chr1.vcf.gz
+  map               :  ./temp/plink.chr1.GRCh38.reformatted.map
+  out               :  flare-out/chr1
+  array             :  true
+  min-maf           :  0.005
+  probs             :  false
+  gen               :  10.0
+  em                :  true
+  nthreads          :  10
+  seed              :  13131313
+
+java.lang.IllegalArgumentException: 
+
+ERROR: Missing the VCF header line.
+VCF source: chr1.vcf.gz
+The VCF header line must immediately follow the meta-information lines.
+The fields of the VCF header line must be tab-delimited and begin with:
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT
+
+	at vcf.VcfHeader.checkHeaderLines(VcfHeader.java:164)
+	at vcf.VcfHeader.<init>(VcfHeader.java:134)
+	at vcf.RefIt.<init>(RefIt.java:132)
+	at vcf.RefIt.create(RefIt.java:96)
+	at admix.AdmixReader.refIt(AdmixReader.java:130)
+	at admix.AdmixReader.<init>(AdmixReader.java:105)
+	at admix.AdmixReader.instance(AdmixReader.java:83)
+	at admix.AdmixChromData$It.<init>(AdmixChromData.java:123)
+	at admix.AdmixMain.runAnalysis(AdmixMain.java:114)
+	at admix.AdmixMain.main(AdmixMain.java:68)
+
+Terminating program.
+2025-08-12 16:25:21 - **** Job ends ****
