@@ -5,9 +5,9 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --nodes=1
-#SBATCH --mem=20gb
+#SBATCH --mem=80gb
 #SBATCH --output=log_files/comp_glob_anc.%J.log
-#SBATCH --time=1:00:00
+#SBATCH --time=3:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -37,7 +37,8 @@ conda activate /projects/p32505/opt/env/AI_env
 
 log_message "**** Run script ****"
 
-python ../_h/
+python ../_h/03.compute_global_ancestry.py /path/to/vcfs/*.vcf.gz --weight --out global_ancestry.tsv
+
 
 conda deactivate
 log_message "**** Job ends ****"
