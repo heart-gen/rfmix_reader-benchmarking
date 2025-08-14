@@ -5,7 +5,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=16gb
+#SBATCH --mem=40gb
 #SBATCH --time=10:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
