@@ -113,7 +113,6 @@ def process_file(path: Path,
 
         prev_pos = None
         prev_counts = {s: None for s in sample_names}
-        first_row_printed = False
 
         # === ITERATE VARIANT LINES ===
         for line in fh:
@@ -126,17 +125,17 @@ def process_file(path: Path,
             # Parse ancestry tokens
             parsed = [parse_ancestry_token(tok) for tok in sample_fields]
 
-            # Pad missing values
+            # Skip rows for samples with missing calls (do not add denominator)
+            # We assume correct length (num_ances) for non-missing tokens
             for i, arr in enumerate(parsed):
-                if not arr:
-                    parsed[i] = [0] * num_ances
-                elif len(arr) < num_ances:
-                    parsed[i] = arr + [0] * (num_ances - len(arr))
+                if not arr:  # Missing or invalid token
+                    parsed[i] = None
 
             # === ADD COUNTS ===
             if not weight_intervals:
-                # Simple site-count
                 for sname, counts in zip(sample_names, parsed):
+                    if counts is None:
+                        continue  # skip missing data
                     for a in range(num_ances):
                         sample_sums[sname][a] += counts[a]
                     sample_total_weight[sname] += 2.0
@@ -153,19 +152,18 @@ def process_file(path: Path,
             if interval_len < 0:
                 print(f"Warning: non-positive interval (length={interval_len}) at pos {pos} in {path.name}", file=sys.stderr)
                 interval_len = 0
-            
 
             for sname in sample_names:
                 counts = prev_counts[sname]
                 if counts is None:
                     continue
+                for a in range(num_ances):
                     sample_sums[sname][a] += counts[a] * interval_len
                 sample_total_weight[sname] += 2.0 * interval_len
 
             prev_pos = pos
             for sname, counts in zip(sample_names, parsed):
                 prev_counts[sname] = counts
-
 
 def compute_proportions(sample_sums: dict, sample_total_weight: dict, ancestries: List[str]):
     """Return a dict sample -> dict(ancestry -> proportion)"""
@@ -177,8 +175,6 @@ def compute_proportions(sample_sums: dict, sample_total_weight: dict, ancestries
         props = {anc: (sums[i] / total if total > 0 else 0.0) for i, anc in enumerate(ancestries)}
         out[s] = props
     return out
-
-
 
 def write_tsv(output_path: str, proportions: dict, ancestries: List[str]):
     with open(output_path, 'w') as out:
