@@ -2,12 +2,14 @@
 #SBATCH --account=b1042
 #SBATCH --partition=genomics
 #SBATCH --job-name=compute_glob_anc
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=16gb
+#SBATCH --time=10:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
-#SBATCH --nodes=1
-#SBATCH --mem=100gb
 #SBATCH --output=log_files/comp_glob_anc.%J.log
-#SBATCH --time=10:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
