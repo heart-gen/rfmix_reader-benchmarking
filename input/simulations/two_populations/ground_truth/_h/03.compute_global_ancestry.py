@@ -11,7 +11,7 @@ from pathlib import Path
 # Project specific
 import gzip
 import pandas as pd
-from typing import List, Tuple
+from typing import List, Dict, Tuple
 import ast
 import argparse
 import sys
