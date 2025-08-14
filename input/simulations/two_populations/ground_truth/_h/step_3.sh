@@ -5,9 +5,9 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --nodes=1
-#SBATCH --mem=80gb
+#SBATCH --mem=100gb
 #SBATCH --output=log_files/comp_glob_anc.%J.log
-#SBATCH --time=3:00:00
+#SBATCH --time=10:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
