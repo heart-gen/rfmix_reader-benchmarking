@@ -16,6 +16,7 @@ import ast
 import argparse
 import sys
 
+
 # --------------------------
 # Parsing the file data
 # --------------------------
@@ -152,7 +153,7 @@ def process_file(path: Path,
             if interval_len < 0:
                 print(f"Warning: non-positive interval (length={interval_len}) at pos {pos} in {path.name}", file=sys.stderr)
                 interval_len = 0
-
+            
             for sname in sample_names:
                 counts = prev_counts[sname]
                 if counts is None:
@@ -165,16 +166,23 @@ def process_file(path: Path,
             for sname, counts in zip(sample_names, parsed):
                 prev_counts[sname] = counts
 
-def compute_proportions(sample_sums: dict, sample_total_weight: dict, ancestries: List[str]):
-    """Return a dict sample -> dict(ancestry -> proportion)"""
-    out = {}
-    for s, sums in sample_sums.items():
-        total = sample_total_weight.get(s, 0.0)
-        if total == 0.0:
-            total = sum(sums)  # fallback
-        props = {anc: (sums[i] / total if total > 0 else 0.0) for i, anc in enumerate(ancestries)}
-        out[s] = props
-    return out
+def compute_proportions(
+    sample_sums: Dict[str, List[float]],
+    sample_total_weight: Dict[str, float],
+    ancestries: List[str]
+    ) -> Dict[str, Dict[str, float]]:
+
+    # Convert sample_sums into DataFrame: rows=samples, columns=ancestries
+    df_sums = pd.DataFrame.from_dict(sample_sums, orient='index', columns=ancestries)
+
+    # Convert total weights into Series
+    total_weight_series = pd.Series(sample_total_weight)
+
+    # Divide each ancestry count by total weight per sample
+    df_props = df_sums.div(total_weight_series, axis=0)
+
+    # Convert back to nested dict: sample -> {ancestry: proportion}
+    return df_props.to_dict(orient='index')
 
 def write_tsv(output_path: str, proportions: dict, ancestries: List[str]):
     with open(output_path, 'w') as out:
@@ -259,8 +267,11 @@ def main():
     # -------------------------
     write_tsv(args.out, proportions, ancestries)
     print(f"Wrote global ancestry table to {args.out}", file=sys.stderr)
-    session_info.show()
 
+session_info.show()
+    
+if __name__ == '__main__':
+    main()
 
 if __name__ == '__main__':
     main()
