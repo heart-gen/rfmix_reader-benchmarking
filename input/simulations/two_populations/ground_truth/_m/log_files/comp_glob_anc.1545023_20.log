@@ -1,0 +1,23 @@
+2025-08-15 16:28:24 - **** Job starts ****
+2025-08-15 16:28:24 - **** Quest info ****
+User: mhi573
+Job id: 1545043
+Job name: compute_glob_anc
+Node name: 
+Hostname: qnode2163
+Task id: 20
+2025-08-15 16:28:24 - **** Loading modules ****
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc      6) xz/5.2.5-gcc       11) mpfr/4.1.0-gcc
+  2) libiconv/1.16-gcc    7) gettext/0.21-gcc   12) zlib/1.2.11-gcc
+  3) libxml2/2.9.12-gcc   8) binutils/2.37-gcc  13) zstd/1.5.0-gcc
+  4) ncurses/6.2-gcc      9) gmp/6.2.1-gcc      14) gcc/12.3.0-gcc
+  5) tar/1.34-gcc        10) mpc/1.1.0-gcc
+
+ 
+
+2025-08-15 16:28:30 - **** Loading mamba environment ****
+2025-08-15 16:28:39 - **** Run script ****
+Using ancestries: ['CEU', 'YRI']
+Processing ./chr20.vcf.gz ...
