@@ -41,10 +41,7 @@ conda activate /projects/p32505/opt/env/AI_env
 log_message "**** Run script ****"
 CHROM=${SLURM_ARRAY_TASK_ID}
 
-python ../_h/03.compute_global_ancestry.py \ 
-        --filename ./chr${CHROM}.vcf.gz \ 
-        --weight \ 
-        --out global_ancestry_chr${CHROM}.tsv
+python ../_h/03.compute_global_ancestry.py --filename ./chr${CHROM}.vcf.gz --weight --out global_ancestry_chr${CHROM}.tsv
 
 conda deactivate
 log_message "**** Job ends ****"
