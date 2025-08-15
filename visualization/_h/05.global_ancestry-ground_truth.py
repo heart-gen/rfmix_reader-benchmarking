@@ -24,27 +24,6 @@ def _load_two_pop_ground_truth():
         )
 
 def main():
-    # Load the two-population ground truth data
-    _, rf_q, _ = _load_two_pop_ground_truth()
-
-    # Plot global ancestry
-    plot_global_ancestry(
-        rf_q,
-        dpi=300,
-        bbox_inches="tight",
-        palette="Set1",      # Two-pop palette
-        figsize=(6, 6),
-        save_path="global_ancestry.ground_truth_2pop"
-    )
-
-    # Plot ancestry by chromosome
-    plot_ancestry_by_chromosome(
-        rf_q,
-        dpi=300,
-        bbox_inches="tight",
-        palette="Set1",      # Two-pop palette
-        save_path="chromosome_summary.ground_truth_2pop"
-    )
 
     # Session information
     session_info.show()
