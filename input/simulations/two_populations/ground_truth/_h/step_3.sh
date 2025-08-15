@@ -7,7 +7,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=80gb
 #SBATCH --array=1-22
-#SBATCH --time=00:30:00
+#SBATCH --time=01:30:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --output=log_files/comp_glob_anc.%A_%a.log
