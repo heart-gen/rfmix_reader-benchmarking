@@ -197,30 +197,36 @@ def write_tsv(output_path: str, proportions: dict, ancestries: List[str]):
 # MAIN
 # --------------------------
     
-    
 def main():
     p = argparse.ArgumentParser(
         description='Compute global ancestry proportions from local ancestry VCF-like files'
     )
+
+    # --- CHANGE 1: Replace positional 'inputs' argument with '--filename' argument ---
+    # Now takes a single chromosome file via the --filename parameter.
     p.add_argument(
-        'inputs',
-        nargs='+',
-        help='Input per-chromosome files (vcf or vcf.gz).'
+        '--filename',
+        required=True,
+        help='Chromosome file (vcf or vcf.gz).'
     )
+
     p.add_argument(
         '--ancestries',
         nargs='+',
-        help='Ordered list of ancestry labels (e.g. CEU YRI). If omitted, tries to read from first file header.'
+        help='Ordered list of ancestry labels (e.g. CEU YRI). If omitted, tries to read from file header.'
     )
     p.add_argument(
         '--weight',
         action='store_true',
         help='Weight calls by interval (pos[i+1]-pos[i]) instead of simple site counts.'
     )
+
+    # --- CHANGE 2: Update default based for chromosome 1 ---
+    # Default output filename now reflects chromosome 1 processing
     p.add_argument(
         '--out',
-        default='global_ancestry.tsv',
-        help='Output TSV file'
+        default='global_ancestry_chr1.tsv',
+        help='Output TSV file (default: global_ancestry_chr1.tsv)'
     )
     args = p.parse_args()
 
@@ -235,9 +241,8 @@ def main():
     # -------------------------
     ancestries = args.ancestries
     if ancestries is None:
-        # try to read from first file
-        first_file = args.inputs[0]
-        file_ancestries, sample_names = parse_header_and_ancestries(first_file)
+        # --- CHANGE 3: Use args.filename instead of args.inputs[0] ---
+        file_ancestries, sample_names = parse_header_and_ancestries(args.filename)
         if file_ancestries is None:
             p.error('No ancestries provided and none found in file header. Pass --ancestries.')
         ancestries = file_ancestries
@@ -245,17 +250,17 @@ def main():
     print(f"Using ancestries: {ancestries}", file=sys.stderr)
 
     # -------------------------
-    # Process each per-chromosome file
+    # Process file
     # -------------------------
-    for path in args.inputs:
-        print(f"Processing {path} ...", file=sys.stderr)
-        process_file(
-            path=path,
-            ancestries=ancestries,
-            weight_intervals=args.weight,
-            sample_sums=sample_sums,
-            sample_total_weight=sample_total_weight
-        )
+    # --- CHANGE 4: Removed for-loop over args.inputs ---
+    print(f"Processing {args.filename} ...", file=sys.stderr)
+    process_file(
+        path=args.filename,
+        ancestries=ancestries,
+        weight_intervals=args.weight,
+        sample_sums=sample_sums,
+        sample_total_weight=sample_total_weight
+    )
 
     # -------------------------
     # Compute proportions
@@ -268,7 +273,7 @@ def main():
     write_tsv(args.out, proportions, ancestries)
     print(f"Wrote global ancestry table to {args.out}", file=sys.stderr)
 
-session_info.show()
+    session_info.show()
     
 if __name__ == '__main__':
     main()
