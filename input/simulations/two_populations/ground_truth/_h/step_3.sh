@@ -6,10 +6,11 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=80gb
-#SBATCH --time=12:00:00
+#SBATCH --array=1-22
+#SBATCH --time=00:30:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
-#SBATCH --output=log_files/comp_glob_anc.%J.log
+#SBATCH --output=log_files/comp_glob_anc.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -38,9 +39,12 @@ source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
 conda activate /projects/p32505/opt/env/AI_env
 
 log_message "**** Run script ****"
+CHROM=${SLURM_ARRAY_TASK_ID}
 
-python ../_h/03.compute_global_ancestry.py ./*.vcf.gz --weight --out global_ancestry.tsv
-
+python ../_h/03.compute_global_ancestry.py \ 
+        --filename ./chr${CHROM}.vcf.gz \ 
+        --weight \ 
+        --out global_ancestry_chr${CHROM}.tsv
 
 conda deactivate
 log_message "**** Job ends ****"
