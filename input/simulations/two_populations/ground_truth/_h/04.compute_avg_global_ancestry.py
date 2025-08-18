@@ -69,7 +69,7 @@ def main():
     args = parser.parse_args()
 
     # Resolve folder path relative to project root
-    folder_path = Path(here(args.folder_path))
+    folder_path = Path(args.folder_path).resolve()
 
     compute_global_ancestry(folder_path, args.file_names, args.output_file)
     session_info.show()
