@@ -29,18 +29,18 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 log_message "**** Loading modules ****"
 
 module purge
-module load cuda/12.4.1-gcc-12.3.0
+module load gcc/12.3.0-gcc
 module list
 
-# Set path variables
+## Edit with your job command
 log_message "**** Loading mamba environment ****"
 source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
-eval "$(mamba shell hook --shell bash)"
+conda activate /projects/p32505/opt/env/AI_env
 
-ENV_PATH="/projects/p32505/opt/env/AI_env"
-
-mamba activate "$ENV_PATH"
-python ../_h/05.global_ancestry-ground_truth.py
+python ../_h/05.global_ancestry-ground_truth.py \
+  --folder /projects/p32505/users/manuel/rfmix_reader-benchmarking/input/simulations/two_populations/ground_truth/_m/ \
+  --file global_ancestry.tsv \
+  --output global_ancestry_ground_truth
 
 if [ $? -ne 0 ]; then
     log_message "Error: mamba or script execution failed"

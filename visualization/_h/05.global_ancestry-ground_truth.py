@@ -6,44 +6,40 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import session_info
 
+def plot_global_ancestry(avg_data, save_path="global_ancestry_ground_truth"):
+    # Ensure correct order of columns
+    avg_data = avg_data[["Sample", "EUR", "AFR"]]
 
-def plot_global_ancestry(avg_data, save_prefix="global_ancestry_ground_truth"):
-    """
-    avg_data: DataFrame with columns ['Sample', 'EUR', 'AFR']
-    save_prefix: output filename prefix (without extension)
-    """
-    df_melt = avg_data.melt(
-        id_vars="Sample",
-        value_vars=["EUR", "AFR"],
-        var_name="Population",
-        value_name="Proportion"
+    # Set up figure
+    plt.figure(figsize=(12, 6))
+
+    # Stacked barplot: AFR on bottom, EUR on top
+    plt.bar(
+        avg_data["Sample"],
+        avg_data["AFR"],
+        label="AFR",
+        color="red"
+    )
+    plt.bar(
+        avg_data["Sample"],
+        avg_data["EUR"],
+        bottom=avg_data["AFR"],
+        label="EUR",
+        color="blue"
     )
 
-    # Define custom color mapping
-    palette = {"EUR": "blue", "AFR": "red"}
-    
-    plt.figure(figsize=(12,6))
-    sns.barplot(
-        data=df_melt,
-        x="Sample",
-        y="Proportion",
-        hue="Population",
-        palette=palette
-    )
     plt.title("Global Ancestry Proportions")
     plt.ylabel("Ancestry Proportion")
-    plt.xlabel("Sample")
-    plt.ylim(0, 1.0)
-    plt.xticks(rotation=90)
+    plt.xlabel("Individuals")
+    plt.xticks([], [])  # remove cluttered x-ticks
     plt.legend(title="Population")
     plt.tight_layout()
 
     # Save in multiple formats
     for ext in ["png", "pdf", "svg"]:
-        out_file = f"{save_prefix}.{ext}"
-        plt.savefig(out_file, dpi=300, bbox_inches="tight")
-        print(f"Saved: {out_file}")
-
+        out_file = f"{save_path}.{ext}"
+        plt.savefig(out_file, dpi=300)
+        print(f"Saved {out_file}")
     plt.close()
 
 
@@ -72,7 +68,7 @@ def main():
     avg_data = pd.read_csv(file_path, sep="\t")
 
     # Plot and save
-    plot_global_ancestry(avg_data, save_prefix=args.output)
+    plot_global_ancestry(avg_data, save_path=args.output)
 
     # Session info
     session_info.show()
