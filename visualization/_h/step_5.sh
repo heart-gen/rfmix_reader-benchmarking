@@ -1,14 +1,13 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=gengpu
-#SBATCH --gres=gpu:h100:1
+#SBATCH --account=b1042
+#SBATCH --partition=genomics
 #SBATCH --job-name=viz_local
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=40gb
-#SBATCH --output=logs/local-ancestry.%j.log
+#SBATCH --mem=4gb
+#SBATCH --output=logs/global_ancestry_ground_truth.%J.log
 #SBATCH --time=04:00:00
 
 # Function to echo with timestamp
