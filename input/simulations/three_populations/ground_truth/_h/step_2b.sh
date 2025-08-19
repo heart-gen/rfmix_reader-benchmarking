@@ -2,8 +2,8 @@
 #SBATCH --account=b1042
 #SBATCH --partition=genomics
 #SBATCH --job-name=convert_int
-#SBATCH --mail-type=FAIL
-#SBATCH --mail-user=kynon.benjamin@northwestern.edu
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=30gb
