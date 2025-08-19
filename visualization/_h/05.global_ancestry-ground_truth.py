@@ -44,7 +44,7 @@ def plot_global_ancestry(avg_data, save_path="global_ancestry_ground_truth"):
         print(f"Saved {out_file}")
     plt.close()
 
-plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_truth_2pop"):
+def plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_truth_2pop"):
 
     folder_path = Path(folder_path).resolve()
     out_prefix = Path(out_prefix).resolve()
