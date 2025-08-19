@@ -1,0 +1,14 @@
+2025-08-19 13:51:31 - **** Job starts ****
+2025-08-19 13:51:31 - **** Quest info ****
+User: mhi573
+Job id: 1688991
+Job name: convert_bp
+Node name: 
+Hostname: qnode1037
+Task id: 21
+2025-08-19 13:51:31 - **** Loading modules ****
+No modules loaded
+2025-08-19 13:51:31 - **** Loading mamba environment ****
+2025-08-19 13:51:40 - **** Run conversion ****
+[W::vcf_parse_info] INFO 'END' is not defined in the header, assuming Type=String
+2025-08-19 13:53:20 - **** Job ends ****
