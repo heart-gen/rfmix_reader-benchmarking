@@ -6,9 +6,9 @@
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=40gb
+#SBATCH --mem=50gb
 #SBATCH --output=log_files/convert.%A_%a.log
-#SBATCH --array=4
+#SBATCH --array=14
 #SBATCH --time=4:00:00
 
 log_message() {
@@ -38,10 +38,17 @@ source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
 conda activate /projects/p32505/opt/env/AI_env
 
 log_message "**** Run conversion ****"
+INPUT="../../_m"
 CHROM=${SLURM_ARRAY_TASK_ID}
 
+python ../_h/01.convert_bp_to_snp.py \
+       ${INPUT}/simulation-files/chr${CHROM}.bp \
+       ${INPUT}/vcf-files/chr${CHROM}.vcf.gz \
+       per_snp_ancestry.chr${CHROM}.tsv.gz
+
 python ../_h/02.convert_hap_to_geno.py ${CHROM} \
-       per_snp_ancestry.chr${CHROM}.tsv.gz chr${CHROM}.vcf.gz 10000
+       per_snp_ancestry.chr${CHROM}.tsv.gz \
+       chr${CHROM}.vcf.gz 10000
 
 conda deactivate
 log_message "**** Job ends ****"
