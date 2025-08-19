@@ -47,7 +47,6 @@ def plot_global_ancestry(avg_data, save_path="global_ancestry_ground_truth"):
 def plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_truth_2pop"):
 
     folder_path = Path(folder_path).resolve()
-    out_prefix = Path(out_prefix).resolve()
 
     all_data = []
     file_pattern = re.compile(r"chr(\d+)\.tsv")
@@ -109,8 +108,9 @@ def plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_tr
     ax.legend(title="Ancestry", loc="upper left", bbox_to_anchor=(1.02, 1))
 
     for ext in ["pdf", "png", "svg"]:
-        plt.savefig(out_prefix.with_suffix(f".{ext}"), bbox_inches="tight")
-        print(f"Saved {out_prefix.with_suffix(f'.{ext}')}")
+        out_file = f"{out_prefix}.{ext}"
+        plt.savefig(out_file, bbox_inches="tight")
+        print(f"Saved {out_file}")
 
     plt.close()
 
@@ -145,7 +145,6 @@ def main():
         
     # Session info
     session_info.show()
-
 
 if __name__ == "__main__":
     main()

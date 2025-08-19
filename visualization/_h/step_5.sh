@@ -6,9 +6,9 @@
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=4gb
+#SBATCH --mem=8gb
 #SBATCH --output=logs/global_ancestry.%J.log
-#SBATCH --time=04:00:00
+#SBATCH --time=00:30:00
 
 # Function to echo with timestamp
 log_message() {
@@ -40,8 +40,7 @@ conda activate /projects/p32505/opt/env/AI_env
 python ../_h/05.global_ancestry-ground_truth.py \
   --folder /projects/p32505/users/manuel/rfmix_reader-benchmarking/input/simulations/two_populations/ground_truth/_m/ \
   --file global_ancestry.tsv \
-  --chromosome_plots \
-  --output global_ancestry_ground_truth
+  --chromosome_plots 
 
 if [ $? -ne 0 ]; then
     log_message "Error: mamba or script execution failed"
