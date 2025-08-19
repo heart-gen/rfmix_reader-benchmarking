@@ -3,8 +3,8 @@
 #SBATCH --partition=gengpu
 #SBATCH --gres=gpu:h100:1
 #SBATCH --job-name=viz_global
-#SBATCH --mail-type=FAIL
-#SBATCH --mail-user=kynon.benjamin@northwestern.edu
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=40gb

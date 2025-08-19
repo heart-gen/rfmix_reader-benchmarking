@@ -1,15 +1,16 @@
 #!/bin/bash
 #SBATCH --account=b1042
 #SBATCH --partition=genomics
-#SBATCH --job-name=convert_int
+#SBATCH --job-name=compute_glob_anc
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=80gb
+#SBATCH --array=1-22
+#SBATCH --time=01:30:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
-#SBATCH --nodes=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=30gb
-#SBATCH --output=log_files/convert.%A_%a.log
-#SBATCH --array=1-22
-#SBATCH --time=3:00:00
+#SBATCH --output=log_files/comp_glob_anc.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -37,11 +38,10 @@ log_message "**** Loading mamba environment ****"
 source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
 conda activate /projects/p32505/opt/env/AI_env
 
-log_message "**** Run conversion ****"
+log_message "**** Run script ****"
 CHROM=${SLURM_ARRAY_TASK_ID}
 
-python ../_h/02.convert_hap_to_geno.py ${CHROM} \
-       per_snp_ancestry.chr${CHROM}.tsv.gz chr${CHROM}.vcf.gz 10000
+python ../_h/03.compute_global_ancestry.py --filename ./chr${CHROM}.vcf.gz --weight --out global_ancestry_chr${CHROM}.tsv
 
 conda deactivate
 log_message "**** Job ends ****"

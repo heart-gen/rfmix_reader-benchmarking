@@ -40,6 +40,16 @@ def main():
         rf_q, dpi=300, bbox_inches="tight", palette="Set1",
         save_path="chromosome_summary.real_data_2pop"
     )
+    # Plot simulated data, two populations
+    _, rf_q, _ = _load_simu_data(2)
+    plot_global_ancestry(
+        rf_q, dpi=300, bbox_inches="tight", palette="Set1",
+        figsize=(6,6), save_path="global_ancestry.simu_data_2pop"
+    )
+    plot_ancestry_by_chromosome(
+        rf_q, dpi=300, bbox_inches="tight", palette="Set1",
+        save_path="chromosome_summary.simu_data_2pop"
+    )
     # Plot simulated data, three populations
     _, rf_q, _ = _load_simu_data(3)
     plot_global_ancestry(
@@ -52,7 +62,6 @@ def main():
     )
     # Session information
     session_info.show()
-
 
 if __name__ == "__main__":
     main()
