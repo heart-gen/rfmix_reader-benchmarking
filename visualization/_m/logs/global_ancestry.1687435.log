@@ -1,0 +1,37 @@
+2025-08-19 12:54:53 - **** Job starts ****
+2025-08-19 12:54:53 - **** Quest info ****
+User: mhi573
+Job id: 1687435
+Job name: viz_local
+Node name: 
+Hostname: qnode0149
+Task id: N/A
+2025-08-19 12:54:53 - **** Loading modules ****
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc      6) xz/5.2.5-gcc       11) mpfr/4.1.0-gcc
+  2) libiconv/1.16-gcc    7) gettext/0.21-gcc   12) zlib/1.2.11-gcc
+  3) libxml2/2.9.12-gcc   8) binutils/2.37-gcc  13) zstd/1.5.0-gcc
+  4) ncurses/6.2-gcc      9) gmp/6.2.1-gcc      14) gcc/12.3.0-gcc
+  5) tar/1.34-gcc        10) mpc/1.1.0-gcc
+
+ 
+
+2025-08-19 12:55:01 - **** Loading mamba environment ****
+Saved global_ancestry.ground_truth_2pop.png
+Saved global_ancestry.ground_truth_2pop.pdf
+Saved global_ancestry.ground_truth_2pop.svg
+Saved chromosome_summary.ground_truth_2pop.pdf
+Saved chromosome_summary.ground_truth_2pop.png
+Saved chromosome_summary.ground_truth_2pop.svg
+-----
+matplotlib          3.10.5
+pandas              2.3.1
+seaborn             0.13.2
+session_info        1.0.0
+-----
+Python 3.12.9 | packaged by conda-forge | (main, Mar  4 2025, 22:48:41) [GCC 13.3.0]
+Linux-4.18.0-553.36.1.el8_10.x86_64-x86_64-with-glibc2.28
+-----
+Session information updated at 2025-08-19 12:55
+2025-08-19 12:55:53 - **** Job ends ****
