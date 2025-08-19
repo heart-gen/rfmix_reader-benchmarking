@@ -3,6 +3,7 @@ import argparse
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 from pathlib import Path
 import session_info
 import re
@@ -43,9 +44,7 @@ def plot_global_ancestry(avg_data, save_path="global_ancestry_ground_truth"):
         print(f"Saved {out_file}")
     plt.close()
 
-def plot_ancestry_whiskers(folder_path, out_prefix="global_ancestry_whiskers"):
-    import re
-    from matplotlib.patches import Patch
+plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_truth_2pop"):
 
     folder_path = Path(folder_path).resolve()
     out_prefix = Path(out_prefix).resolve()
@@ -77,10 +76,17 @@ def plot_ancestry_whiskers(folder_path, out_prefix="global_ancestry_whiskers"):
     data = pd.concat(all_data, ignore_index=True)
     data = data[data["Chromosome"].between(1, 22)]
     data["Chromosome"] = pd.Categorical(
-        data["Chromosome"], categories=list(range(1, 22)), ordered=True
+        data["Chromosome"], categories=list(range(1, 23)), ordered=True
     )
 
     colors = {"AFR": "red", "EUR": "blue"}
+
+    flierprops = dict(
+    marker='o',
+    markerfacecolor='white',
+    markeredgecolor='black',
+    markersize=5
+    )   
 
     plt.figure(figsize=(14, 6))
     ax = sns.boxplot(
@@ -90,19 +96,17 @@ def plot_ancestry_whiskers(folder_path, out_prefix="global_ancestry_whiskers"):
         hue="Ancestry",
         palette=colors,
         showcaps=True,
-        fliersize=1,
-        linewidth=1.2
+        linewidth=1.2,
+        flierprops=flierprops
     )
 
     ax.set_title("Ancestry Proportion per Chromosome", fontsize=14, weight="bold")
     ax.set_ylabel("Ancestry Proportion")
     ax.set_xlabel("Chromosome")
-    ax.set_ylim(0, 1)
+    ax.set_ylim(-0.05, 1.05)  # 5% padding on bottom and top
 
     # Move legend outside top-right
     ax.legend(title="Ancestry", loc="upper left", bbox_to_anchor=(1.02, 1))
-
-    plt.tight_layout()
 
     for ext in ["pdf", "png", "svg"]:
         plt.savefig(out_prefix.with_suffix(f".{ext}"), bbox_inches="tight")
@@ -123,28 +127,21 @@ def main():
         help="Name of the TSV file with ancestry averages"
     )
     parser.add_argument(
-        "--output", type=str, default="global_ancestry_ground_truth",
-        help="Output filename prefix (default: global_ancestry_ground_truth)"
-    )
-    parser.add_argument(
-        "--chromosome_plots", action="store_true",  # [NEW] flag to also produce whisker plots
+        "--chromosome_plots", action="store_true",
         help="If set, also generate per-chromosome ancestry whisker plots"
     )
     
     args = parser.parse_args()
 
-    # Build file path
     file_path = Path(args.folder) / args.file
-
-    # Load TSV
     avg_data = pd.read_csv(file_path, sep="\t")
 
-    # Plot and save
-    plot_global_ancestry(avg_data, save_path=args.output)
+    # Save global ancestry plot
+    plot_global_ancestry(avg_data, save_path="global_ancestry.ground_truth_2pop")
 
-    # [NEW] Optional per-chromosome whisker plots
+    # Optional per-chromosome whisker plots
     if args.chromosome_plots:
-        plot_ancestry_whiskers(args.folder, out_prefix="global_ancestry_whiskers")
+        plot_ancestry_whiskers(args.folder, out_prefix="chromosome_summary.ground_truth_2pop")
         
     # Session info
     session_info.show()
