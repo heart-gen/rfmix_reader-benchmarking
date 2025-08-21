@@ -22,19 +22,9 @@ import sys
 # --------------------------
 
 def open_vcf_gz(path: str):
-    """
-    Open .vcf.gz file types.
-    """
     return gzip.open(path, 'rt') if str(path).endswith('.gz') else open(path, 'r')
 
 def parse_header_and_ancestries(path) -> Tuple[dict, List[str], List[str]]:
-    """
-    Extract ancestries and sample names from the VCF header.
-
-    Returns:
-        ancestries: list of ancestry names (if available)
-        sample_names: list of sample names from #CHROM header
-    """
     ancestries = None
     sample_names = None
     with open_vcf_gz(path) as f:
@@ -58,10 +48,6 @@ def parse_header_and_ancestries(path) -> Tuple[dict, List[str], List[str]]:
     return ancestries, sample_names
 
 def parse_ancestry_token(token: str) -> List[int]:
-    """
-    Parse a sample token like '0|2' or '0|2:otherinfo' -> [0, 2]
-    Returns a list of ints (one per ancestry).
-    """
     if token is None or token == '.':
         return []
     token = token.split(':', 1)[0]
@@ -82,10 +68,6 @@ def process_file(path: Path,
                  weight_intervals: bool,
                  sample_sums: dict,
                  sample_total_weight: dict):
-    """Process one input file and update sample_sums and sample_total_weight in-place.
-    
-    Also prints example numeric counts for the first variant row (for visual inspection).
-    """
     num_ances = len(ancestries)
     
     with open_vcf_gz(path) as fh:
@@ -127,7 +109,7 @@ def process_file(path: Path,
             parsed = [parse_ancestry_token(tok) for tok in sample_fields]
 
             # Skip rows for samples with missing calls (do not add denominator)
-            # We assume correct length (num_ances) for non-missing tokens
+            # assume correct length (num_ances) for non-missing tokens
             for i, arr in enumerate(parsed):
                 if not arr:  # Missing or invalid token
                     parsed[i] = None
@@ -202,8 +184,6 @@ def main():
         description='Compute global ancestry proportions from local ancestry VCF-like files'
     )
 
-    # --- CHANGE 1: Replace positional 'inputs' argument with '--filename' argument ---
-    # Now takes a single chromosome file via the --filename parameter.
     p.add_argument(
         '--filename',
         required=True,
@@ -221,7 +201,6 @@ def main():
         help='Weight calls by interval (pos[i+1]-pos[i]) instead of simple site counts.'
     )
 
-    # --- CHANGE 2: Update default based for chromosome 1 ---
     # Default output filename now reflects chromosome 1 processing
     p.add_argument(
         '--out',
@@ -241,7 +220,6 @@ def main():
     # -------------------------
     ancestries = args.ancestries
     if ancestries is None:
-        # --- CHANGE 3: Use args.filename instead of args.inputs[0] ---
         file_ancestries, sample_names = parse_header_and_ancestries(args.filename)
         if file_ancestries is None:
             p.error('No ancestries provided and none found in file header. Pass --ancestries.')
@@ -252,7 +230,6 @@ def main():
     # -------------------------
     # Process file
     # -------------------------
-    # --- CHANGE 4: Removed for-loop over args.inputs ---
     print(f"Processing {args.filename} ...", file=sys.stderr)
     process_file(
         path=args.filename,
