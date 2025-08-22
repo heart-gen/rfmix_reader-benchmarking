@@ -41,7 +41,8 @@ log_message "**** Run conversion ****"
 CHROM=${SLURM_ARRAY_TASK_ID}
 
 python ../_h/02.convert_hap_to_geno.py ${CHROM} \
-       per_snp_ancestry.chr${CHROM}.tsv.gz chr${CHROM}.vcf.gz 10000
+       per_snp_ancestry.chr${CHROM}.tsv.gz chr${CHROM}.vcf.gz \
+       ../../_m/simulation-files/chr${CHROM}.bp 10000
 
 conda deactivate
 log_message "**** Job ends ****"

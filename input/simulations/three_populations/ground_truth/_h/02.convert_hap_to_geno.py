@@ -21,11 +21,21 @@ def group_haplotypes(columns):
     return {k: v for k, v in sample_pairs.items() if len(v) == 2}
 
 
-def get_ref_ancestry_and_map(filename, nrows=1000):
-    sample_df = pd.read_csv(filename, sep="\t", nrows=nrows, index_col=0)
-    ref_ancestry = sample_df.iloc[0].value_counts().idxmax()
-    all_ancestries = sorted(set(sample_df.values.ravel()))
-    return ref_ancestry, {anc: i for i, anc in enumerate(all_ancestries)}
+def collect_all_ancestries(files, bp_file=None):
+    ancestries = set()
+    if bp_file is not None:
+        # Parse ancestry labels directly from BP file
+        with open(bp_file) as f:
+            for line in f:
+                if line.strip() and not line.startswith("Sample"):
+                    anc = line.split()[0]
+                    ancestries.add(anc)
+    else:
+        # Scan input hap file(s)
+        for fn in files:
+            df = pd.read_csv(fn, sep="\t", nrows=5000, index_col=0)
+            ancestries.update(df.values.ravel())
+    return sorted(ancestries), {anc: i for i, anc in enumerate(sorted(ancestries))}
 
 
 @njit(parallel=True)
@@ -41,7 +51,7 @@ def batch_encode_pairwise(a1, a2, n_ancestries):
     return result
 
 
-def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
+def stream_encode(input_file, output_file, bp_file, chunksize=10000, chrom="chr1"):
     open_fn = gzip.open if output_file.endswith('.gz') else open
     with open_fn(output_file, 'wt', newline='') as raw_out:
         out_f = TextIOWrapper(raw_out) if isinstance(raw_out, gzip.GzipFile) else raw_out
@@ -55,8 +65,8 @@ def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
             raise ValueError("No haplotype pairs found in input.")
 
         # Efficient ancestry map estimation
-        _, ancestry_map = get_ref_ancestry_and_map(input_file)
-        ancestries = list(sorted(ancestry_map.keys()))
+        ancestries, ancestry_map = collect_all_ancestries([input_file],
+                                                          bp_file=bp_file)
         n_ancestries = len(ancestries)
 
         # Write metadata and header
@@ -97,18 +107,19 @@ def stream_encode(input_file, output_file, chunksize=10000, chrom="chr1"):
             writer.writerows(rows_out)
 
 
-def main(input_file, output_file, chunksize, chrom):
-    stream_encode(input_file, output_file, chunksize, chrom)
+def main(input_file, output_file, bp_file, chunksize, chrom):
+    stream_encode(input_file, output_file, bp_file, chunksize, chrom)
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
-        print("Usage: python 01.convert_hap_to_geno.py <chrom> <input_tsv[gz]> <output_tsv[gz]> [chunksize]")
+        print("Usage: python 01.convert_hap_to_geno.py <chrom> <input_tsv[gz]> <output_tsv[gz]> <bp_file> [chunksize]")
         sys.exit(1)
 
     chrom = f"chr{sys.argv[1]}"
     input_file = sys.argv[2]
     output_file = sys.argv[3]
-    chunksize = int(sys.argv[4]) if len(sys.argv) >= 5 else 10000
+    bp_file = sys.argv[4]
+    chunksize = int(sys.argv[5]) if len(sys.argv) >= 6 else 10000
 
-    main(input_file, output_file, chunksize, chrom)
+    main(input_file, output_file, bp_file, chunksize, chrom)
