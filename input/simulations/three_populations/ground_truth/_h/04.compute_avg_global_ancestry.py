@@ -16,7 +16,7 @@ import pandas as pd
 # average per sample
 # --------------------------
 
-def compute_global_ancestry(folder_path: Path, file_names: list, output_file: str = "global_ancestry.tsv"):
+def compute_global_ancestry(folder_path: Path, file_names: list, output_file: str = "avg_global_ancestry.tsv"):
    
     dfs = []
     for fname in file_names:
@@ -26,8 +26,10 @@ def compute_global_ancestry(folder_path: Path, file_names: list, output_file: st
         # Rename CEU -> EUR, YRI -> AFR
         df = df.rename(columns={"CEU": "EUR", "YRI": "AFR"})
 
-        # Keep only required columns
-        df = df[["Sample", "EUR", "AFR"]]
+        # Keep Sample + all ancestry columns dynamically
+        ancestry_cols = [c for c in df.columns if c != "Sample"]
+        df = df[["Sample"] + ancestry_cols]
+
         dfs.append(df)
 
     # Combine all chromosomes
@@ -63,7 +65,7 @@ def main():
     parser.add_argument(
         "--output_file",
         type=str,
-        default="global_ancestry.tsv",
+        default="avg_global_ancestry.tsv",
         help="Output TSV filename."
     )
     args = parser.parse_args()

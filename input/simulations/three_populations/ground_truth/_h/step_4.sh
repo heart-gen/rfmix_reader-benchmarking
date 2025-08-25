@@ -42,7 +42,7 @@ log_message "**** Run script ****"
 python ../_h/04.compute_avg_global_ancestry.py \
     --folder_path "./" \
     --file_names *.tsv \
-    --output_file global_ancestry.tsv
+    --output_file avg_global_ancestry.tsv
 
 conda deactivate
 log_message "**** Job ends ****"
