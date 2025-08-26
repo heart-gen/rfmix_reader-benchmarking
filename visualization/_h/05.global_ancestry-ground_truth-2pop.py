@@ -8,7 +8,7 @@ from pathlib import Path
 import session_info
 import re
 
-def plot_global_ancestry(avg_data, save_path="global_ancestry_ground_truth"):
+def plot_global_ancestry(avg_data, save_path="global_ancestry.ground_truth"):
     # Ensure correct order of columns
     avg_data = avg_data[["Sample", "EUR", "AFR"]]
 
