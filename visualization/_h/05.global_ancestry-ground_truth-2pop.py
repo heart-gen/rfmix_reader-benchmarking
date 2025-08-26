@@ -35,7 +35,6 @@ def plot_global_ancestry(avg_data, save_path="global_ancestry_ground_truth"):
     plt.xlabel("Individuals")
     plt.xticks([], [])  # remove cluttered x-ticks
     plt.legend(title="Population")
-    plt.tight_layout()
 
     # Save in multiple formats
     for ext in ["png", "pdf", "svg"]:
