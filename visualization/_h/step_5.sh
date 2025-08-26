@@ -37,9 +37,9 @@ log_message "**** Loading mamba environment ****"
 source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
 conda activate /projects/p32505/opt/env/AI_env
 
-python ../_h/05.global_ancestry-ground_truth.py \
+python ../_h/05.global_ancestry-ground_truth-2pop.py \
   --folder /projects/p32505/users/manuel/rfmix_reader-benchmarking/input/simulations/two_populations/ground_truth/_m/ \
-  --file global_ancestry.tsv \
+  --file avg_global_ancestry.tsv \
   --chromosome_plots 
 
 if [ $? -ne 0 ]; then
