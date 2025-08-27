@@ -1,4 +1,4 @@
-## Script to visualize global ancestry for TWO population ground-truth data
+## Script to visualize global ancestry for THREE population ground-truth data
 import argparse
 import pandas as pd
 import seaborn as sns
@@ -10,22 +10,31 @@ import re
 
 def plot_global_ancestry(avg_data, save_path="global_ancestry.ground_truth"):
     # Ensure correct order of columns
-    avg_data = avg_data[["Sample", "EUR", "AFR"]]
+    avg_data = avg_data[["Sample", "EUR", "PUR", "AFR"]]
 
     # Set up figure
     plt.figure(figsize=(12, 6))
 
-    # Stacked barplot: AFR on bottom, EUR on top
+    # AFR bottom
     plt.bar(
         avg_data["Sample"],
         avg_data["AFR"],
         label="AFR",
         color="red"
     )
+    # PUR middle (stacked on AFR)
+    plt.bar(
+        avg_data["Sample"],
+        avg_data["PUR"],
+        bottom=avg_data["AFR"],
+        label="PUR",
+        color="green"
+    )
+    # EUR top (stacked on AFR + PUR)
     plt.bar(
         avg_data["Sample"],
         avg_data["EUR"],
-        bottom=avg_data["AFR"],
+        bottom=avg_data["AFR"] + avg_data["PUR"],
         label="EUR",
         color="blue"
     )
@@ -44,7 +53,7 @@ def plot_global_ancestry(avg_data, save_path="global_ancestry.ground_truth"):
         print(f"Saved {out_file}")
     plt.close()
 
-def plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_truth_2pop"):
+def plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_truth_3pop"):
 
     folder_path = Path(folder_path).resolve()
 
@@ -58,12 +67,12 @@ def plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_tr
         chrom = int(match.group(1))
 
         df = pd.read_csv(file, sep="\t")
-        df = df.rename(columns={"YRI": "AFR", "CEU": "EUR"})
+        df = df.rename(columns={"YRI": "AFR", "CEU": "EUR", "PUR": "PUR"})
         df["Chromosome"] = chrom
 
         df_melt = df.melt(
             id_vars=["Sample", "Chromosome"],
-            value_vars=["AFR", "EUR"],
+            value_vars=["AFR", "EUR", "PUR"],
             var_name="Ancestry",
             value_name="Proportion"
         )
@@ -78,7 +87,7 @@ def plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_tr
         data["Chromosome"], categories=list(range(1, 23)), ordered=True
     )
 
-    colors = {"AFR": "red", "EUR": "blue"}
+    colors = {"AFR": "red", "EUR": "blue", "PUR": "green"}
 
     flierprops = dict(
     marker='o',
@@ -116,7 +125,7 @@ def plot_ancestry_whiskers(folder_path, out_prefix="chromosome_summary.ground_tr
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Visualize global ancestry proportions for TWO population data."
+        description="Visualize global ancestry proportions for THREE population data."
     )
     parser.add_argument(
         "--folder", type=str, required=True,
@@ -137,11 +146,11 @@ def main():
     avg_data = pd.read_csv(file_path, sep="\t")
 
     # Save global ancestry plot
-    plot_global_ancestry(avg_data, save_path="global_ancestry.ground_truth_2pop")
+    plot_global_ancestry(avg_data, save_path="global_ancestry.ground_truth_3pop")
 
     # Optional per-chromosome whisker plots
     if args.chromosome_plots:
-        plot_ancestry_whiskers(args.folder, out_prefix="chromosome_summary.ground_truth_2pop")
+        plot_ancestry_whiskers(args.folder, out_prefix="chromosome_summary.ground_truth_3pop")
         
     # Session info
     session_info.show()
