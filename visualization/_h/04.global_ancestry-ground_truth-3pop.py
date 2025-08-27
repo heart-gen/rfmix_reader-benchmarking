@@ -8,7 +8,7 @@ from pathlib import Path
 import session_info
 import re
 
-def plot_global_ancestry(avg_data, save_path="global_ancestry_ground_truth"):
+def plot_global_ancestry(avg_data, save_path="global_ancestry.ground_truth"):
     # Ensure correct order of columns
     avg_data = avg_data[["Sample", "EUR", "AFR"]]
 
@@ -34,13 +34,13 @@ def plot_global_ancestry(avg_data, save_path="global_ancestry_ground_truth"):
     plt.ylabel("Ancestry Proportion")
     plt.xlabel("Individuals")
     plt.xticks([], [])  # remove cluttered x-ticks
-    plt.legend(title="Population")
-    plt.tight_layout()
+    # Legend outside
+    plt.legend(title="Population", loc="upper left", bbox_to_anchor=(1.02, 1))
 
     # Save in multiple formats
     for ext in ["png", "pdf", "svg"]:
         out_file = f"{save_path}.{ext}"
-        plt.savefig(out_file, dpi=300)
+        plt.savefig(out_file, dpi=300, bbox_inches="tight")
         print(f"Saved {out_file}")
     plt.close()
 
