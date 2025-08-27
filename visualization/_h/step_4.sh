@@ -1,15 +1,14 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=gengpu
-#SBATCH --gres=gpu:h100:1
+#SBATCH --account=b1042
+#SBATCH --partition=genomics
 #SBATCH --job-name=viz_local
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=40gb
-#SBATCH --output=logs/local-ancestry.%j.log
-#SBATCH --time=04:00:00
+#SBATCH --mem=8gb
+#SBATCH --output=logs/global_ancestry.%J.log
+#SBATCH --time=00:30:00
 
 # Function to echo with timestamp
 log_message() {
@@ -30,23 +29,23 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 log_message "**** Loading modules ****"
 
 module purge
-module load cuda/12.4.1-gcc-12.3.0
+module load gcc/12.3.0-gcc
 module list
 
-# Set path variables
+## Edit with your job command
 log_message "**** Loading mamba environment ****"
 source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
-eval "$(mamba shell hook --shell bash)"
+conda activate /projects/p32505/opt/env/AI_env
 
-ENV_PATH="/projects/p32505/opt/env/AI_env"
-
-mamba activate "$ENV_PATH"
-python ../_h/04.local_ancestry-ground_truth.py
+python ../_h/04.global_ancestry-ground_truth-3pop.py \
+  --folder /projects/p32505/users/manuel/rfmix_reader-benchmarking/input/simulations/three_populations/ground_truth/_m/ \
+  --file avg_global_ancestry.tsv \
+  --chromosome_plots 
 
 if [ $? -ne 0 ]; then
     log_message "Error: mamba or script execution failed"
     exit 1
 fi
 
-mamba deactivate
+conda deactivate
 log_message "**** Job ends ****"

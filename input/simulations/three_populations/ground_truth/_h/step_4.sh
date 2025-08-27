@@ -1,16 +1,16 @@
 #!/bin/bash
 #SBATCH --account=b1042
 #SBATCH --partition=genomics
-#SBATCH --job-name=viz_local
+#SBATCH --job-name=compute_glob_anc
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=4gb
+#SBATCH --time=00:30:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
-#SBATCH --nodes=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=8gb
-#SBATCH --output=logs/global_ancestry.%J.log
-#SBATCH --time=00:30:00
+#SBATCH --output=log_files/comp_avg_glob_anc.%J.log
 
-# Function to echo with timestamp
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
@@ -37,15 +37,12 @@ log_message "**** Loading mamba environment ****"
 source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
 conda activate /projects/p32505/opt/env/AI_env
 
-python ../_h/05.global_ancestry-ground_truth-2pop.py \
-  --folder /projects/p32505/users/manuel/rfmix_reader-benchmarking/input/simulations/two_populations/ground_truth/_m/ \
-  --file avg_global_ancestry.tsv \
-  --chromosome_plots 
+log_message "**** Run script ****"
 
-if [ $? -ne 0 ]; then
-    log_message "Error: mamba or script execution failed"
-    exit 1
-fi
+python ../_h/04.compute_avg_global_ancestry.py \
+    --folder_path "./" \
+    --file_names *.tsv \
+    --output_file avg_global_ancestry.tsv
 
 conda deactivate
 log_message "**** Job ends ****"
