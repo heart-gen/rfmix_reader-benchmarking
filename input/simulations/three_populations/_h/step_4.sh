@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=short
+#SBATCH --account=b1042
+#SBATCH --partition=genomics
 #SBATCH --job-name=flare_model
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
@@ -10,7 +10,7 @@
 #SBATCH --mem=24gb
 #SBATCH --output=logs/flare.%A-%a.log
 #SBATCH --array=1-22
-#SBATCH --time=01:00:00
+#SBATCH --time=03:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"

@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=short
+#SBATCH --account=b1042
+#SBATCH --partition=genomics
 #SBATCH --job-name=simu_genotypes
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu

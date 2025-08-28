@@ -30,18 +30,20 @@ log_message "**** Loading modules ****"
 
 module purge
 module load bcftools/1.10.1
+module load htslib/1.16
 module list
 
 ## Edit with your job command
 CHROM=${SLURM_ARRAY_TASK_ID}
-VCFDIR="/projects/b1213/resources/1kGP/GRCh38_phased_vcf/raw/"
 TEMPDIR="temp"
+FILTERED_VCF="${TEMPDIR}/chr${CHROM}.biallelic.vcf.gz"
 
 log_message "**** Prepare samples ****"
-echo -e "Chromosome: ${CRHOM}"
+echo -e "Chromosome: ${CHROM}"
 
-bcftools view -v snps -S ${TEMPDIR}/samples_id -Oz \
-         -o ${TEMPDIR}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz \
-         $VCFDIR/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz
+bcftools view -v snps -S "${TEMPDIR}/samples_id" -Oz \
+         -o "${TEMPDIR}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz" \
+         "${FILTERED_VCF}"
 
+tabix -f -p vcf "${TEMPDIR}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz"
 log_message "**** Job ends ****"
