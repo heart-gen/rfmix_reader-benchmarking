@@ -2,7 +2,7 @@
 #SBATCH --account=b1042
 #SBATCH --partition=genomics
 #SBATCH --job-name=viz_local
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=FAIL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
