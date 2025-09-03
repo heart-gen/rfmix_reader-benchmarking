@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=short
+#SBATCH --account=b1042
+#SBATCH --partition=genomics
 #SBATCH --job-name=simu_genotypes
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
@@ -32,13 +32,16 @@ module list
 
 ## Edit with your job command
 ONE_K="/projects/b1213/resources/1kGP/data_raw"
+OUTDIR="simulation-files"
+
+mkdir -p ${OUTDIR}
 
 log_message "**** Generate admixture models ****"
 cut -f 1,2 ${ONE_K}/integrated_call_samples_v3.20130502.ALL.panel | \
-    sed '1d' | sed -e 's/ /\t/g' > 1k_sampleinfo.tsv
+    sed '1d' | sed -e 's/ /\t/g' > ${OUTDIR}/1k_sampleinfo.tsv
 
 # AFR admixed
-echo -e "500\tAFR_admixed\tCEU\tYRI" > AFR_admixed.dat
-echo -e "10\t0\t0.2\t0.8" >> AFR_admixed.dat
+echo -e "500\tAFR_admixed\tCEU\tYRI" > ${OUTDIR}/AFR_admixed.dat
+echo -e "10\t0\t0.2\t0.8" >> ${OUTDIR}/AFR_admixed.dat
 
 log_message "**** Job ends ****"
