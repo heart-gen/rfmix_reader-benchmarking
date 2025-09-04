@@ -32,19 +32,20 @@ module purge
 module list
 
 ## Edit with your job command
-CHROM=${SLURM_ARRAY_TASK_ID}
 OUTDIR="rfmix-out"
+VCFDIR="simulation-files"
+CHROM=${SLURM_ARRAY_TASK_ID}
 SOFTWARE="/projects/p32505/opt/bin"
 ONE_K="/projects/b1213/resources/1kGP/"
 REF="/projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref"
 
-mkdir -p $OUTDIR
-
 log_message "**** Run RFMix ****"
 echo -e "Chromosome: ${CRHOM}"
 
+mkdir -p $OUTDIR
+
 $SOFTWARE/rfmix \
-    -f chr${CHROM}.vcf.gz \
+    -f ${VCFDIR}/chr${CHROM}.vcf.gz \
     -r $REF/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz \
     -m $REF/samples_id2 \
     -g $REF/genetic_map38 \

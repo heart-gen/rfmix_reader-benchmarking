@@ -1,14 +1,14 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=normal
+#SBATCH --account=b1042
+#SBATCH --partition=genomics
 #SBATCH --job-name=simu_genotypes
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=150gb
-#SBATCH --output=output.%A_%a.log
-#SBATCH --array=1-4
+#SBATCH --output=logs/simgeno.%A_%a.log
+#SBATCH --array=1-22
 #SBATCH --time=04:00:00
 
 log_message() {
@@ -30,6 +30,7 @@ log_message "**** Loading modules ****"
 
 module purge
 module load htslib/1.16
+module load bcftools/1.10.1
 module list
 
 ## Edit with your job command
@@ -40,17 +41,33 @@ conda activate /projects/p32505/opt/env/AI_env
 log_message "**** Run simulation ****"
 ONE_K="/projects/b1213/resources/1kGP/"
 CHROM=${SLURM_ARRAY_TASK_ID}
+INPUTS="simulation-files"
+TEMPDIR="temp"
 
+mkdir -p "$TEMPDIR"
+
+# Symlink map file
+ln -s "${ONE_K}/genetic_maps/plink.chr${CHROM}.GRCh38.map" \
+   "$TEMPDIR/chr${CHROM}.map"
+
+# Pre-filter the reference VCF to biallelic variants only
+FILTERED_VCF="${TEMPDIR}/chr${CHROM}.biallelic.vcf.gz"
+bcftools view -m2 -M2 -v snps,indels \
+         ${ONE_K}/GRCh38_phased_vcf/raw/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz \
+         -Oz -o ${FILTERED_VCF}
+bcftools index -f ${FILTERED_VCF}
+
+# Run haptools on biallelic-only VCF
 haptools simgenotype \
-         --model AFR_admixed.dat \
-         --mapdir ${ONE_K}/genetic_maps/ \
+         --model ${INPUTS}/AFR_admixed.dat \
+         --mapdir ${TEMPDIR}/ \
          --chroms ${CHROM} \
          --seed 20240126 \
-         --ref_vcf ${ONE_K}/GRCh38_phased_vcf/raw/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz \
-         --sample_info 1k_sampleinfo.tsv \
-         --out ./chr${CHROM}.vcf.gz
+         --ref_vcf ${FILTERED_VCF} \
+         --sample_info ${INPUTS}/1k_sampleinfo.tsv \
+         --out ${INPUTS}/chr${CHROM}.vcf.gz
 
-tabix -f chr${CHROM}.vcf.gz
+tabix -p vcf ${INPUTS}/chr${CHROM}.vcf.gz
 
 conda deactivate
 log_message "**** Job ends ****"
