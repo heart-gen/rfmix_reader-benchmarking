@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=16gb
 #SBATCH --output=logs/flare.%j.log
-#SBATCH --time=01:00:00
+#SBATCH --time=03:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -46,6 +46,8 @@ mkdir -p "$OUTDIR"
 mkdir -p "$TEMPDIR"
 
 log_message "**** Match Variants ****"
+tabix -f -p vcf "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz"
+
 bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\n' \
          "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" > \
          "${TEMPDIR}/ref.chr${CHROM}.variants.txt"

@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --account=b1042
-#SBATCH --partition=genomicslong
+#SBATCH --account=p32505
+#SBATCH --partition=normal
 #SBATCH --job-name=rfmix_simu
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
@@ -8,8 +8,8 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=150gb
 #SBATCH --output=logs/rfmix.%A_%a.log
-#SBATCH --array=1-22
-#SBATCH --time=96:00:00
+#SBATCH --array=18-22
+#SBATCH --time=48:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
