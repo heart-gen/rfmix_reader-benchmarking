@@ -35,8 +35,8 @@ module list
 ## Job commands here
 CHROM=1
 TEMPDIR="temp"
-VCFDIR="vcf-files"
 OUTDIR="flare-out"
+VCFDIR="simulation-files"
 THREADS=${SLURM_CPUS_PER_TASK}
 SOFTWARE="/projects/p32505/opt/bin"
 MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"

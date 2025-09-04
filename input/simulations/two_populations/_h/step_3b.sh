@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=short
-#SBATCH --job-name=flare_prep
+#SBATCH --account=b1042
+#SBATCH --partition=genomics
+#SBATCH --job-name=flare_model
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
@@ -30,27 +30,48 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 
 module purge
 module load htslib/1.16
+module load bcftools/1.10.1
 module list
 
 ## Job commands here
+TEMPDIR="temp"
 OUTDIR="flare-out"
+VCFDIR="simulation-files"
 CHROM=${SLURM_ARRAY_TASK_ID}
 THREADS=${SLURM_CPUS_PER_TASK}
 SOFTWARE="/projects/p32505/opt/bin"
 MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
 REF="/projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref"
 
-log_message "**** Fix PLINK map file ****"
-awk '{if(NR>0) $1="chr"$1; print}' "${MAP_DIR}/plink.chr${CHROM}.GRCh38.map" \
-    > ./temp/plink.chr${CHROM}.GRCh38.reformatted.map
+mkdir -p "$OUTDIR"
+mkdir -p "$TEMPDIR"
+
+log_message "**** Match Variants ****"
+bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\n' \
+         "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" > \
+         "${TEMPDIR}/ref.chr${CHROM}.variants.txt"
+
+bcftools view -R "${TEMPDIR}/ref.chr${CHROM}.variants.txt" \
+         "${VCFDIR}/chr${CHROM}.vcf.gz" | \
+    bcftools sort | \
+    bcftools norm -d both -Oz -o "${VCFDIR}/chr${CHROM}.filtered.vcf.gz"
+
+bcftools view -R "${TEMPDIR}/ref.chr${CHROM}.variants.txt" \
+         "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" | \
+    bcftools sort | \
+    bcftools norm -d both -Oz -o "${TEMPDIR}/ref.chr${CHROM}.filtered.vcf.gz"
+
+log_message "**** Index VCF files ****"
+tabix -f -p vcf "${TEMPDIR}/ref.chr${CHROM}.filtered.vcf.gz"
+tabix -f -p vcf "${VCFDIR}/chr${CHROM}.filtered.vcf.gz"
 
 log_message "**** FLARE Local Ancestry Analysis ****"
 
 java -Xmx16g -jar $SOFTWARE/flare.jar \
-     ref="$REF/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" \
+     ref="${TEMPDIR}/ref.chr${CHROM}.filtered.vcf.gz" \
      ref-panel="$REF/samples_id2" \
-     map="./temp/plink.chr${CHROM}.GRCh38.reformatted.map" \
-     gt="chr${CHROM}.vcf.gz" nthreads=$THREADS \
+     map="${MAPDIR}/plink.chr${CHROM}.GRCh38.reformatted.map" \
+     gt="${VCFDIR}/chr${CHROM}.filtered.vcf.gz" nthreads=$THREADS \
      seed=13131313 em=false model="${OUTDIR}/chr1.model" \
      array=true out="${OUTDIR}/chr${CHROM}"
 
