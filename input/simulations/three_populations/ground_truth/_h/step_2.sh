@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --account=b1042
-#SBATCH --partition=genomics
+#SBATCH --account=p32505
+#SBATCH --partition=normal
 #SBATCH --job-name=convert_int
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=manuel.jr1@northwestern.edu
