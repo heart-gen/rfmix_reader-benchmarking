@@ -1,0 +1,17 @@
+2025-09-06 11:47:26 - **** Job starts ****
+2025-09-06 11:47:26 - **** Quest info ****
+User: owb0346
+Job id: 3406533
+Job name: flare_model
+Node name: 
+Hostname: qnode1018
+Task id: N/A
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   3) openssl/1.0.2k-gcc-4.8.5
+  2) htslib/1.16             4) bcftools/1.10.1
+
+ 
+
+2025-09-06 11:47:36 - **** Match Variants ****
+Writing to /tmp/bcftools-sort.udYs9y

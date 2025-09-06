@@ -1,0 +1,39 @@
+2025-09-03 17:50:43 - **** Job starts ****
+2025-09-03 17:50:43 - **** Quest info ****
+User: owb0346
+Job id: 3222120
+Job name: simu_genotypes
+Node name: 
+Hostname: qnode2159
+Task id: 2
+2025-09-03 17:50:43 - **** Loading modules ****
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   3) openssl/1.0.2k-gcc-4.8.5
+  2) htslib/1.16             4) bcftools/1.10.1
+
+ 
+
+2025-09-03 17:50:56 - **** Loading mamba environment ****
+2025-09-03 17:51:09 - **** Run simulation ****
+[    INFO] Using seed 20240126 (sim_genotype.py:359)
+[    INFO] Simulating generation 1 (sim_genotype.py:457)
+[    INFO] Simulating generation 2 (sim_genotype.py:463)
+[    INFO] Simulating generation 3 (sim_genotype.py:463)
+[    INFO] Simulating generation 4 (sim_genotype.py:463)
+[    INFO] Simulating generation 5 (sim_genotype.py:463)
+[    INFO] Simulating generation 6 (sim_genotype.py:463)
+[    INFO] Simulating generation 7 (sim_genotype.py:463)
+[    INFO] Simulating generation 8 (sim_genotype.py:463)
+[    INFO] Simulating generation 9 (sim_genotype.py:463)
+[    INFO] Simulating generation 10 (sim_genotype.py:463)
+[    INFO] Outputting breakpoint file simulation-files/chr2.bp (sim_genotype.py:503)
+[    INFO] Outputting file simulation-files/chr2.vcf.gz (sim_genotype.py:75)
+[ WARNING] The max_variants parameter was not specified. We have no choice but to append to an ever-growing array, which can lead to memory overuse! (genotypes.py:165)
+[    INFO] Loading genotypes from 3202 samples (genotypes.py:289)
+[    INFO] Copying 6080523 variants into np arrays. (genotypes.py:174)
+[    INFO] Transposing genotype matrix of size (6080523, 3202, 3) (genotypes.py:209)
+/var/spool/slurmd/job3222120/slurm_script: line 68: 3072538 Killed                  haptools simgenotype --model ${INPUTS}/AFR_admixed.dat --mapdir ${TEMPDIR}/ --chroms ${CHROM} --seed 20240126 --ref_vcf ${FILTERED_VCF} --sample_info ${INPUTS}/1k_sampleinfo.tsv --out ${INPUTS}/chr${CHROM}.vcf.gz
+tbx_index_build failed: simulation-files/chr2.vcf.gz
+2025-09-03 19:12:02 - **** Job ends ****
+slurmstepd: error: Detected 1 oom_kill event in StepId=3222120.batch. Some of the step tasks have been OOM Killed.

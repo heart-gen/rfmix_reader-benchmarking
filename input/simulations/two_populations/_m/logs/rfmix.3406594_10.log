@@ -1,0 +1,30 @@
+2025-09-06 11:50:16 - **** Job starts ****
+2025-09-06 11:50:16 - **** Quest info ****
+User: owb0346
+Job id: 3406605
+Job name: rfmix_simu
+Node name: 
+Hostname: qnode1139
+Task id: 10
+2025-09-06 11:50:16 - **** Loading modules ****
+No modules loaded
+2025-09-06 11:50:17 - **** Run RFMix ****
+Chromosome: 
+
+RFMIX v2.03-r0 - Local Ancestry and Admixture Inference
+(c) 2016, 2017 Mark Koni Hamilton Wright
+Bustamante Lab - Stanford University School of Medicine
+Based on concepts developed in RFMIX v1 by Brian Keith Maples, et al.
+
+This version is licensed for non-commercial academic research use only
+For commercial licensing, please contact cdbadmin@stanford.edu
+
+--- For use in scientific publications please cite original publication ---
+Brian Maples, Simon Gravel, Eimear E. Kenny, and Carlos D. Bustamante (2013).
+RFMix: A Discriminative Modeling Approach for Rapid and Robust Local-Ancestry
+Inference. Am. J. Hum. Genet. 93, 278-288
+
+
+Loading genetic map for chromosome chr10 ...  done
+Mapping samples ... 1711 samples combined
+Scanning input VCFs for common SNPs on chromosome chr10 ...   
