@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=16gb
 #SBATCH --output=logs/flare.%j.log
-#SBATCH --time=03:00:00
+#SBATCH --time=24:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
