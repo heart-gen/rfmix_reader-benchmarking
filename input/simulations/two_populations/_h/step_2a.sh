@@ -8,8 +8,8 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=150gb
 #SBATCH --output=logs/rfmix.%A_%a.log
-#SBATCH --array=18-22
-#SBATCH --time=48:00:00
+#SBATCH --array=10-17
+#SBATCH --time=36:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
