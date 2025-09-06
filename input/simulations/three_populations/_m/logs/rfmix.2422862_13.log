@@ -1,0 +1,157 @@
+2025-08-27 22:41:19 - **** Job starts ****
+2025-08-27 22:41:19 - **** Quest info ****
+User: owb0346
+Job id: 2423138
+Job name: rfmix_3pop
+Node name: 
+Hostname: qnode3084
+Task id: 13
+2025-08-27 22:41:19 - **** Loading modules ****
+No modules loaded
+2025-08-27 22:41:19 - **** Run RFMix ****
+Chromosome: 
+
+RFMIX v2.03-r0 - Local Ancestry and Admixture Inference
+(c) 2016, 2017 Mark Koni Hamilton Wright
+Bustamante Lab - Stanford University School of Medicine
+Based on concepts developed in RFMIX v1 by Brian Keith Maples, et al.
+
+This version is licensed for non-commercial academic research use only
+For commercial licensing, please contact cdbadmin@stanford.edu
+
+--- For use in scientific publications please cite original publication ---
+Brian Maples, Simon Gravel, Eimear E. Kenny, and Carlos D. Bustamante (2013).
+RFMix: A Discriminative Modeling Approach for Rapid and Robust Local-Ancestry
+Inference. Am. J. Hum. Genet. 93, 278-288
+
+
+Loading genetic map for chromosome chr13 ...  done
+Mapping samples ... 411 samples combined
+Scanning input VCFs for common SNPs on chromosome chr13 ...   2185766 SNPs
+Loading haplotypes... done
+Defining and initializing conditional random field...  
+   setting up CRF points and random forest windows... 
+   computing random forest window spacing overlay... 
+   initializing apriori reference subpop across CRF... 
+   setting up random forest probability estimation arrays... done
+Defining and initializing conditional random field...   done
+83552761 (4.7%) variant alleles	0 (0.0%) missing alleles
+
+Generating internal simulation samples...    
+Internally simulated 383 samples from 32 randomly selected reference parents.
+
+Scanning for optimal CRF Weight.... 
+
+Conditional Random Field Weight 1 - det(m) = 5.8             
+
+Conditional Random Field Weight 2 - det(m) = 7.1             
+
+Conditional Random Field Weight 3 - det(m) = 7.9             
+
+Conditional Random Field Weight 4 - det(m) = 8.7             
+
+Conditional Random Field Weight 5 - det(m) = 9.8             
+
+Conditional Random Field Weight 6 - det(m) = 10.7             
+
+Conditional Random Field Weight 7 - det(m) = 11.4             
+
+Conditional Random Field Weight 8 - det(m) = 11.8             
+
+Conditional Random Field Weight 9 - det(m) = 12.2             
+
+Conditional Random Field Weight 10 - det(m) = 12.7             
+
+Conditional Random Field Weight 11 - det(m) = 13.3             
+
+Conditional Random Field Weight 12 - det(m) = 13.4             
+
+Conditional Random Field Weight 13 - det(m) = 14.1             
+
+Conditional Random Field Weight 14 - det(m) = 14.8             
+
+Conditional Random Field Weight 15 - det(m) = 15.6             
+
+Conditional Random Field Weight 16 - det(m) = 16.3             
+
+Conditional Random Field Weight 17 - det(m) = 16.5             
+
+Conditional Random Field Weight 18 - det(m) = 16.6             
+
+Conditional Random Field Weight 19 - det(m) = 16.9             
+
+Conditional Random Field Weight 21 - det(m) = 17.6             
+
+Conditional Random Field Weight 22 - det(m) = 17.9             
+
+Conditional Random Field Weight 23 - det(m) = 18.1             
+
+Conditional Random Field Weight 25 - det(m) = 18.3             
+
+Conditional Random Field Weight 27 - det(m) = 18.5             
+
+Conditional Random Field Weight 28 - det(m) = 19.0             
+
+Conditional Random Field Weight 29 - det(m) = 19.4             
+
+Conditional Random Field Weight 31 - det(m) = 19.6             
+
+Conditional Random Field Weight 34 - det(m) = 20.3             
+
+Conditional Random Field Weight 35 - det(m) = 20.3             
+
+Conditional Random Field Weight 36 - det(m) = 20.5             
+
+Conditional Random Field Weight 37 - det(m) = 21.0             
+
+Conditional Random Field Weight 38 - det(m) = 21.3             
+
+Conditional Random Field Weight 39 - det(m) = 21.6             
+
+Conditional Random Field Weight 40 - det(m) = 21.9             
+
+Conditional Random Field Weight 41 - det(m) = 22.0             
+
+Conditional Random Field Weight 42 - det(m) = 22.0             
+
+Conditional Random Field Weight 45 - det(m) = 22.1             
+
+Conditional Random Field Weight 46 - det(m) = 22.2             
+
+Conditional Random Field Weight 47 - det(m) = 22.3             
+
+Conditional Random Field Weight 49 - det(m) = 22.4             
+
+Conditional Random Field Weight 50 - det(m) = 22.7             
+
+Conditional Random Field Weight 51 - det(m) = 22.9             
+
+Conditional Random Field Weight 52 - det(m) = 23.0             
+
+Conditional Random Field Weight 53 - det(m) = 23.1             
+
+Conditional Random Field Weight 56 - det(m) = 23.2             
+
+Conditional Random Field Weight 57 - det(m) = 23.4             
+
+Conditional Random Field Weight 58 - det(m) = 23.5             
+
+Conditional Random Field Weight 66 - det(m) = 23.7             
+
+Conditional Random Field Weight 96 - det(m) = 24.1             
+
+Maximum scoring weight is 96 (24.1)
+Simulation results... 
+	CEU	PUR	YRI
+	0	1	2
+0	98.3	65.2	1.0
+1	1.4	26.0	0.9
+2	0.3	8.8	98.0
+
+
+
+
+Outputing forward-backward results.... 
+Outputing diploid global ancestry estimates.... 
+Initial analysis - logl -396562246.5
+2025-08-28 08:44:20 - **** Job ends ****

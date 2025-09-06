@@ -1,0 +1,19 @@
+2025-08-27 21:41:53 - **** Job starts ****
+2025-08-27 21:41:53 - **** Quest info ****
+User: owb0346
+Job id: 2422195
+Job name: prep_data
+Node name: 
+Hostname: qnode0716
+Task id: 20
+2025-08-27 21:41:53 - **** Loading modules ****
+
+Currently Loaded Modules:
+  1) openssl/1.0.2k-gcc-4.8.5   3) bzip2/1.0.8-gcc-4.8.5
+  2) bcftools/1.10.1            4) htslib/1.16
+
+ 
+
+2025-08-27 21:42:13 - **** Prepare samples ****
+Chromosome: 20
+2025-08-27 21:51:41 - **** Job ends ****

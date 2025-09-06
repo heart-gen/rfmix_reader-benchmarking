@@ -1,0 +1,13 @@
+2025-08-27 21:33:47 - **** Job starts ****
+2025-08-27 21:33:47 - **** Quest info ****
+User: owb0346
+Job id: 2422047
+Job name: prep_samples
+Node name: 
+Hostname: qnode0016
+Task id: N/A
+2025-08-27 21:33:47 - **** Loading modules ****
+No modules loaded
+2025-08-27 21:33:48 - **** Prepare samples ****
+'/projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/genetic_map38' -> 'temp/genetic_map38'
+2025-08-27 21:33:48 - **** Job ends ****

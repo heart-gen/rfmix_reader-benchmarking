@@ -1,0 +1,57 @@
+2025-08-27 22:20:40 - **** Job starts ****
+2025-08-27 22:20:40 - **** Quest info ****
+User: owb0346
+Job id: 2422870
+Job name: flare_model
+Node name: 
+Hostname: qnode2177
+Task id: 7
+
+Currently Loaded Modules:
+  1) openssl/1.0.2k-gcc-4.8.5   3) bzip2/1.0.8-gcc-4.8.5
+  2) bcftools/1.10.1            4) htslib/1.16
+
+ 
+
+2025-08-27 22:20:47 - **** Match Variants ****
+Writing to /tmp/bcftools-sort.IoDYXd
+Merging 2 temporary files
+Cleaning
+Lines   total/split/realigned/skipped:	2611440/0/0/0
+Done
+Writing to /tmp/bcftools-sort.FO2RrG
+Merging 5 temporary files
+Cleaning
+Lines   total/split/realigned/skipped:	2541205/0/0/0
+Done
+2025-08-28 00:12:17 - **** Index VCF files ****
+2025-08-28 00:12:44 - **** FLARE Local Ancestry Analysis ****
+Copyright (C) 2021-2023 Brian L. Browning
+Enter "java -jar flare.jar" to print a list of command line arguments
+
+Program             :  flare.jar  [ version 0.5.2, 29Oct24.cc6 ]
+Start Time          :  12:12 AM CDT on 28 Aug 2025
+Max Memory          :  24576 MB
+
+Parameters
+  ref               :  temp/ref.chr7.filtered.vcf.gz
+  ref-panel         :  temp/samples_id2
+  gt                :  vcf-files/chr7.filtered.vcf.gz
+  map               :  /projects/b1213/resources/1kGP/genetic_maps/plink.chr7.GRCh38.reformatted.map
+  out               :  flare-out/chr7
+  array             :  true
+  min-maf           :  0.005
+  probs             :  false
+  gen               :  10.0
+  em                :  false
+  nthreads          :  24
+  seed              :  13131313
+
+Statistics
+  reference samples :  311
+  target samples    :  100
+  markers           :  704316
+
+Wallclock Time      :  2 minutes 18 seconds
+End Time            :  12:15 AM CDT on 28 Aug 2025
+2025-08-28 00:15:03 - **** Job ends ****
