@@ -1,0 +1,16 @@
+2025-09-06 11:23:00 - **** Job starts ****
+2025-09-06 11:23:00 - **** Quest info ****
+User: owb0346
+Job id: 3406002
+Job name: gzip_rfmix
+Node name: 
+Hostname: qnode0168
+Task id: 8
+2025-09-06 11:23:00 - **** Loading modules ****
+No modules loaded
+2025-09-06 11:23:00 - **** Run compression ****
+Chromosome: 
+Compressing rfmix-files/chr8.fb.tsv
+Compressing rfmix-files/chr8.msp.tsv
+Compressing rfmix-files/chr8.sis.tsv
+2025-09-06 11:23:53 - **** Job ends ****
