@@ -1,0 +1,29 @@
+# list of ancestries
+PUR	CEU	YRI
+
+# list of reference panels
+PUR	CEU	YRI
+
+# T: number of generations since admixture
+10.0
+
+# mu[i]: proportion of target genotypes with ancestry i
+0.33333334	0.33333334	0.33333334
+
+
+# p[i][j]: probability that a model state haplotype is in reference panel j
+#          when the model state ancestry is i
+0.60283923	0.29062685	0.106533885
+0.32470173	0.66624564	0.009052625
+0.09706058	0.015305653	0.88763374
+
+# theta[i][j]: probability that a model state haplotype and the target
+#              haplotype carry different alleles when the model state haplotype
+#              is in reference panel j and the model state ancestry is i
+1.15920826E-4	1.15920826E-4	1.15920826E-4
+1.15920826E-4	1.15920826E-4	1.15920826E-4
+1.15920826E-4	1.15920826E-4	1.15920826E-4
+
+# rho[i]: rate of the exponential IBD segment cM-length distribution when the
+#         most recent common ancestor precedes admixture and has ancestry i
+459.10614	466.10367	672.3221
