@@ -1,14 +1,14 @@
-2025-09-06 11:50:16 - **** Job starts ****
-2025-09-06 11:50:16 - **** Quest info ****
+2025-09-06 11:53:44 - **** Job starts ****
+2025-09-06 11:53:44 - **** Quest info ****
 User: owb0346
-Job id: 3406608
+Job id: 3406640
 Job name: rfmix_simu
 Node name: 
-Hostname: qnode2211
-Task id: 13
-2025-09-06 11:50:16 - **** Loading modules ****
+Hostname: qnode2185
+Task id: 16
+2025-09-06 11:53:44 - **** Loading modules ****
 No modules loaded
-2025-09-06 11:50:16 - **** Run RFMix ****
+2025-09-06 11:53:44 - **** Run RFMix ****
 Chromosome: 
 
 RFMIX v2.03-r0 - Local Ancestry and Admixture Inference
@@ -25,9 +25,9 @@ RFMix: A Discriminative Modeling Approach for Rapid and Robust Local-Ancestry
 Inference. Am. J. Hum. Genet. 93, 278-288
 
 
-Loading genetic map for chromosome chr13 ...  done
+Loading genetic map for chromosome chr16 ...  done
 Mapping samples ... 1711 samples combined
-Scanning input VCFs for common SNPs on chromosome chr13 ...   2185766 SNPs
+Scanning input VCFs for common SNPs on chromosome chr16 ...   2068626 SNPs
 Loading haplotypes... done
 Defining and initializing conditional random field...  
    setting up CRF points and random forest windows... 
@@ -35,7 +35,7 @@ Defining and initializing conditional random field...
    initializing apriori reference subpop across CRF... 
    setting up random forest probability estimation arrays... done
 Defining and initializing conditional random field...   done
-350738723 (4.7%) variant alleles	0 (0.0%) missing alleles
+290549178 (4.1%) variant alleles	0 (0.0%) missing alleles
 
 Generating internal simulation samples...    
 Internally simulated 400 samples from 122 randomly selected reference parents.
