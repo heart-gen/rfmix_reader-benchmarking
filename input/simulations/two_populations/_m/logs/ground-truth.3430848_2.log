@@ -1,0 +1,36 @@
+2025-09-07 08:12:51 - **** Job starts ****
+2025-09-07 08:12:51 - **** Quest info ****
+User: owb0346
+Job id: 3430848
+Job name: simu_2pops
+Node name: 
+Hostname: qnode3080
+Task id: 2
+2025-09-07 08:12:51 - **** Loading modules ****
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   3) openssl/1.0.2k-gcc-4.8.5
+  2) htslib/1.16             4) bcftools/1.10.1
+
+ 
+
+2025-09-07 08:12:56 - **** Loading mamba environment ****
+**** Run simulation ****
+[    INFO] Using seed 20240126 (sim_genotype.py:359)
+[    INFO] Simulating generation 1 (sim_genotype.py:457)
+[    INFO] Simulating generation 2 (sim_genotype.py:463)
+[    INFO] Simulating generation 3 (sim_genotype.py:463)
+[    INFO] Simulating generation 4 (sim_genotype.py:463)
+[    INFO] Simulating generation 5 (sim_genotype.py:463)
+[    INFO] Simulating generation 6 (sim_genotype.py:463)
+[    INFO] Simulating generation 7 (sim_genotype.py:463)
+[    INFO] Simulating generation 8 (sim_genotype.py:463)
+[    INFO] Simulating generation 9 (sim_genotype.py:463)
+[    INFO] Simulating generation 10 (sim_genotype.py:463)
+[    INFO] Outputting breakpoint file gt-files/chr2.bp (sim_genotype.py:503)
+[    INFO] Outputting file gt-files/chr2.vcf.gz (sim_genotype.py:75)
+[ WARNING] The max_variants parameter was not specified. We have no choice but to append to an ever-growing array, which can lead to memory overuse! (genotypes.py:165)
+[    INFO] Loading genotypes from 3202 samples (genotypes.py:289)
+[    INFO] Copying 6080523 variants into np arrays. (genotypes.py:174)
+[    INFO] Transposing genotype matrix of size (6080523, 3202, 3) (genotypes.py:209)
+[    INFO] Writing VCF records (transform.py:483)

@@ -1,0 +1,44 @@
+2025-09-07 07:57:49 - **** Job starts ****
+2025-09-07 07:57:49 - **** Quest info ****
+User: owb0346
+Job id: 3430822
+Job name: flare_model
+Node name: 
+Hostname: qnode0309
+Task id: 5
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   3) openssl/1.0.2k-gcc-4.8.5
+  2) htslib/1.16             4) bcftools/1.10.1
+
+ 
+
+2025-09-07 07:58:01 - **** Match Variants ****
+Writing to /tmp/bcftools-sort.rxWOX0
+Merging 5 temporary files
+Cleaning
+Lines   total/split/realigned/skipped:	2905583/0/0/0
+Done
+Writing to /tmp/bcftools-sort.th9FOX
+[E::idx_find_and_load] Could not retrieve index file for '/projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/1kGP_high_coverage_Illumina.chr5.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz'
+Failed to read from /projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/1kGP_high_coverage_Illumina.chr5.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz: could not load index
+[E::bcf_hdr_read] Input is not detected as bcf or vcf format
+Could not read VCF/BCF headers from -
+Cleaning
+Failed to read from standard input: unknown file type
+2025-09-07 09:53:15 - **** Index VCF files ****
+tbx_index_build failed: temp/ref.chr5.filtered.vcf.gz
+2025-09-07 09:53:32 - **** FLARE Local Ancestry Analysis ****
+
+
+Error     :  File does not exist
+Filename  :  temp/ref.chr5.filtered.vcf.gz
+
+java.lang.Throwable: File does not exist
+	at blbutil.Validate.getFile(Validate.java:147)
+	at admix.AdmixPar.<init>(AdmixPar.java:117)
+	at admix.AdmixMain.getPar(AdmixMain.java:176)
+	at admix.AdmixMain.main(AdmixMain.java:57)
+
+Terminating program.
+2025-09-07 09:53:33 - **** Job ends ****
