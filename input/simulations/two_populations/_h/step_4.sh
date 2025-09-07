@@ -1,13 +1,13 @@
 #!/bin/bash
-#SBATCH --account=b1042
-#SBATCH --partition=genomics
+#SBATCH --account=p32505
+#SBATCH --partition=normal
 #SBATCH --job-name=simu_2pops
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
-#SBATCH --array=1-22
+#SBATCH --array=2
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=150gb
+#SBATCH --mem=175gb
 #SBATCH --output=logs/ground-truth.%A_%a.log
 #SBATCH --time=04:00:00
 
