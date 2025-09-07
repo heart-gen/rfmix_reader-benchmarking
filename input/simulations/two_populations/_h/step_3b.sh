@@ -10,7 +10,7 @@
 #SBATCH --mem=16gb
 #SBATCH --output=logs/flare.%A-%a.log
 #SBATCH --array=2-22
-#SBATCH --time=01:00:00
+#SBATCH --time=12:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -40,7 +40,7 @@ VCFDIR="simulation-files"
 CHROM=${SLURM_ARRAY_TASK_ID}
 THREADS=${SLURM_CPUS_PER_TASK}
 SOFTWARE="/projects/p32505/opt/bin"
-MAP_DIR="/projects/b1213/resources/1kGP/genetic_maps"
+MAPDIR="/projects/b1213/resources/1kGP/genetic_maps"
 REF="/projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref"
 
 mkdir -p "$OUTDIR"

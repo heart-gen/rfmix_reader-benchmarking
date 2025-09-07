@@ -45,26 +45,26 @@ REF="/projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref"
 mkdir -p "$OUTDIR"
 mkdir -p "$TEMPDIR"
 
-# log_message "**** Match Variants ****"
-# tabix -f -p vcf "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz"
+log_message "**** Match Variants ****"
+tabix -f -p vcf "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz"
 
-# bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\n' \
-#          "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" > \
-#          "${TEMPDIR}/ref.chr${CHROM}.variants.txt"
+bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\n' \
+         "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" > \
+         "${TEMPDIR}/ref.chr${CHROM}.variants.txt"
 
-# bcftools view -R "${TEMPDIR}/ref.chr${CHROM}.variants.txt" \
-#          "${VCFDIR}/chr${CHROM}.vcf.gz" | \
-#     bcftools sort | \
-#     bcftools norm -d both -Oz -o "${VCFDIR}/chr${CHROM}.filtered.vcf.gz"
+bcftools view -R "${TEMPDIR}/ref.chr${CHROM}.variants.txt" \
+         "${VCFDIR}/chr${CHROM}.vcf.gz" | \
+    bcftools sort | \
+    bcftools norm -d both -Oz -o "${VCFDIR}/chr${CHROM}.filtered.vcf.gz"
 
-# bcftools view -R "${TEMPDIR}/ref.chr${CHROM}.variants.txt" \
-#          "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" | \
-#     bcftools sort | \
-#     bcftools norm -d both -Oz -o "${TEMPDIR}/ref.chr${CHROM}.filtered.vcf.gz"
+bcftools view -R "${TEMPDIR}/ref.chr${CHROM}.variants.txt" \
+         "${REF}/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz" | \
+    bcftools sort | \
+    bcftools norm -d both -Oz -o "${TEMPDIR}/ref.chr${CHROM}.filtered.vcf.gz"
 
-# log_message "**** Index VCF files ****"
-# tabix -f -p vcf "${TEMPDIR}/ref.chr${CHROM}.filtered.vcf.gz"
-# tabix -f -p vcf "${VCFDIR}/chr${CHROM}.filtered.vcf.gz"
+log_message "**** Index VCF files ****"
+tabix -f -p vcf "${TEMPDIR}/ref.chr${CHROM}.filtered.vcf.gz"
+tabix -f -p vcf "${VCFDIR}/chr${CHROM}.filtered.vcf.gz"
 
 log_message "**** FLARE Local Ancestry Analysis ****"
 
