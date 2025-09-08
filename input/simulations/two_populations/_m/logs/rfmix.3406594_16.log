@@ -214,3 +214,4 @@ Simulation results...
 1	4.3	99.3
 
 
+slurmstepd: error: *** JOB 3406640 ON qnode2185 CANCELLED AT 2025-09-07T23:59:03 DUE TO TIME LIMIT ***

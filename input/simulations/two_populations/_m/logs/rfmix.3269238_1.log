@@ -228,3 +228,7 @@ Simulation results...
 1	3.9	99.3
 
 
+
+/var/spool/slurmd/job3269239/slurm_script: line 53: 4122355 Killed                  $SOFTWARE/rfmix -f ${VCFDIR}/chr${CHROM}.vcf.gz -r $REF/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz -m $REF/samples_id2 -g $REF/genetic_map38 -o ${OUTDIR}/chr${CHROM} --chromosome=chr${CHROM}
+2025-09-08 03:40:51 - **** Job ends ****
+slurmstepd: error: Detected 1 oom_kill event in StepId=3269239.batch. Some of the step tasks have been OOM Killed.

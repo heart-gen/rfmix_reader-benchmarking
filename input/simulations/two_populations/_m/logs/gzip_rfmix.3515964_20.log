@@ -1,0 +1,16 @@
+2025-09-08 06:57:50 - **** Job starts ****
+2025-09-08 06:57:50 - **** Quest info ****
+User: owb0346
+Job id: 3515969
+Job name: gzip_rfmix
+Node name: 
+Hostname: qnode0004
+Task id: 20
+2025-09-08 06:57:50 - **** Loading modules ****
+No modules loaded
+2025-09-08 06:57:50 - **** Run compression ****
+Chromosome: 
+Warning: rfmix-files/chr20.fb.tsv not found
+Warning: rfmix-files/chr20.msp.tsv not found
+Warning: rfmix-files/chr20.sis.tsv not found
+2025-09-08 06:57:50 - **** Job ends ****
