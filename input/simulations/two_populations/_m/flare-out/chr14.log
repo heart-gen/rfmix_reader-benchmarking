@@ -1,0 +1,31 @@
+Copyright (C) 2021-2023 Brian L. Browning
+Enter "java -jar flare.jar" to print a list of command line arguments
+
+Program             :  flare.jar  [ version 0.5.2, 29Oct24.cc6 ]
+Start Time          :  03:29 PM CDT on 07 Sep 2025
+Max Memory          :  16384 MB
+
+Parameters
+  ref               :  temp/ref.chr14.filtered.vcf.gz
+  ref-panel         :  /projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/samples_id2
+  gt                :  simulation-files/chr14.filtered.vcf.gz
+  map               :  /projects/b1213/resources/1kGP/genetic_maps/plink.chr14.GRCh38.reformatted.map
+  out               :  flare-out/chr14
+  array             :  true
+  min-maf           :  0.005
+  probs             :  false
+  model             :  flare-out/chr1.model
+  em                :  false
+  nthreads          :  10
+  seed              :  13131313
+
+
+Note: the minor allele count filter is not applied when 'array=true'
+
+Statistics
+  reference samples :  1211
+  target samples    :  500
+  markers           :  412639
+
+Wallclock Time      :  3 minutes 45 seconds
+End Time            :  03:33 PM CDT on 07 Sep 2025

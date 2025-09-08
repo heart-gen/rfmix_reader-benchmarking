@@ -1,0 +1,28 @@
+Copyright (C) 2021-2023 Brian L. Browning
+Enter "java -jar flare.jar" to print a list of command line arguments
+
+Program             :  flare.jar  [ version 0.5.2, 29Oct24.cc6 ]
+Start Time          :  09:37 PM CDT on 06 Sep 2025
+Max Memory          :  16384 MB
+
+Parameters
+  ref               :  temp/ref.chr1.filtered.vcf.gz
+  ref-panel         :  /projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/samples_id2
+  gt                :  simulation-files/chr1.filtered.vcf.gz
+  map               :  /projects/b1213/resources/1kGP/genetic_maps/plink.chr1.GRCh38.reformatted.map
+  out               :  flare-out/chr1
+  array             :  true
+  min-maf           :  0.005
+  probs             :  false
+  gen               :  10.0
+  em                :  true
+  nthreads          :  10
+  seed              :  13131313
+
+Statistics
+  reference samples :  1211
+  target samples    :  500
+  markers           :  1008779
+
+Wallclock Time      :  21 minutes 35 seconds
+End Time            :  09:59 PM CDT on 06 Sep 2025
