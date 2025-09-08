@@ -1,0 +1,60 @@
+2025-09-07 13:15:15 - **** Job starts ****
+2025-09-07 13:15:15 - **** Quest info ****
+User: owb0346
+Job id: 3454446
+Job name: flare_model
+Node name: 
+Hostname: qnode0297
+Task id: 2
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   3) openssl/1.0.2k-gcc-4.8.5
+  2) htslib/1.16             4) bcftools/1.10.1
+
+ 
+
+2025-09-07 13:15:25 - **** Match Variants ****
+Writing to /tmp/bcftools-sort.HEc3hH
+Merging 7 temporary files
+Cleaning
+Lines   total/split/realigned/skipped:	3874385/0/0/0
+Done
+Writing to /tmp/bcftools-sort.8r6CtD
+Merging 16 temporary files
+Cleaning
+Lines   total/split/realigned/skipped:	3778371/0/0/0
+Done
+2025-09-07 19:57:43 - **** Index VCF files ****
+2025-09-07 19:59:14 - **** FLARE Local Ancestry Analysis ****
+Copyright (C) 2021-2023 Brian L. Browning
+Enter "java -jar flare.jar" to print a list of command line arguments
+
+Program             :  flare.jar  [ version 0.5.2, 29Oct24.cc6 ]
+Start Time          :  07:59 PM CDT on 07 Sep 2025
+Max Memory          :  16384 MB
+
+Parameters
+  ref               :  temp/ref.chr2.filtered.vcf.gz
+  ref-panel         :  /projects/b1213/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/samples_id2
+  gt                :  simulation-files/chr2.filtered.vcf.gz
+  map               :  /projects/b1213/resources/1kGP/genetic_maps/plink.chr2.GRCh38.reformatted.map
+  out               :  flare-out/chr2
+  array             :  true
+  min-maf           :  0.005
+  probs             :  false
+  model             :  flare-out/chr1.model
+  em                :  false
+  nthreads          :  10
+  seed              :  13131313
+
+
+Note: the minor allele count filter is not applied when 'array=true'
+
+Statistics
+  reference samples :  1211
+  target samples    :  500
+  markers           :  1068842
+
+Wallclock Time      :  8 minutes 47 seconds
+End Time            :  08:08 PM CDT on 07 Sep 2025
+2025-09-07 20:08:01 - **** Job ends ****

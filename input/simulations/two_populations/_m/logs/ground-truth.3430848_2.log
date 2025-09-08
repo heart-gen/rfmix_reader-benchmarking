@@ -34,3 +34,4 @@ Currently Loaded Modules:
 [    INFO] Copying 6080523 variants into np arrays. (genotypes.py:174)
 [    INFO] Transposing genotype matrix of size (6080523, 3202, 3) (genotypes.py:209)
 [    INFO] Writing VCF records (transform.py:483)
+slurmstepd: error: *** JOB 3430848 ON qnode3080 CANCELLED AT 2025-09-07T12:18:05 DUE TO TIME LIMIT ***
