@@ -52,7 +52,7 @@ FILTERED_VCF="${TEMPDIR}/chr${CHROM}.biallelic.vcf.gz"
 haptools simgenotype \
          --model ${INPUTS}/AFR_washington.dat \
          --mapdir ${TEMPDIR}/ \
-         --chroms ${CHROM} \
+         --chroms ${CHROM} --contigs \
          --seed 20240126 --pop_field \
          --ref_vcf ${FILTERED_VCF} \
          --sample_info ${INPUTS}/1k_sampleinfo.tsv \
