@@ -36,7 +36,7 @@ module list
 ## Edit with your job command
 log_message "**** Loading mamba environment ****"
 source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
-conda activate /projects/p32505/opt/env/AI_env
+conda activate /projects/p32505/opt/envs/ml
 
 echo "**** Run simulation ****"
 CHROM=${SLURM_ARRAY_TASK_ID}
@@ -52,7 +52,7 @@ FILTERED_VCF="${TEMPDIR}/chr${CHROM}.biallelic.vcf.gz"
 haptools simgenotype \
          --model ${INPUTS}/AFR_washington.dat \
          --mapdir ${TEMPDIR}/ \
-         --chroms ${CHROM} --contigs \
+         --chroms ${CHROM} \
          --seed 20240126 --pop_field \
          --ref_vcf ${FILTERED_VCF} \
          --sample_info ${INPUTS}/1k_sampleinfo.tsv \
