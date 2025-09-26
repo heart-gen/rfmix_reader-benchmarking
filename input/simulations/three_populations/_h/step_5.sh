@@ -38,6 +38,11 @@ log_message "**** Loading mamba environment ****"
 source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
 conda activate /projects/p32505/opt/envs/ml
 
+log_message "**** Generate VCF contigs for header ****"
+REF="/projects/b1213/resources/1kGP/references/Homo_sapiens_assembly38.fasta.fai"
+awk '{print "##contig=<ID=" $1 ",length=" $2 ">"}' "$REF" | \
+    head -25 > contigs.txt
+
 echo "**** Run simulation ****"
 CHROM=${SLURM_ARRAY_TASK_ID}
 INPUTS="simulation-files"
@@ -45,6 +50,7 @@ GTDIR="gt-files"
 TEMPDIR="temp"
 
 mkdir -p "$GTDIR"
+mkdir -p $"TEMPDIR"
 
 # Run haptools to generate ground truth data
 FILTERED_VCF="${TEMPDIR}/chr${CHROM}.biallelic.vcf.gz"
@@ -56,7 +62,12 @@ haptools simgenotype \
          --seed 20240126 --pop_field \
          --ref_vcf ${FILTERED_VCF} \
          --sample_info ${INPUTS}/1k_sampleinfo.tsv \
-         --out ${GTDIR}/chr${CHROM}.vcf.gz
+         --out ${TEMPDIR}/chr${CHROM}.vcf.gz
+
+log_message "**** Annotate VCF ****"
+bcftools annotate --header-lines contigs.txt \
+         -O z -o ${GTDIR}/chr${CHROM}.vcf.gz \
+         ${TEMPDIR}/chr${CHROM}.vcf.gz
 
 # Index output
 tabix -p vcf ${GTDIR}/chr${CHROM}.vcf.gz

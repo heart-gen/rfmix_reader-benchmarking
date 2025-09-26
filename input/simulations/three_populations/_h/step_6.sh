@@ -52,5 +52,4 @@ tabix -p vcf ${VCF}
 
 rm $TEMPFILE
 
-conda deactivate
 log_message "**** Job ends ****"
