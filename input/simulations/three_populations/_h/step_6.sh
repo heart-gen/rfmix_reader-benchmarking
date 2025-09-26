@@ -1,15 +1,14 @@
 #!/bin/bash
-#SBATCH --account=b1042
-#SBATCH --partition=genomics
-#SBATCH --job-name=patch_contigs
+#SBATCH --account=p32505
+#SBATCH --partition=short
+#SBATCH --job-name=clean_files
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
-#SBATCH --array=1-22
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=25gb
-#SBATCH --output=logs/patch.%A_%a.log
-#SBATCH --time=03:00:00
+#SBATCH --mem=2gb
+#SBATCH --output=logs/clean.log
+#SBATCH --time=00:05:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -26,30 +25,22 @@ echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 
 ## List current modules for reproducibility
-log_message "**** Loading modules ****"
 
 module purge
-module load htslib/1.16
-module load bcftools/1.10.1
 module list
 
 ## Edit with your job command
-echo "**** Run simulation ****"
-GTDIR="gt-files"
-CHROM=${SLURM_ARRAY_TASK_ID}
-TEMPFILE="temp/temp.chr${CHROM}.vcf.gz"
-REF="/projects/b1213/resources/1kGP/references/Homo_sapiens_assembly38.fasta.fai"
+log_message "**** Clean-up files ****"
+mkdir -p simulation-files
+mv -v *bp simulation-files/
+mv -v 1k_sampleinfo.tsv simulation-files/
+mv -v *dat simulation-files/
 
-# Run haptools to generate ground truth data
-VCF="${GTDIR}/chr${CHROM}.vcf.gz"
-mv -v ${VCF} "${TEMPFILE}"
+mkdir -p vcf-files
+mv -v chr* vcf-files/
 
-bcftools annotate --contigs "$REF" -O z -o "${VCF}" "${TEMPFILE}"
-
-# Index output
-rm ${VCF}.tbi
-tabix -p vcf ${VCF}
-
-rm $TEMPFILE
+log_message "**** Clean-up temporary ****"
+rm temp/*
+rmdir temp
 
 log_message "**** Job ends ****"
