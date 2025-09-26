@@ -50,7 +50,7 @@ GTDIR="gt-files"
 TEMPDIR="temp"
 
 mkdir -p "$GTDIR"
-mkdir -p $"TEMPDIR"
+mkdir -p "$TEMPDIR"
 
 # Run haptools to generate ground truth data
 FILTERED_VCF="${TEMPDIR}/chr${CHROM}.biallelic.vcf.gz"
