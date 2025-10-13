@@ -21,6 +21,5 @@ cufile.log
 *.bak
 *.rfmix.Q
 *txt.gz
-*tsv.gz
 *.RData
 *.vcf.gz
