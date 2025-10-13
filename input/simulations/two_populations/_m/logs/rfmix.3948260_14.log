@@ -1,14 +1,14 @@
-2025-09-06 11:51:24 - **** Job starts ****
-2025-09-06 11:51:24 - **** Quest info ****
+2025-09-15 08:35:12 - **** Job starts ****
+2025-09-15 08:35:12 - **** Quest info ****
 User: owb0346
-Job id: 3406620
+Job id: 3948270
 Job name: rfmix_simu
 Node name: 
-Hostname: qnode2014
+Hostname: qnode2151
 Task id: 14
-2025-09-06 11:51:24 - **** Loading modules ****
+2025-09-15 08:35:12 - **** Loading modules ****
 No modules loaded
-2025-09-06 11:51:25 - **** Run RFMix ****
+2025-09-15 08:35:13 - **** Run RFMix ****
 Chromosome: 
 
 RFMIX v2.03-r0 - Local Ancestry and Admixture Inference
@@ -223,4 +223,8 @@ Simulation results...
 
 
 
-slurmstepd: error: *** JOB 3406620 ON qnode2014 CANCELLED AT 2025-09-07T23:56:26 DUE TO TIME LIMIT ***
+
+Outputing forward-backward results.... 
+Outputing diploid global ancestry estimates.... 
+Initial analysis - logl -367327305.0
+2025-09-16 21:12:45 - **** Job ends ****

@@ -1,14 +1,14 @@
-2025-09-04 07:35:13 - **** Job starts ****
-2025-09-04 07:35:13 - **** Quest info ****
+2025-09-23 06:58:24 - **** Job starts ****
+2025-09-23 06:58:24 - **** Quest info ****
 User: owb0346
-Job id: 3269239
+Job id: 4681735
 Job name: rfmix_simu
 Node name: 
-Hostname: qnode2168
+Hostname: qnode3122
 Task id: 1
-2025-09-04 07:35:13 - **** Loading modules ****
+2025-09-23 06:58:24 - **** Loading modules ****
 No modules loaded
-2025-09-04 07:35:13 - **** Run RFMix ****
+2025-09-23 06:58:24 - **** Run RFMix ****
 Chromosome: 
 
 RFMIX v2.03-r0 - Local Ancestry and Admixture Inference
@@ -229,6 +229,8 @@ Simulation results...
 
 
 
-/var/spool/slurmd/job3269239/slurm_script: line 53: 4122355 Killed                  $SOFTWARE/rfmix -f ${VCFDIR}/chr${CHROM}.vcf.gz -r $REF/1kGP_high_coverage_Illumina.chr${CHROM}.filtered.SNV_INDEL_SV_phased_panel.snpsOnly.eur.afr.vcf.gz -m $REF/samples_id2 -g $REF/genetic_map38 -o ${OUTDIR}/chr${CHROM} --chromosome=chr${CHROM}
-2025-09-08 03:40:51 - **** Job ends ****
-slurmstepd: error: Detected 1 oom_kill event in StepId=3269239.batch. Some of the step tasks have been OOM Killed.
+
+Outputing forward-backward results.... 
+Outputing diploid global ancestry estimates.... 
+Initial analysis - logl -937955252.2
+2025-09-26 00:13:34 - **** Job ends ****

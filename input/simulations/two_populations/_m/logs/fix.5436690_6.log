@@ -1,0 +1,19 @@
+2025-09-30 15:47:03 - **** Job starts ****
+2025-09-30 15:47:03 - **** Quest info ****
+User: owb0346
+Job id: 5436717
+Job name: fix_files
+Node name: 
+Hostname: qnode0004
+Task id: 6
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   3) openssl/1.0.2k-gcc-4.8.5
+  2) htslib/1.16             4) bcftools/1.10.1
+
+ 
+
+2025-09-30 15:47:13 - Processing chr6 ...
+[W::bgzf_read_block] EOF marker is absent. The input is probably truncated
+  Fixed header and reindexed: gt-files/chr6.vcf.gz
+2025-09-30 15:47:15 - **** Job ends ****

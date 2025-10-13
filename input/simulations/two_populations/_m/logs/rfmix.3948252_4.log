@@ -1,0 +1,244 @@
+2025-09-15 08:34:02 - **** Job starts ****
+2025-09-15 08:34:02 - **** Quest info ****
+User: owb0346
+Job id: 3948252
+Job name: rfmix_simu
+Node name: 
+Hostname: qnode1260
+Task id: 4
+2025-09-15 08:34:02 - **** Loading modules ****
+No modules loaded
+2025-09-15 08:34:03 - **** Run RFMix ****
+Chromosome: 
+
+RFMIX v2.03-r0 - Local Ancestry and Admixture Inference
+(c) 2016, 2017 Mark Koni Hamilton Wright
+Bustamante Lab - Stanford University School of Medicine
+Based on concepts developed in RFMIX v1 by Brian Keith Maples, et al.
+
+This version is licensed for non-commercial academic research use only
+For commercial licensing, please contact cdbadmin@stanford.edu
+
+--- For use in scientific publications please cite original publication ---
+Brian Maples, Simon Gravel, Eimear E. Kenny, and Carlos D. Bustamante (2013).
+RFMix: A Discriminative Modeling Approach for Rapid and Robust Local-Ancestry
+Inference. Am. J. Hum. Genet. 93, 278-288
+
+
+Loading genetic map for chromosome chr4 ...  done
+Mapping samples ... 1711 samples combined
+Scanning input VCFs for common SNPs on chromosome chr4 ...   4262759 SNPs
+Loading haplotypes... done
+Defining and initializing conditional random field...  
+   setting up CRF points and random forest windows... 
+   computing random forest window spacing overlay... 
+   initializing apriori reference subpop across CRF... 
+   setting up random forest probability estimation arrays... done
+Defining and initializing conditional random field...   done
+691671947 (4.7%) variant alleles	0 (0.0%) missing alleles
+
+Generating internal simulation samples...    
+Internally simulated 400 samples from 122 randomly selected reference parents.
+
+Scanning for optimal CRF Weight.... 
+
+Conditional Random Field Weight 1 - det(m) = 65.4             
+
+Conditional Random Field Weight 2 - det(m) = 69.4             
+
+Conditional Random Field Weight 3 - det(m) = 71.7             
+
+Conditional Random Field Weight 4 - det(m) = 73.4             
+
+Conditional Random Field Weight 5 - det(m) = 75.1             
+
+Conditional Random Field Weight 6 - det(m) = 76.5             
+
+Conditional Random Field Weight 7 - det(m) = 77.7             
+
+Conditional Random Field Weight 8 - det(m) = 78.7             
+
+Conditional Random Field Weight 9 - det(m) = 79.6             
+
+Conditional Random Field Weight 10 - det(m) = 80.4             
+
+Conditional Random Field Weight 11 - det(m) = 81.2             
+
+Conditional Random Field Weight 12 - det(m) = 81.8             
+
+Conditional Random Field Weight 13 - det(m) = 82.4             
+
+Conditional Random Field Weight 14 - det(m) = 83.0             
+
+Conditional Random Field Weight 15 - det(m) = 83.6             
+
+Conditional Random Field Weight 16 - det(m) = 84.1             
+
+Conditional Random Field Weight 17 - det(m) = 84.6             
+
+Conditional Random Field Weight 18 - det(m) = 85.1             
+
+Conditional Random Field Weight 19 - det(m) = 85.4             
+
+Conditional Random Field Weight 20 - det(m) = 85.8             
+
+Conditional Random Field Weight 21 - det(m) = 86.2             
+
+Conditional Random Field Weight 22 - det(m) = 86.5             
+
+Conditional Random Field Weight 23 - det(m) = 86.8             
+
+Conditional Random Field Weight 24 - det(m) = 87.1             
+
+Conditional Random Field Weight 25 - det(m) = 87.3             
+
+Conditional Random Field Weight 26 - det(m) = 87.6             
+
+Conditional Random Field Weight 27 - det(m) = 87.8             
+
+Conditional Random Field Weight 28 - det(m) = 88.0             
+
+Conditional Random Field Weight 29 - det(m) = 88.3             
+
+Conditional Random Field Weight 30 - det(m) = 88.5             
+
+Conditional Random Field Weight 31 - det(m) = 88.8             
+
+Conditional Random Field Weight 32 - det(m) = 89.0             
+
+Conditional Random Field Weight 33 - det(m) = 89.1             
+
+Conditional Random Field Weight 34 - det(m) = 89.2             
+
+Conditional Random Field Weight 35 - det(m) = 89.4             
+
+Conditional Random Field Weight 36 - det(m) = 89.5             
+
+Conditional Random Field Weight 37 - det(m) = 89.7             
+
+Conditional Random Field Weight 38 - det(m) = 89.8             
+
+Conditional Random Field Weight 39 - det(m) = 89.9             
+
+Conditional Random Field Weight 40 - det(m) = 90.0             
+
+Conditional Random Field Weight 41 - det(m) = 90.1             
+
+Conditional Random Field Weight 42 - det(m) = 90.2             
+
+Conditional Random Field Weight 43 - det(m) = 90.4             
+
+Conditional Random Field Weight 44 - det(m) = 90.4             
+
+Conditional Random Field Weight 45 - det(m) = 90.5             
+
+Conditional Random Field Weight 46 - det(m) = 90.7             
+
+Conditional Random Field Weight 47 - det(m) = 90.8             
+
+Conditional Random Field Weight 48 - det(m) = 90.9             
+
+Conditional Random Field Weight 49 - det(m) = 91.0             
+
+Conditional Random Field Weight 50 - det(m) = 91.1             
+
+Conditional Random Field Weight 51 - det(m) = 91.2             
+
+Conditional Random Field Weight 52 - det(m) = 91.3             
+
+Conditional Random Field Weight 53 - det(m) = 91.4             
+
+Conditional Random Field Weight 54 - det(m) = 91.5             
+
+Conditional Random Field Weight 55 - det(m) = 91.6             
+
+Conditional Random Field Weight 56 - det(m) = 91.6             
+
+Conditional Random Field Weight 57 - det(m) = 91.7             
+
+Conditional Random Field Weight 58 - det(m) = 91.8             
+
+Conditional Random Field Weight 59 - det(m) = 91.9             
+
+Conditional Random Field Weight 60 - det(m) = 91.9             
+
+Conditional Random Field Weight 61 - det(m) = 92.0             
+
+Conditional Random Field Weight 62 - det(m) = 92.0             
+
+Conditional Random Field Weight 63 - det(m) = 92.1             
+
+Conditional Random Field Weight 64 - det(m) = 92.2             
+
+Conditional Random Field Weight 65 - det(m) = 92.2             
+
+Conditional Random Field Weight 66 - det(m) = 92.2             
+
+Conditional Random Field Weight 67 - det(m) = 92.2             
+
+Conditional Random Field Weight 68 - det(m) = 92.3             
+
+Conditional Random Field Weight 69 - det(m) = 92.3             
+
+Conditional Random Field Weight 70 - det(m) = 92.4             
+
+Conditional Random Field Weight 71 - det(m) = 92.4             
+
+Conditional Random Field Weight 72 - det(m) = 92.5             
+
+Conditional Random Field Weight 73 - det(m) = 92.5             
+
+Conditional Random Field Weight 74 - det(m) = 92.6             
+
+Conditional Random Field Weight 75 - det(m) = 92.6             
+
+Conditional Random Field Weight 77 - det(m) = 92.6             
+
+Conditional Random Field Weight 78 - det(m) = 92.7             
+
+Conditional Random Field Weight 79 - det(m) = 92.8             
+
+Conditional Random Field Weight 80 - det(m) = 92.8             
+
+Conditional Random Field Weight 81 - det(m) = 92.9             
+
+Conditional Random Field Weight 82 - det(m) = 92.9             
+
+Conditional Random Field Weight 85 - det(m) = 92.9             
+
+Conditional Random Field Weight 86 - det(m) = 92.9             
+
+Conditional Random Field Weight 87 - det(m) = 92.9             
+
+Conditional Random Field Weight 88 - det(m) = 93.0             
+
+Conditional Random Field Weight 89 - det(m) = 93.1             
+
+Conditional Random Field Weight 90 - det(m) = 93.1             
+
+Conditional Random Field Weight 91 - det(m) = 93.1             
+
+Conditional Random Field Weight 92 - det(m) = 93.1             
+
+Conditional Random Field Weight 95 - det(m) = 93.2             
+
+Conditional Random Field Weight 96 - det(m) = 93.2             
+
+Conditional Random Field Weight 98 - det(m) = 93.3             
+
+Conditional Random Field Weight 99 - det(m) = 93.3             
+
+Maximum scoring weight is 99 (93.3)
+Simulation results... 
+	AFR	EUR
+	0	1
+0	94.3	1.0
+1	5.7	99.0
+
+
+
+
+Outputing forward-backward results.... 
+Outputing diploid global ancestry estimates.... 
+Initial analysis - logl -789551440.2
+2025-09-18 03:45:31 - **** Job ends ****
