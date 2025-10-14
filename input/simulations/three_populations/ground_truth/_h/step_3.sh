@@ -36,7 +36,7 @@ module list
 ## Edit with your job command
 log_message "**** Loading mamba environment ****"
 source /projects/p32505/opt/miniforge3/etc/profile.d/conda.sh
-conda activate /projects/p32505/opt/env/AI_env
+conda activate /projects/p32505/opt/envs/ml
 
 log_message "**** Run script ****"
 CHROM=${SLURM_ARRAY_TASK_ID}
