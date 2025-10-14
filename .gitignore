@@ -6,9 +6,6 @@ jupyterlab.slurm
 binary_files/*
 
 # Project specific
-*.fb.tsv
-*.msp.tsv
-*.sis.tsv
 *.bin
 cufile.log
 *.vcf
@@ -19,7 +16,5 @@ cufile.log
 *.fam
 *.tmp
 *.bak
-*.rfmix.Q
 *txt.gz
-*.RData
 *.vcf.gz
