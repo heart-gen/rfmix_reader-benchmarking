@@ -1,0 +1,16 @@
+2025-10-13 15:32:26 - **** Job starts ****
+2025-10-13 15:32:26 - **** Quest info ****
+User: owb0346
+Job id: 6915301
+Job name: gzip_rfmix
+Node name: 
+Hostname: qnode0017
+Task id: 16
+2025-10-13 15:32:26 - **** Loading modules ****
+No modules loaded
+2025-10-13 15:32:27 - **** Run compression ****
+Chromosome: 
+Compressing rfmix-out/chr16.fb.tsv
+Compressing rfmix-out/chr16.msp.tsv
+Compressing rfmix-out/chr16.sis.tsv
+2025-10-13 15:34:09 - **** Job ends ****
