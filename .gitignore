@@ -9,12 +9,9 @@ binary_files/*
 *.bin
 cufile.log
 *.vcf
-*.vcf.gz
 *.vcf.gz.tbi
 *.bim
 *.bed
 *.fam
 *.tmp
 *.bak
-*txt.gz
-*.vcf.gz
