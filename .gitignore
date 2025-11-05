@@ -15,7 +15,3 @@ cufile.log
 *.fam
 *.tmp
 *.bak
-*.sis.tsv
-*.fb.tsv
-*.msp.tsv
-*.rfmix.Q
