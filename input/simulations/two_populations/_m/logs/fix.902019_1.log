@@ -1,0 +1,16 @@
+2025-11-14 09:20:41 - **** Job starts ****
+2025-11-14 09:20:41 - **** Quest info ****
+User: owb0346
+Job id: 902021
+Job name: fix_files
+Node name: 
+Hostname: qnode0109
+Task id: 1
+No modules loaded
+2025-11-14 09:20:41 - Processing chr1 ...
+2025-11-14 09:20:41 - **** Loading conda environment ****
+[W::bcf_sr_add_hreader] No BGZF EOF marker; file 'gt-files/back/chr1.vcf.gz' may be truncated
+[E::bgzf_read_block] Failed to read BGZF block data at offset 1006629219 expected 3225 bytes; hread returned 3067
+tbx_index_build3 failed: gt-files/chr1.vcf.gz
+  Fixed header and reindexed: gt-files/chr1.vcf.gz
+2025-11-14 09:21:44 - **** Job ends ****
