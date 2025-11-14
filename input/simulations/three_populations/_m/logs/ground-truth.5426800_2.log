@@ -1,0 +1,46 @@
+2025-09-30 14:19:39 - **** Job starts ****
+2025-09-30 14:19:39 - **** Quest info ****
+User: owb0346
+Job id: 5429109
+Job name: simu_3pops
+Node name: 
+Hostname: qnode3123
+Task id: 2
+2025-09-30 14:19:39 - **** Loading modules ****
+
+Currently Loaded Modules:
+  1) bzip2/1.0.8-gcc-4.8.5   3) openssl/1.0.2k-gcc-4.8.5
+  2) htslib/1.16             4) bcftools/1.10.1
+
+ 
+
+2025-09-30 14:19:47 - **** Loading mamba environment ****
+2025-09-30 14:19:54 - **** Generate VCF contigs for header ****
+**** Run simulation ****
+Traceback (most recent call last):
+  File "/projects/p32505/opt/envs/ml/bin/haptools", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/gpfs/projects/p32505/opt/envs/ml/lib/python3.12/site-packages/click/core.py", line 1462, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/envs/ml/lib/python3.12/site-packages/click/core.py", line 1383, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/envs/ml/lib/python3.12/site-packages/click/core.py", line 1850, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/envs/ml/lib/python3.12/site-packages/click/core.py", line 1246, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/envs/ml/lib/python3.12/site-packages/click/core.py", line 814, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/envs/ml/lib/python3.12/site-packages/haptools/__main__.py", line 278, in simgenotype
+    popsize = validate_params(
+              ^^^^^^^^^^^^^^^^
+  File "/gpfs/projects/p32505/opt/envs/ml/lib/python3.12/site-packages/haptools/sim_genotype.py", line 862, in validate_params
+    raise Exception(f"Chromosome {chrom} in the list given is not valid.")
+Exception: Chromosome chr2 in the list given is not valid.
+2025-09-30 14:20:00 - **** Annotate VCF ****
+2025-09-30 14:22:46 - **** Job ends ****

@@ -1,0 +1,13 @@
+2025-11-14 17:19:26 - **** Job starts ****
+2025-11-14 17:19:26 - **** Quest info ****
+User: owb0346
+Job id: 929594
+Job name: fix_files
+Node name: 
+Hostname: qnode0133
+Task id: 13
+No modules loaded
+2025-11-14 17:19:27 - Processing chr13 ...
+2025-11-14 17:19:27 - **** Loading conda environment ****
+  Fixed header and reindexed: gt-files/chr13.vcf.gz
+2025-11-14 17:19:38 - **** Job ends ****
