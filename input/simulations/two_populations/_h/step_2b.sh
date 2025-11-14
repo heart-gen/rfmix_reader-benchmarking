@@ -5,7 +5,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
-#SBATCH --array=15,17-22
+#SBATCH --array=1-22
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=2gb
 #SBATCH --output=logs/gzip_rfmix.%A_%a.log

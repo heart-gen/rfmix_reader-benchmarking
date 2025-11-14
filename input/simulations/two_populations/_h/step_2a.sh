@@ -6,10 +6,10 @@
 #SBATCH --mail-user=kynon.benjamin@northwestern.edu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=150gb
+#SBATCH --mem=250gb
 #SBATCH --output=logs/rfmix.%A_%a.log
-#SBATCH --array=10-17
-#SBATCH --time=36:00:00
+#SBATCH --array=1-22
+#SBATCH --time=128:00:00
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
