@@ -1,1 +1,1 @@
-/projects/b1213/resources/processed-data/local-ancestry/rfmix-version/_m/chr14.rfmix.Q
+/ocean/projects/bio250020p/shared/resources/processed-data/local-ancestry/rfmix-version/_m/chr14.rfmix.Q
