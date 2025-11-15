@@ -49,11 +49,10 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     return prefixes
 
 
-def _read_csv(fn: str, usecols=None, dtype=None) -> pd.DataFrame:
+def _read_csv(fn: str, header=None) -> pd.DataFrame:
     return pd.read_csv(
-        fn, sep="\t", engine="c",
-        usecols=usecols, dtype=dtype,
-        memory_map=True, low_memory=False,
+        fn, sep=r"\s+", header=None, engine="c", dtype=header, comment="#",
+        names=list(header.keys()), memory_map=True, low_memory=False,
     )
 
 
@@ -61,30 +60,18 @@ def _read_file(fn_list: List[dict], read_func: Callable) -> List[pd.DataFrame]:
     return [read_func(f) for f in fn_list]
 
 
-def _types(fn: str, Q: bool = True, n_rows: int = 100) -> dict[str, str]:
+def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict[str, str]:
     """Infer dtypes for a TSV file using a small sample with pandas."""
     sample = pd.read_csv(
-        fn, sep="\t", nrows=n_rows, engine="c", low_memory=False,
+        fn, sep=f"\s+", nrows=n_rows, engine="c", low_memory=False,
+        skiprows=1
     )
-    dtypes = sample.dtypes
-    def _map_dtype(col: str) -> str:
-        dt = dtypes[col]
-        if np.issubdtype(dt, np.floating):
-            return "float32"
-        if np.issubdtype(dt, np.integer):
-            return "int32"
-        return "string"
 
     if Q:
-        header = odict()
-        header["sample_id"] = "string"
-        for col in sample.columns[1:]:
-            header[col] = _map_dtype(col)
+        header = {"sample_id": pd.CategoricalDtype()}
+        header.update(sample.dtypes[1:].to_dict())
     else:
-        header = odict()
-        for col in sample.columns:
-            header[col] = _map_dtype(col)
-
+        header = sample.dtypes.to_dict()
     return header
     
 
@@ -94,8 +81,8 @@ def concat_tables(tables: List[pd.DataFrame]) -> pd.DataFrame:
 
 def _read_Q(fn_dict):
     fn = fn_dict["rfmix.Q"]
-    dtypes = _types(fn, Q=True)
-    df = _read_csv(fn, dtype=dtypes)
+    header = _types(fn, Q=True)
+    df = _read_csv(fn, header=header)
     chrom_match = re.search(r'chr(\d+)', fn)
     chrom = chrom_match.group(0) if chrom_match else None
     df["chrom"] = chrom
@@ -104,8 +91,8 @@ def _read_Q(fn_dict):
 
 def _read_fb(fn_dict):
     fn = fn_dict["fb.tsv"]
-    dtypes = _types(fn, Q=False)
-    return _read_csv(fn, dtype=dtypes)
+    header = _types(fn, Q=False)
+    return _read_csv(fn, header=header)
 
 
 def table_to_numpy(df: pd.DataFrame, dtype: np.dtype = np.float32) -> np.ndarray:
