@@ -124,15 +124,13 @@ def simulate_analysis(input_dir: str, task: int):
     X = concat_tables(X_tables)
 
     loci = X.select(["chromosome", "physical_position"])
-    ancestry_table = X.drop(["chromosome", "physical_position", "sample_id", "marker"])
+    ancestry_table = X.drop(["chromosome", "physical_position",
+                             "genetic_position", "genetic_marker_index"])
 
     ancestry_matrix = table_to_numpy(ancestry_table, dtype=np.float32)
     admix = _subset_populations(ancestry_matrix, len(pops))
 
-    g_anc_means = {name: pc.mean(g_anc[name]).as_py() for name in pops}
-    admix_means = np.mean(admix, axis=0)
-
-    return loci, g_anc_means, admix_means
+    return loci, g_anc, admix
 
 
 def get_peak_cpu_memory_mb() -> float:
@@ -156,10 +154,10 @@ def run_task(input_dir: str, label: str, task: int):
         random.seed(seed)
         np.random.seed(seed)
 
-        logging.info(f"Replicate {replicate}: Reading file {file_path}")
+        logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
 
         start = time.time()
-        g_anc_means, _ = simulate_analysis(input_dir, task)
+        _, g_anc, _ = simulate_analysis(input_dir, task)
         wall_time = time.time() - start
         peak_mem = get_peak_cpu_memory_mb()
 
@@ -177,7 +175,7 @@ def run_task(input_dir: str, label: str, task: int):
         with open(meta_path, "w") as f:
             json.dump(meta, f, indent=2)
 
-        logger.info(
+        logging.info(
             "Finished replicate %d in %.2fs, peak RSS: %.2f MB",
             replicate, wall_time, peak_mem,
         )
