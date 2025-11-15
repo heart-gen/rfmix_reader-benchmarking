@@ -1,4 +1,4 @@
-import re
+import re, io
 import psutil
 import logging
 import platform
@@ -53,11 +53,74 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     return prefixes
 
 
-def _read_arrow_table(fn: str) -> pa.Table:
-    # PyArrow file reader
+def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict[str, pa.DataType]:
+    """Infer column types from a TSV file using PyArrow, skipping initial comment and reading header from second line."""
+    with open(fn, "r") as f:
+        lines = f.readlines()
+
+    if len(lines) < 2:
+        raise ValueError("File does not contain enough lines to extract header.")
+
+    # Skip first comment line, clean second line (the header)
+    header_line = lines[1].lstrip()
+    if header_line.startswith("#"):
+        header_line = header_line[1:]
+    column_names = header_line.strip().split()
+
+    # Join the header and a few data lines for in-memory parsing
+    data_sample = [header_line] + lines[2:2 + n_rows]
+    buffer = io.BytesIO("".join(data_sample).encode("utf-8"))
+
+    # Read with PyArrow, using custom column names
+    table = pacsv.read_csv(
+        buffer,
+        read_options=pacsv.ReadOptions(column_names=column_names),
+        parse_options=pacsv.ParseOptions(delimiter="\t"),
+        convert_options=pacsv.ConvertOptions(column_types=None)  # Let PyArrow infer types
+    )
+
+    # Extract inferred schema
+    schema = table.schema
+    types = {}
+
+    if Q:
+        # Manually set sample_id as categorical
+        types["sample_id"] = pa.dictionary(pa.int32(), pa.string())
+        for field in schema:
+            if field.name != "sample_id":
+                types[field.name] = field.type
+    else:
+        types = {field.name: field.type for field in schema}
+
+    return types
+
+
+def _read_arrow_table(fn: str, Q: bool = False) -> pa.Table:
+    # Infer column types from a sample of the file
+    inferred_types = _types(fn, Q=Q, n_rows=100)
+
+    # Re-read the full file with inferred types, skipping the first line (comment),
+    # using column names from the second line
+    with open(fn, "r") as f:
+        lines = f.readlines()
+
+    if len(lines) < 2:
+        raise ValueError("File does not contain enough lines for header and data.")
+
+    header_line = lines[1].lstrip()
+    if header_line.startswith("#"):
+        header_line = header_line[1:]
+    column_names = header_line.strip().split()
+
+    # Reconstruct cleaned file content (skip comment, use cleaned header, keep all remaining lines)
+    content = [header_line] + lines[2:]
+    buffer = io.BytesIO("".join(content).encode("utf-8"))
+
     return pacsv.read_csv(
-        fn, read_options=pacsv.ReadOptions(use_threads=True),
-        parse_options=pacsv.ParseOptions(delimiter="\t")
+        buffer,
+        read_options=pacsv.ReadOptions(column_names=column_names, use_threads=True),
+        parse_options=pacsv.ParseOptions(delimiter="\t"),
+        convert_options=pacsv.ConvertOptions(column_types=inferred_types)
     )
 
 
@@ -73,7 +136,7 @@ def concat_tables(tables: List[pa.Table]) -> pa.Table:
 def _read_Q(fn_dict):
     # Read Q matrix with chromosome info
     fn = fn_dict["rfmix.Q"]
-    table = _read_arrow_table(fn)
+    table = _read_arrow_table(fn, Q=True)
     chrom_match = re.search(r'chr(\d+)', fn)
     chrom = chrom_match.group(0) if chrom_match else None
 
@@ -85,7 +148,7 @@ def _read_Q(fn_dict):
 def _read_fb(fn_dict):
     # Read fb.tsv file
     fn = fn_dict["fb.tsv"]
-    return _read_arrow_table(fn)
+    return _read_arrow_table(fn, Q=False)
 
 
 def table_to_numpy(table: pa.Table, dtype: np.dtype = np.float32) -> np.ndarray:
