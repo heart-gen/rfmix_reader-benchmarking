@@ -1,151 +1,79 @@
-# This script will test the memory usage and executive time for
-# RFMix-reader.
-from time import time
+import re
+import psutil
+import logging
+import platform
+import argparse
+import random, os
+import json, time
+import numpy as np
+import pyarrow as pa
 from numpy import stack
-from pyhere import here
-from re import search as rsearch
+import pyarrow.csv as pacsv
+import pyarrow.compute as pc
 from typing import Callable, List
-from memory_profiler import profile
-from rfmix_reader import get_prefixes
-from collections import OrderedDict as odict
-from pandas import DataFrame, read_csv, concat, StringDtype
 
-@profile
-def read_data(prefix_path, verbose=True):
-    fn = get_prefixes(prefix_path, verbose)
+# Setup logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-    # Global ancestry
-    g_anc = _read_file(fn, lambda f: _read_Q(f["rfmix.Q"]))
-    pops = g_anc[0].drop(["sample_id", "chrom"], axis=1).columns.values
-    g_anc = concat(g_anc, axis=0, ignore_index=True)
-
-    # Local ancestry
-    X = _read_file(fn, lambda f: _read_fb(f["fb.tsv"]))
-    X = concat(X, axis=0, ignore_index=True)
-
-    loci = X.loc[:, ["chromosome", "physical_position"]]
-    X = X.iloc[:, 4:].values
-    admix = _subset_populations(X, len(pops))
+# Metadata logging
+def collect_metadata(parser_version, task_id, replicate, label):
+    return {
+        "parser": parser_version,
+        "task": task_id,
+        "replicate": replicate,
+        "label": label,
+        "hardware": platform.platform(),
+        "software_versions": {
+            "python": platform.python_version(),
+            "pyarrow": pa.__version__,
+            "psutil": psutil.__version__,
+        }
+    }
 
 
-def _read_file(fn: List[str], read_func: Callable) -> List:
-    """
-    Read data from multiple files using a provided read function.
+# Simulate file discovery (replace this with your real get_prefixes function)
+def get_prefixes(prefix_path, verbose=True):
+    return [
+        {"rfmix.Q": f"{prefix_path}/chr1.Q", "fb.tsv": f"{prefix_path}/chr1.fb.tsv"},
+        {"rfmix.Q": f"{prefix_path}/chr22.Q", "fb.tsv": f"{prefix_path}/chr22.fb.tsv"},
+    ]
 
-    Parameters:
-    ----------
-    fn (List[str]): A list of file paths to read.
-    read_func (Callable): A function to read data from each file.
-
-    Returns:
-    -------
-    List: A list containing the data read from each file.
-    """
-    return [read_func(file_name) for file_name in fn]
-
-
-def _read_fb(fn: str) -> DataFrame:
-    header = odict(_types(fn, False))
-    return _read_tsv(fn, header)
+# PyArrow file reader
+def _read_arrow_table(fn: str) -> pa.Table:
+    return pacsv.read_csv(
+        fn,
+        read_options=pacsv.ReadOptions(use_threads=True),
+        parse_options=pacsv.ParseOptions(delimiter="\t")
+    )
 
 
-def _read_Q(fn: str) -> DataFrame:
-    """
-    Read the Q matrix from a file and add the chromosome information.
-
-    Parameters:
-    ----------
-    fn (str): The file path of the Q matrix file.
-
-    Returns:
-    -------
-    DataFrame: The Q matrix with the chromosome information added.
-    """
-    header = odict(_types(fn))
-    df = _read_csv(fn, header)
-    m = rsearch(r'chr(\d+)', fn)
-    chrom = m.group(0) if m else None
-    if chrom:
-        df["chrom"] = chrom
-    else:
-        print(f"Warning: Could not extract chromosome information from '{fn}'")
-    return df
+# General-purpose file reader
+def _read_file(fn_list: List[dict], read_func: Callable) -> List[pa.Table]:
+    return [read_func(f) for f in fn_list]
 
 
-def _read_csv(fn: str, header: dict) -> DataFrame:
-    """
-    Read a CSV file into a pandas DataFrame with specified data types.
+def concat_tables(tables: List[pa.Table]) -> pa.Table:
+    return pa.concat_tables(tables, promote=True)
 
-    Parameters:
-    ----------
-    fn (str): The file path of the CSV file.
-    header (dict): A dictionary mapping column names to data types.
+# Read Q matrix with chromosome info
+def _read_Q(fn_dict):
+    fn = fn_dict["rfmix.Q"]
+    table = _read_arrow_table(fn)
+    chrom_match = re.search(r'chr(\d+)', fn)
+    chrom = chrom_match.group(0) if chrom_match else None
 
-    Returns:
-    -------
-    DataFrame: The data read from the CSV file as a pandas DataFrame.
-    """
-    return read_csv(fn, delim_whitespace=True, header=None,
-                    names=list(header.keys()), dtype=header, comment="#",
-                    compression=None, engine="c",iterator=False)
+    # Add chrom column to arrow Table
+    chrom_col = pa.array([chrom] * table.num_rows)
+    return table.append_column("chrom", chrom_col)
 
-
-def _read_tsv(fn: str, header: dict) -> DataFrame:
-    """
-    Read a TSV file into a pandas DataFrame.
-
-    Parameters:
-    ----------
-    fn (str): File name of the TSV file.
-
-    Returns:
-    -------
-    DataFrame: DataFrame containing specified columns from the TSV file.
-    """
-    chunks = read_csv(fn, delim_whitespace=True, header=0,
-                      names=list(header.keys()), dtype=header, comment="#",
-                      chunksize=100_000)
-    # Concatenate chunks into single DataFrame
-    return concat(chunks, ignore_index=True)
+# Read fb.tsv file
+def _read_fb(fn_dict):
+    fn = fn_dict["fb.tsv"]
+    return _read_arrow_table(fn)
 
 
-def _types(fn: str, Q: bool = True) -> dict:
-    """
-    Infer the data types of columns in a TSV file.
-
-    Parameters:
-    ----------
-    fn (str) : File name of the TSV file.
-
-    Returns:
-    -------
-    dict : Dictionary mapping column names to their inferred data types.
-    """
-    if is_available():
-        df = read_csv(fn,sep="\t",nrows=2,skiprows=1)
-    else:
-        df = read_csv(fn,delim_whitespace=True,nrows=2,skiprows=1)
-    if Q:
-        # Initialize the header dictionary with the sample_id column
-        header = {"sample_id": StringDtype()}
-        # Update the header dictionary with the data types of the remaining columns
-        header.update(df.dtypes[1:].to_dict())
-    else:
-        header = df.dtypes.to_dict()
-    return header
-
-
-def _subset_populations(X, npops):
-    """
-    Subset and process the input array X based on populations.
-
-    Parameters:
-    X (ndarray): Input array where columns represent data for different populations.
-    npops (int): Number of populations for column processing.
-
-    Returns:
-    ndarray: Processed array with adjacent columns summed for each population subset.
-    """
+# Subset population matrix
+def _subset_populations(X: np.ndarray, npops: int) -> np.ndarray:
     pop_subset = []
     ncols = X.shape[1]
     if ncols % npops != 0:
@@ -158,14 +86,98 @@ def _subset_populations(X, npops):
         pop_subset.append(X0_summed)
     return stack(pop_subset, 1)
 
+# 🧠 Updated simulate_analysis
+def simulate_analysis(prefix_path: str):
+    fn_list = get_prefixes(prefix_path)
 
-def main():
-    prefix_path = here("input/simulations/two_populations/_m/rfmix-out")
-    start_time = time()
-    _ = read_data(prefix_path)
-    end_time = time()
-    print(f"Execution time: {end_time - start_time} seconds")
+    # Read and concatenate Q files
+    g_anc_tables = _read_file(fn_list, _read_Q)
+    g_anc = concat_tables(g_anc_tables)
+
+    # Infer population labels from column names (skip 'sample_id' and 'chrom')
+    col_names = g_anc.column_names
+    pops = [name for name in col_names if name not in ("sample_id", "chrom")]
+
+    # Read and concatenate fb.tsv files
+    X_tables = _read_file(fn_list, _read_fb)
+    X = concat_tables(X_tables)
+
+    # Extract loci and ancestry matrix
+    loci = X.select(["chromosome", "physical_position"])
+    ancestry_table = X.drop(["chromosome", "physical_position", "sample_id", "marker"])
+
+    # Convert Arrow Table to NumPy array for numerical operation
+    ancestry_matrix = np.column_stack([ancestry_table[column].to_numpy() for column in ancestry_table.column_names])
+
+    # Subset
+    admix = _subset_populations(ancestry_matrix, len(pops))
+
+    # Optional: Compute Arrow summary statistics (or convert to Pandas only if needed)
+    # Example using Arrow: mean
+    g_anc_means = {name: pc.mean(g_anc[name]).as_py() for name in pops}
+    admix_means = np.mean(admix, axis=0)
+
+    return g_anc_means, admix_means
 
 
+# Simulated file selection based on task
+def select_file(input_dir: str, task: int):
+    if task == 1:
+        return os.path.join(input_dir, "chr1.tsv")
+    elif task == 2:
+        return os.path.join(input_dir, "chr22.tsv")
+    else:
+        return os.path.join(input_dir, "all_chr.tsv")
+
+# Track peak CPU memory in MB
+def get_peak_cpu_memory():
+    process = psutil.Process(os.getpid())
+    mem_info = process.memory_info()
+    return mem_info.rss / (1024 ** 2)  # RSS: Resident Set Size in MB
+
+
+# Main processing function
+def run_task(input_dir: str, label: str, task: int):
+    output_dir = os.path.join("output", label)
+    os.makedirs(output_dir, exist_ok=True)
+
+    for replicate in range(3, 6):  # Replicates 3 to 5
+        seed = replicate
+        random.seed(seed)
+        np.random.seed(seed)
+
+        file_path = select_file(input_dir, task)
+        logging.info(f"Replicate {replicate}: Reading file {file_path}")
+
+        start_mem = get_peak_cpu_memory()
+        start = time.time()
+        g_anc_means, _ = simulate_analysis(file_path)
+        wall_time = time.time() - start
+        end_mem = get_peak_cpu_memory()
+        peak_mem = max(start_mem, end_mem)
+
+        # Save result
+        result_path = os.path.join(output_dir, f"result_replicate_{replicate}.csv")
+        table = pa.table([g_anc_means])
+        pacsv.write_csv(table, result_path)
+
+        # Save metadata
+        meta = collect_metadata("pyarrow", task, replicate, label)
+        meta["wall_time_sec"] = wall_time
+        meta["peak_cpu_memory_MB"] = peak_mem
+        meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
+        with open(meta_path, "w") as f:
+            json.dump(meta, f, indent=2)
+
+        logging.info(f"Finished replicate {replicate} in {wall_time:.2f}s, CPU Peak: {peak_mem:.2f} MB")
+
+# CLI entrypoint
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Large File PyArrow Processor")
+    parser.add_argument("--input", type=str, required=True, help="Input directory with data files")
+    parser.add_argument("--label", type=str, required=True, help="Label for output directory")
+    parser.add_argument("--task", type=int, choices=[1, 2, 3], required=True,
+                        help="Task type: 1=small chrom, 2=large chrom, 3=all chroms")
+    args = parser.parse_args()
+
+    run_task(args.input, args.label, args.task)
