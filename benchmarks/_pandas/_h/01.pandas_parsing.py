@@ -7,6 +7,7 @@ import random, json
 import psutil, time
 import pandas as pd
 from typing import Callable, List
+from collections import OrderedDict as odict
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -48,13 +49,44 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     return prefixes
 
 
-def _read_csv(fn: str) -> pd.DataFrame:
-    return pd.read_csv(fn, sep="\t", engine="c")
+def _read_csv(fn: str, usecols=None, dtype=None) -> pd.DataFrame:
+    return pd.read_csv(
+        fn, sep="\t", engine="c",
+        usecols=usecols, dtype=dtype,
+        memory_map=True, low_memory=False,
+    )
 
 
 def _read_file(fn_list: List[dict], read_func: Callable) -> List[pd.DataFrame]:
     return [read_func(f) for f in fn_list]
 
+
+def _types(fn: str, Q: bool = True, n_rows: int = 100) -> dict[str, str]:
+    """Infer dtypes for a TSV file using a small sample with pandas."""
+    sample = pd.read_csv(
+        fn, sep="\t", nrows=n_rows, engine="c", low_memory=False,
+    )
+    dtypes = sample.dtypes
+    def _map_dtype(col: str) -> str:
+        dt = dtypes[col]
+        if np.issubdtype(dt, np.floating):
+            return "float32"
+        if np.issubdtype(dt, np.integer):
+            return "int32"
+        return "string"
+
+    if Q:
+        header = odict()
+        header["sample_id"] = "string"
+        for col in sample.columns[1:]:
+            header[col] = _map_dtype(col)
+    else:
+        header = odict()
+        for col in sample.columns:
+            header[col] = _map_dtype(col)
+
+    return header
+    
 
 def concat_tables(tables: List[pd.DataFrame]) -> pd.DataFrame:
     return pd.concat(tables, ignore_index=True)
@@ -62,7 +94,8 @@ def concat_tables(tables: List[pd.DataFrame]) -> pd.DataFrame:
 
 def _read_Q(fn_dict):
     fn = fn_dict["rfmix.Q"]
-    df = _read_csv(fn)
+    dtypes = _types(fn, Q=True)
+    df = _read_csv(fn, dtype=dtypes)
     chrom_match = re.search(r'chr(\d+)', fn)
     chrom = chrom_match.group(0) if chrom_match else None
     df["chrom"] = chrom
@@ -71,7 +104,8 @@ def _read_Q(fn_dict):
 
 def _read_fb(fn_dict):
     fn = fn_dict["fb.tsv"]
-    return _read_csv(fn)
+    dtypes = _types(fn, Q=False)
+    return _read_csv(fn, dtype=dtypes)
 
 
 def table_to_numpy(df: pd.DataFrame, dtype: np.dtype = np.float32) -> np.ndarray:
@@ -104,7 +138,12 @@ def simulate_analysis(input_dir: str, task: int):
     X = concat_tables(X_tables)
 
     loci = X[["chromosome", "physical_position"]]
-    ancestry_df = X.drop(columns=["chromosome", "physical_position", "genetic_position", "genetic_marker_index"])
+    drop_cols = [c for c in ["chromosome", "physical_position",
+                             "genetic_position", "genetic_marker_index"]
+                 if c in X.columns]
+    ancestry_df = X.drop(columns=drop_cols)
+    ancestry_df = ancestry_df.select_dtypes(include=[np.number])
+
 
     ancestry_matrix = table_to_numpy(ancestry_df, dtype=np.float32)
     admix = _subset_populations(ancestry_matrix, len(pops))
