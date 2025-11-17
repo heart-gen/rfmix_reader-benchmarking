@@ -49,7 +49,7 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
 
 def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict:
     # Rough type inference using cudf sample
-    sample = cudf.read_csv(fn, sep='\s+', skiprows=1, nrows=n_rows)
+    sample = cudf.read_csv(fn, sep='\t', skiprows=1, nrows=n_rows)
     if Q:
         header = {"sample_id": "category"}
         header.update({k: str(v) for k, v in zip(sample.columns[1:], sample.dtypes[1:])})
@@ -61,8 +61,11 @@ def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict:
 def _read_csv(fn: str, header=None, Q: bool = False) -> cudf.DataFrame:
     col_names = list(header.keys())
     dtypes = {i: header[name] for i, name in enumerate(col_names)}
-    df = cudf.read_csv(fn, sep=r'\s+', header=None if not Q, comment="#",
-                       names=col_names, dtype=dtypes)
+    if Q:
+        df = cudf.read_csv(fn, sep='\t', header=None, comment="#",
+                           names=col_names, dtype=dtypes)
+    else:
+        df = cudf.read_csv(fn, sep="\t", comment="#", dtype=dtypes)
     return df
 
 
@@ -91,7 +94,7 @@ def _read_fb(fn_dict):
 
 
 def table_to_cupy(df: cudf.DataFrame, dtype=cp.float32) -> cp.ndarray:
-    return cp.asarray(df.to_numpy(), dtype=dtype)
+    return df.to_cupy().astype(dtype, copy=False)
 
 
 def _subset_populations(X: cp.ndarray, npops: int) -> cp.ndarray:
@@ -137,6 +140,14 @@ def get_peak_cpu_memory_mb() -> float:
     return usage.ru_maxrss / 1024.0
 
 
+def init_rmm_with_stats():
+    base = rmm.mr.CudaMemoryResource()
+    pool = rmm.mr.PoolMemoryResource(base)
+    stats = rmm.mr.StatisticsResourceAdapter(pool)
+    rmm.mr.set_current_device_resource(stats)
+    return stats
+
+
 def _dict_to_df_single_row(d: dict[str, float]) -> cudf.DataFrame:
     return cudf.DataFrame([d])
 
@@ -145,7 +156,7 @@ def run_task(input_dir: str, label: str, task: int):
     output_dir = os.path.join("output", label)
     os.makedirs(output_dir, exist_ok=True)
 
-    rmm.reinitialize(pool_allocator=True)
+    global stats_resource
 
     for replicate in range(3, 6):
         seed = replicate
@@ -159,7 +170,8 @@ def run_task(input_dir: str, label: str, task: int):
             _, g_anc, _ = simulate_analysis(input_dir, task)
             wall_time = time.time() - start
             peak_mem = get_peak_cpu_memory_mb()
-            gpu_mem = rmm.mr.get_current_device_resource().get_high_watermark() / 1024**2
+            gpu_peak_bytes = stats_resource.get_high_watermark()
+            gpu_peak_mb = gpu_peak_bytes / 1024**2
 
             g_anc_means = g_anc.select_dtypes(include=["float64", "float32", "int32", "int64"]).mean().to_pandas().to_dict()
 
@@ -189,7 +201,7 @@ def run_task(input_dir: str, label: str, task: int):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Large File Pandas Processor")
+    parser = argparse.ArgumentParser(description="Large File cuDF Processor")
     parser.add_argument("--input", type=str, required=True,
                         help="Input directory with data files")
     parser.add_argument("--label", type=str, required=True,
