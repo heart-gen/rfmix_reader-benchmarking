@@ -5,7 +5,7 @@
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
 #SBATCH --array=1-3
-#SBATCH --time=02:00:00
+#SBATCH --time=12:00:00
 #SBATCH --output=logs/polars.two_pop.%A_%a.log
 
 log_message() {
