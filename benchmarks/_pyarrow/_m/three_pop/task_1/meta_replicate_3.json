@@ -1,0 +1,32 @@
+{
+  "parser": "pyarrow",
+  "task": 1,
+  "replicate": 3,
+  "label": "task_1",
+  "hardware": "Linux-4.18.0-553.22.1.el8_10.x86_64-x86_64-with-glibc2.28",
+  "software_versions": {
+    "python": "3.11.13",
+    "pyarrow": "22.0.0",
+    "psutil": "6.1.1"
+  },
+  "cpu_info": {
+    "os_cpu_count": 128,
+    "psutil_cpu_count_logical": 128,
+    "psutil_cpu_count_physical": 128,
+    "SLURM_JOB_CPUS_PER_NODE": "64",
+    "SLURM_NTASKS": "64",
+    "SLURM_TASKS_PER_NODE": "64",
+    "env_POLARS_MAX_THREADS": "16",
+    "env_RAYON_NUM_THREADS": "16",
+    "env_OMP_NUM_THREADS": "1",
+    "env_MKL_NUM_THREADS": "1",
+    "env_OPENBLAS_NUM_THREADS": "1",
+    "polars_thread_pool_size": 16,
+    "pyarrow_cpu_count": 16,
+    "pyarrow_io_thread_count": 16
+  },
+  "status": "success",
+  "oom_type": null,
+  "wall_time_sec": 5.711350202560425,
+  "peak_cpu_memory_MB": 4498.875
+}
