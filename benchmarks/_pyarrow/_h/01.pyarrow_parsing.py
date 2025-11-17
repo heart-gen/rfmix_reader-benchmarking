@@ -67,9 +67,7 @@ def _split_header_and_data(fn: str, Q: bool = False) -> tuple[list[str], list[st
     if len(lines) < 1:
         raise ValueError(f"{fn} is empty")
 
-    header_line = None
-    header_idx = None
-
+    header_line = header_idx = None
     if Q:
         hash_seen = 0
         for i, line in enumerate(lines):
@@ -170,12 +168,10 @@ def concat_tables(tables: List[pa.Table]) -> pa.Table:
 
 
 def _read_Q(fn_dict):
-    # Read Q matrix with chromosome info
     fn = fn_dict["rfmix.Q"]
     table = _read_arrow_table(fn, Q=True)
     chrom_match = re.search(r'chr(\d+)', fn)
     chrom = chrom_match.group(0) if chrom_match else None
-    # Add chrom column to arrow Table
     chrom_col = pa.array([chrom] * table.num_rows)
     return table.append_column("chrom", chrom_col)
 
@@ -222,9 +218,8 @@ def simulate_analysis(input_dir: str, task: int):
     loci = X.select(["chromosome", "physical_position"])
     drop_cols = [c for c in ["chromosome", "physical_position",
                              "genetic_position", "genetic_marker_index"]
-                 if c in X.columns]
+                 if c in X.column_names]
     ancestry_table = X.drop(columns=drop_cols)
-
     ancestry_matrix = table_to_numpy(ancestry_table, dtype=np.float32)
     admix = _subset_populations(ancestry_matrix, len(pops))
 
