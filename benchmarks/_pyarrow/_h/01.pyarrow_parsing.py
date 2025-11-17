@@ -40,10 +40,9 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
         raise ValueError(f"Unsupported task id: {task}")
 
     prefixes: list[dict[str, str]] = []
-
     for chrom in chroms:
         prefixes.append({
-            "rfmix.Q": os.path.join(input_dir, f"chr{chrom}.Q"),
+            "rfmix.Q": os.path.join(input_dir, f"chr{chrom}.rfmix.Q"),
             "fb.tsv":  os.path.join(input_dir, f"chr{chrom}.fb.tsv"),
         })
 
@@ -68,7 +67,8 @@ def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict[str, pa.DataType
     column_names = header_line.strip().split()
 
     # Join the header and a few data lines for in-memory parsing
-    data_sample = [header_line] + lines[2:2 + n_rows]
+    clean_header = "\t".join(column_names) + "\n"
+    data_sample = [clean_header] + lines[2:2 + n_rows]
     buffer = io.BytesIO("".join(data_sample).encode("utf-8"))
 
     # Read with PyArrow, using custom column names
@@ -85,9 +85,10 @@ def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict[str, pa.DataType
 
     if Q:
         # Manually set sample_id as categorical
-        types["sample_id"] = pa.dictionary(pa.int32(), pa.string())
         for field in schema:
-            if field.name != "sample_id":
+            if field.name == "sample":
+                types["sample_id"] = pa.string()
+            if field.name != "sample":
                 types[field.name] = field.type
     else:
         types = {field.name: field.type for field in schema}
@@ -96,11 +97,7 @@ def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict[str, pa.DataType
 
 
 def _read_arrow_table(fn: str, Q: bool = False) -> pa.Table:
-    # Infer column types from a sample of the file
     inferred_types = _types(fn, Q=Q, n_rows=100)
-
-    # Re-read the full file with inferred types, skipping the first line (comment),
-    # using column names from the second line
     with open(fn, "r") as f:
         lines = f.readlines()
 
@@ -112,8 +109,11 @@ def _read_arrow_table(fn: str, Q: bool = False) -> pa.Table:
         header_line = header_line[1:]
     column_names = header_line.strip().split()
 
-    # Reconstruct cleaned file content (skip comment, use cleaned header, keep all remaining lines)
-    content = [header_line] + lines[2:]
+    if Q and column_names[0] == "sample":
+        column_names[0] = "sample_id"
+
+    clean_header = "\t".join(column_names) + "\n"
+    content = [clean_header] + lines[2:]
     buffer = io.BytesIO("".join(content).encode("utf-8"))
 
     return pacsv.read_csv(
@@ -125,12 +125,11 @@ def _read_arrow_table(fn: str, Q: bool = False) -> pa.Table:
 
 
 def _read_file(fn_list: List[dict], read_func: Callable) -> List[pa.Table]:
-    # General-purpose file reader
     return [read_func(f) for f in fn_list]
 
 
 def concat_tables(tables: List[pa.Table]) -> pa.Table:
-    return pa.concat_tables(tables, promote=True)
+    return pa.concat_tables(tables, promote_options='default')
 
 
 def _read_Q(fn_dict):
@@ -139,14 +138,12 @@ def _read_Q(fn_dict):
     table = _read_arrow_table(fn, Q=True)
     chrom_match = re.search(r'chr(\d+)', fn)
     chrom = chrom_match.group(0) if chrom_match else None
-
     # Add chrom column to arrow Table
     chrom_col = pa.array([chrom] * table.num_rows)
     return table.append_column("chrom", chrom_col)
 
 
 def _read_fb(fn_dict):
-    # Read fb.tsv file
     fn = fn_dict["fb.tsv"]
     return _read_arrow_table(fn, Q=False)
 
@@ -157,7 +154,6 @@ def table_to_numpy(table: pa.Table, dtype: np.dtype = np.float32) -> np.ndarray:
 
 
 def _subset_populations(X: np.ndarray, npops: int) -> np.ndarray:
-    # Subset population matrix
     pop_subset: list[np.ndarray] = []
     ncols = X.shape[1]
     if ncols % npops != 0:
@@ -187,8 +183,10 @@ def simulate_analysis(input_dir: str, task: int):
     X = concat_tables(X_tables)
 
     loci = X.select(["chromosome", "physical_position"])
-    ancestry_table = X.drop(["chromosome", "physical_position",
-                             "genetic_position", "genetic_marker_index"])
+    drop_cols = [c for c in ["chromosome", "physical_position",
+                             "genetic_position", "genetic_marker_index"]
+                 if c in X.columns]
+    ancestry_table = X.drop(columns=drop_cols)
 
     ancestry_matrix = table_to_numpy(ancestry_table, dtype=np.float32)
     admix = _subset_populations(ancestry_matrix, len(pops))
@@ -197,14 +195,9 @@ def simulate_analysis(input_dir: str, task: int):
 
 
 def get_peak_cpu_memory_mb() -> float:
-    # If you prefer psutil, keep the original; this version uses ru_maxrss.
     import resource
     usage = resource.getrusage(resource.RUSAGE_SELF)
     return usage.ru_maxrss / 1024.0
-
-
-def _dict_to_arrow_single_row(d: dict[str, float]) -> pa.Table:
-    return pa.table({k: [v] for k, v in d.items()})
 
 
 def run_task(input_dir: str, label: str, task: int):
@@ -212,22 +205,16 @@ def run_task(input_dir: str, label: str, task: int):
     output_dir = os.path.join("output", label)
     os.makedirs(output_dir, exist_ok=True)
 
-    for replicate in range(3, 6):  # Replicates 3 to 5
-        seed = replicate
-        random.seed(seed)
-        np.random.seed(seed)
+    for replicate in range(1, 6):
+        seed = replicate + 13
+        random.seed(seed); np.random.seed(seed)
 
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
 
         start = time.time()
-        _, g_anc, _ = simulate_analysis(input_dir, task)
+        _, _, _ = simulate_analysis(input_dir, task)
         wall_time = time.time() - start
         peak_mem = get_peak_cpu_memory_mb()
-
-        # Save result
-        result_path = os.path.join(output_dir, f"result_replicate_{replicate}.csv")
-        table = _dict_to_arrow_single_row(g_anc_means)
-        pacsv.write_csv(table, result_path)
 
         # Save metadata
         meta = collect_metadata("pyarrow", task, replicate, label)
