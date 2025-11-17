@@ -1,0 +1,187 @@
+2025-11-17 18:15:13 - **** Job starts ****
+2025-11-17 18:15:13 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36036374
+Job name: cudf_3pop
+Node name: 
+Hostname: v034
+Task id: 3
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1   2) cuda/12.6.1
+
+ 
+
+2025-11-17 18:15:14 - **** Loading conda environment ****
+2025-11-17 18:15:14 - **** Run analysis ****
+2025-11-17 18:15:17,201 - INFO - Replicate 1: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:15:17,335 - INFO - CPU info: {'os_cpu_count': 96, 'psutil_cpu_count_logical': 96, 'psutil_cpu_count_physical': 48, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:15:17,342 - INFO - Task 3 -> 22 chromosome(s): [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+[  4582][18:16:16:734454][error ] [A][Stream 0x1][Upstream 3473857792B][FAILURE maximum pool size exceeded: std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3473857792 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory]
+2025-11-17 18:16:16,746 - ERROR - Error on replicate 1: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.235282 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3473857792 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+Traceback (most recent call last):
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 252, in run_task
+    _, _, _ = simulate_analysis(input_dir, task)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 199, in simulate_analysis
+    X_tables = _read_file(fn_list, _read_fb)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in _read_file
+    return [read_func(f) for f in fn_list]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in <listcomp>
+    return [read_func(f) for f in fn_list]
+            ^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 170, in _read_fb
+    return _read_csv(fn, dtypes=dtypes, Q=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 145, in _read_csv
+    df = cudf.read_csv(fn, sep="\t", comment="#", dtype=dtypes)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/utils/performance_tracking.py", line 51, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/io/csv.py", line 271, in read_csv
+    table_w_meta = plc.io.csv.read_csv(options)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pylibcudf/io/csv.pyx", line 656, in pylibcudf.io.csv.read_csv
+  File "pylibcudf/io/csv.pyx", line 678, in pylibcudf.io.csv.read_csv
+MemoryError: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.235282 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3473857792 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+2025-11-17 18:16:16,752 - INFO - Finished replicate 1 in 59.41s, peak RSS: 749.92 MB, peak GPU: 28118.67 MB
+2025-11-17 18:16:16,752 - INFO - Replicate 2: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:16:16,755 - INFO - CPU info: {'os_cpu_count': 96, 'psutil_cpu_count_logical': 96, 'psutil_cpu_count_physical': 48, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:16:16,758 - INFO - Task 3 -> 22 chromosome(s): [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+[  4582][18:16:36:742350][error ] [A][Stream 0x1][Upstream 3306811648B][FAILURE maximum pool size exceeded: std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory]
+2025-11-17 18:16:36,756 - ERROR - Error on replicate 2: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.079708 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+Traceback (most recent call last):
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 252, in run_task
+    _, _, _ = simulate_analysis(input_dir, task)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 199, in simulate_analysis
+    X_tables = _read_file(fn_list, _read_fb)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in _read_file
+    return [read_func(f) for f in fn_list]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in <listcomp>
+    return [read_func(f) for f in fn_list]
+            ^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 170, in _read_fb
+    return _read_csv(fn, dtypes=dtypes, Q=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 145, in _read_csv
+    df = cudf.read_csv(fn, sep="\t", comment="#", dtype=dtypes)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/utils/performance_tracking.py", line 51, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/io/csv.py", line 271, in read_csv
+    table_w_meta = plc.io.csv.read_csv(options)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pylibcudf/io/csv.pyx", line 656, in pylibcudf.io.csv.read_csv
+  File "pylibcudf/io/csv.pyx", line 678, in pylibcudf.io.csv.read_csv
+MemoryError: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.079708 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+2025-11-17 18:16:36,761 - INFO - Finished replicate 2 in 20.00s, peak RSS: 751.12 MB, peak GPU: 31288.05 MB
+2025-11-17 18:16:36,761 - INFO - Replicate 3: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:16:36,763 - INFO - CPU info: {'os_cpu_count': 96, 'psutil_cpu_count_logical': 96, 'psutil_cpu_count_physical': 48, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:16:36,767 - INFO - Task 3 -> 22 chromosome(s): [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+[  4582][18:16:51:032708][error ] [A][Stream 0x1][Upstream 3306811648B][FAILURE maximum pool size exceeded: std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory]
+2025-11-17 18:16:51,047 - ERROR - Error on replicate 3: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.079708 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+Traceback (most recent call last):
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 252, in run_task
+    _, _, _ = simulate_analysis(input_dir, task)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 199, in simulate_analysis
+    X_tables = _read_file(fn_list, _read_fb)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in _read_file
+    return [read_func(f) for f in fn_list]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in <listcomp>
+    return [read_func(f) for f in fn_list]
+            ^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 170, in _read_fb
+    return _read_csv(fn, dtypes=dtypes, Q=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 145, in _read_csv
+    df = cudf.read_csv(fn, sep="\t", comment="#", dtype=dtypes)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/utils/performance_tracking.py", line 51, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/io/csv.py", line 271, in read_csv
+    table_w_meta = plc.io.csv.read_csv(options)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pylibcudf/io/csv.pyx", line 656, in pylibcudf.io.csv.read_csv
+  File "pylibcudf/io/csv.pyx", line 678, in pylibcudf.io.csv.read_csv
+MemoryError: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.079708 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+2025-11-17 18:16:51,053 - INFO - Finished replicate 3 in 14.28s, peak RSS: 751.58 MB, peak GPU: 31288.05 MB
+2025-11-17 18:16:51,054 - INFO - Replicate 4: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:16:51,056 - INFO - CPU info: {'os_cpu_count': 96, 'psutil_cpu_count_logical': 96, 'psutil_cpu_count_physical': 48, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:16:51,059 - INFO - Task 3 -> 22 chromosome(s): [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+[  4582][18:17:05:245702][error ] [A][Stream 0x1][Upstream 3306811648B][FAILURE maximum pool size exceeded: std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory]
+2025-11-17 18:17:05,259 - ERROR - Error on replicate 4: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.079708 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+Traceback (most recent call last):
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 252, in run_task
+    _, _, _ = simulate_analysis(input_dir, task)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 199, in simulate_analysis
+    X_tables = _read_file(fn_list, _read_fb)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in _read_file
+    return [read_func(f) for f in fn_list]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in <listcomp>
+    return [read_func(f) for f in fn_list]
+            ^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 170, in _read_fb
+    return _read_csv(fn, dtypes=dtypes, Q=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 145, in _read_csv
+    df = cudf.read_csv(fn, sep="\t", comment="#", dtype=dtypes)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/utils/performance_tracking.py", line 51, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/io/csv.py", line 271, in read_csv
+    table_w_meta = plc.io.csv.read_csv(options)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pylibcudf/io/csv.pyx", line 656, in pylibcudf.io.csv.read_csv
+  File "pylibcudf/io/csv.pyx", line 678, in pylibcudf.io.csv.read_csv
+MemoryError: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.079708 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+2025-11-17 18:17:05,264 - INFO - Finished replicate 4 in 14.20s, peak RSS: 751.61 MB, peak GPU: 31288.05 MB
+2025-11-17 18:17:05,264 - INFO - Replicate 5: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:17:05,267 - INFO - CPU info: {'os_cpu_count': 96, 'psutil_cpu_count_logical': 96, 'psutil_cpu_count_physical': 48, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:17:05,270 - INFO - Task 3 -> 22 chromosome(s): [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+[  4582][18:17:19:546004][error ] [A][Stream 0x1][Upstream 3306811648B][FAILURE maximum pool size exceeded: std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory]
+2025-11-17 18:17:19,559 - ERROR - Error on replicate 5: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.079708 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+Traceback (most recent call last):
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 252, in run_task
+    _, _, _ = simulate_analysis(input_dir, task)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 199, in simulate_analysis
+    X_tables = _read_file(fn_list, _read_fb)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in _read_file
+    return [read_func(f) for f in fn_list]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 150, in <listcomp>
+    return [read_func(f) for f in fn_list]
+            ^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 170, in _read_fb
+    return _read_csv(fn, dtypes=dtypes, Q=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/_cudf/_m/../_h/01.cudf_parsing.py", line 145, in _read_csv
+    df = cudf.read_csv(fn, sep="\t", comment="#", dtype=dtypes)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/utils/performance_tracking.py", line 51, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/cudf/io/csv.py", line 271, in read_csv
+    table_w_meta = plc.io.csv.read_csv(options)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pylibcudf/io/csv.pyx", line 656, in pylibcudf.io.csv.read_csv
+  File "pylibcudf/io/csv.pyx", line 678, in pylibcudf.io.csv.read_csv
+MemoryError: std::bad_alloc: out_of_memory: RMM failure at:/tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/pool_memory_resource.hpp:261: Maximum pool size exceeded (failed to allocate 3.079708 GiB): std::bad_alloc: out_of_memory: CUDA error (failed to allocate 3306811648 bytes) at: /tmp/pip-build-env-f1g0jjmr/normal/lib/python3.11/site-packages/librmm/include/rmm/mr/device/cuda_memory_resource.hpp:62: cudaErrorMemoryAllocation out of memory
+2025-11-17 18:17:19,565 - INFO - Finished replicate 5 in 14.29s, peak RSS: 753.68 MB, peak GPU: 31288.05 MB
+2025-11-17 18:17:20 - Job finished at: Mon Nov 17 18:17:20 EST 2025
