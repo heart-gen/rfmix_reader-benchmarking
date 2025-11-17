@@ -80,7 +80,7 @@ def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict:
 
 def _read_csv(fn: str, dtypes: dict, Q: bool = False) -> cudf.DataFrame:
     if Q:
-        col_names = (dtypes.keys())
+        col_names = list(dtypes.keys())
         df = cudf.read_csv(
             fn, sep='\t', header=None, comment="#",
             names=col_names, dtype=dtypes
@@ -183,7 +183,6 @@ def run_task(input_dir: str, output_path: str, label: str, task: int):
             try:
                 _, _, _ = simulate_analysis(input_dir, task)
             except Exception as e:
-                wall_time = time.time() - start
                 is_oom, kind = is_oom_error(e)
                 status = "oom" if is_oom else "error"
                 oom_kind = kind if is_oom else None
@@ -203,16 +202,6 @@ def run_task(input_dir: str, output_path: str, label: str, task: int):
         meta["wall_time_sec"] = wall_time
         meta["peak_cpu_memory_MB"] = peak_cpu
         meta["peak_gpu_memory_MB"] = peak_gpu
-
-        if status == "success":
-            g_anc_means = (g_anc.select_dtypes(include=["float64", "float32",
-                                                        "int32", "int64"])
-                           .mean().to_pandas().to_dict())
-            df_result = _dict_to_df_single_row(g_anc_means)
-            df_result.to_pandas().to_csv(
-                os.path.join(output_dir, f"result_replicate_{replicate}.csv"),
-                index=False,
-            )
             
         meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
         with open(meta_path, "w") as f:
