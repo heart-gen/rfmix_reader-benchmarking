@@ -38,8 +38,24 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 log_message "**** Run analysis ****"
 TASK="${SLURM_ARRAY_TASK_ID}"
-INPUT_DIR="../../../input/simulations/three_populations/_m/rfmix-files/"
 OUTDIR="three_pop/no_binaries"
+
+# Choose input directory based on TASK
+case "${TASK}" in
+  1)
+    INPUT_DIR="../../../input/simulations/three_populations/task_1/rfmix-files/"
+    ;;
+  2)
+    INPUT_DIR="../../../input/simulations/three_populations/task_2/rfmix-files/"
+    ;;
+  3)
+    INPUT_DIR="../../../input/simulations/three_populations/_m/rfmix-files/"
+    ;;
+  *)
+    echo "Invalid TASK value: ${TASK}"
+    exit 1
+    ;;
+esac
 
 python ../_h/01.rfmix_parsing.py --input "${INPUT_DIR}" \
        --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}" --gpu
