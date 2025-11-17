@@ -13,6 +13,11 @@ log_message() {
 }
 
 log_message "**** Job starts ****"
+export POLARS_MAX_THREADS=16
+export RAYON_NUM_THREADS=16
+export OMP_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
 
 log_message "**** Bridges-2 info ****"
 echo "User: ${USER}"
