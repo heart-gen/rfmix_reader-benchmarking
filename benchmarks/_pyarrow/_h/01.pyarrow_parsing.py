@@ -29,6 +29,17 @@ def collect_metadata(parser_version, task_id, replicate, label):
     }
 
 
+def is_oom_error(e: BaseException) -> tuple[bool, str]:
+    """Heuristic classification of OOM vs other error."""
+    msg = str(e).lower()
+    if isinstance(e, MemoryError):
+        return True, "cpu"
+    oom_keywords = ["out of memory", "cuda error: out of memory", "rmm_alloc"]
+    if any(k in msg for k in oom_keywords):
+        return True, "gpu"
+    return False, "unknown"
+
+
 def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     if task == 1:
         chroms = [21]
@@ -243,14 +254,32 @@ def run_task(input_dir: str, output_path: str, label: str, task: int):
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
 
         start = time.time()
-        _, _, _ = simulate_analysis(input_dir, task)
-        wall_time = time.time() - start
+        status = "success"
+        oom_kind = None
+        error_msg = None
+
+        try:
+            _, _, _ = simulate_analysis(input_dir, task)
+        except Exception as e:
+            wall_time = time.time() - start
+            is_oom, kind = is_oom_error(e)
+            status = "oom" if is_oom else "error"
+            oom_kind = kind if is_oom else None
+            error_msg = str(e)[:500]
+            logging.exception("Error on replicate %d: %s", replicate, e)
+        else:
+            wall_time = time.time() - start
+
         peak_mem = get_peak_cpu_memory_mb()
 
         # Save metadata
         meta = collect_metadata("pyarrow", task, replicate, label)
+        meta["status"] = status
+        meta["oom_type"] = oom_kind
         meta["wall_time_sec"] = wall_time
         meta["peak_cpu_memory_MB"] = peak_mem
+        if error_msg:
+            meta["error"] = error_msg
 
         meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
         with open(meta_path, "w") as f:

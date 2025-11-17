@@ -118,6 +118,8 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
         meta["wall_time_sec"] = wall_time
         meta["peak_cpu_memory_MB"] = peak_cpu
         meta["peak_gpu_memory_MB"] = peak_gpu
+        if error_msg:
+            meta["error"] = error_msg
 
         if status == "success":
             numeric = g_anc.select_dtypes(include=["float64", "float32", "int32", "int64"])
