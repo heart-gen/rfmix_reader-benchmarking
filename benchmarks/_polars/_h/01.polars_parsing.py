@@ -6,6 +6,7 @@ import numpy as np
 import random, json
 import psutil, time
 import polars as pl
+import polars.selectors as cs
 from typing import Callable, List
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -38,7 +39,7 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     prefixes = []
     for chrom in chroms:
         prefixes.append({
-            "rfmix.Q": os.path.join(input_dir, f"chr{chrom}.Q"),
+            "rfmix.Q": os.path.join(input_dir, f"chr{chrom}.rfmix.Q"),
             "fb.tsv":  os.path.join(input_dir, f"chr{chrom}.fb.tsv"),
         })
 
@@ -96,10 +97,8 @@ def _read_Q(fn_dict):
     fn = fn_dict["rfmix.Q"]
     header = _types(fn)
     lf = _read_csv(fn, header=header, Q=True)
-
     chrom_match = re.search(r'chr(\d+)', fn)
     chrom = chrom_match.group(0) if chrom_match else None
-
     return lf.with_columns([pl.lit(chrom).alias("chrom")])
 
 
@@ -109,7 +108,7 @@ def _read_fb(fn_dict):
 
 
 def _subset_populations(df: pl.LazyFrame, npops: int) -> np.ndarray:
-    col_names = list(df.schema.keys())
+    col_names = list(df.collect_schema())
     ncols = len(col_names)
 
     if ncols % npops != 0:
@@ -149,9 +148,9 @@ def simulate_analysis(input_dir: str, task: int):
     loci = X.select(["chromosome", "physical_position"]).collect()
     meta_cols = ["chromosome", "physical_position", "genetic_position",
                  "genetic_marker_index"]
-    meta_in = [c for c in meta_cols if c in X.columns]
+    meta_in = [c for c in meta_cols if c in X.collect_schema().names()]
 
-    ancestry_lf = X.drop(meta_in).select(pl.col(pl.NUMERIC_DTYPES))
+    ancestry_lf = X.drop(meta_in).select(cs.numeric())
     admix = _subset_populations(ancestry_lf, len(pops))
 
     return loci, g_anc, admix
@@ -167,27 +166,18 @@ def run_task(input_dir: str, label: str, task: int):
     output_dir = os.path.join("output", label)
     os.makedirs(output_dir, exist_ok=True)
 
-    for replicate in range(3, 6):
-        seed = replicate
-        random.seed(seed)
-        np.random.seed(seed)
+    for replicate in range(1, 6):
+        seed = replicate + 13
+        random.seed(seed); np.random.seed(seed)
 
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
 
         start = time.time()
-        _, g_anc, _ = simulate_analysis(input_dir, task)
+        _, _, _ = simulate_analysis(input_dir, task)
         wall_time = time.time() - start
         peak_mem = get_peak_cpu_memory_mb()
 
-        # Numeric columns only
-        g_anc_means = {
-            col: g_anc[col].mean() for col in g_anc.columns
-            if g_anc[col].dtype in pl.NUMERIC_DTYPES
-        }
-
-        result_path = os.path.join(output_dir, f"result_replicate_{replicate}.csv")
-        pl.DataFrame(g_anc_means).write_csv(result_path)
-
+        # Output meta data
         meta = collect_metadata("polars", task, replicate, label)
         meta["wall_time_sec"] = wall_time
         meta["peak_cpu_memory_MB"] = peak_mem
