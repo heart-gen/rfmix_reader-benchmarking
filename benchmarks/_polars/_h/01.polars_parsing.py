@@ -49,55 +49,68 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     return prefixes
 
 
-def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict[str, pl.DataType]:
-    """Infer dtypes using Polars sample read."""
-    sample = pl.read_csv(
-        fn, separator=r"\s+", n_rows=n_rows, comment_prefix="#", has_header=False
-    )
+def _types(fn: str) -> list[str]:
+    """Infer dtypes using Polars sample read, Q only."""
+    header_line: str | None = None
+    hash_lines_seen = 0
+    with open(fn, "r") as f:
+        for line in f:
+            if not line.startswith("#"):
+                continue
 
-    dtypes = sample.dtypes_dict()
+            hash_lines_seen += 1
+            if hash_lines_seen == 1:
+                continue
 
-    if Q:
-        # First column = categorical
-        ((first_name, first_type), *rest) = dtypes.items()
-        return {"sample_id": pl.Categorical, **dict(rest)}
+            header_line = line[1:].strip()
+            break
 
-    return dtypes
+    if header_line is None:
+        raise ValueError(f"No suitable header line starting with '#' found in {fn}")
+
+    if "\t" in header_line:
+        header = header_line.split("\t")
+    else:
+        header = header_line.split()
+
+    if header:
+        header[0] = "sample_id"
+    return header
 
 
-def _read_csv(fn: str, dtypes=None) -> pl.LazyFrame:
+def _read_csv(fn: str, header: list[str]=None, Q: bool=True) -> pl.LazyFrame:
     return pl.scan_csv(
-        fn, separator=r"\s+", comment_prefix="#", has_header=False, dtypes=dtypes
+        fn, separator="\t", comment_prefix="#", has_header=not Q, 
+        new_columns=header if Q else None,
     )
 
 
-def _read_file(fn_list: List[dict], read_func: Callable) -> List[pl.DataFrame]:
+def _read_file(fn_list: List[dict], read_func: Callable) -> List[pl.LazyFrame]:
     return [read_func(f) for f in fn_list]
 
 
-def concat_tables(tables: List[pl.LazyFrame]) -> pl.DataFrame:
+def concat_tables(tables: List[pl.LazyFrame]) -> pl.LazyFrame:
     return pl.concat(tables, how="vertical_relaxed")
 
 
 def _read_Q(fn_dict):
     fn = fn_dict["rfmix.Q"]
-    header = _types(fn, Q=True)
-    df = _read_csv(fn, dtypes=header)
+    header = _types(fn)
+    lf = _read_csv(fn, header=header, Q=True)
 
     chrom_match = re.search(r'chr(\d+)', fn)
     chrom = chrom_match.group(0) if chrom_match else None
 
-    return df.with_columns([pl.lit(chrom).alias("chrom")])
+    return lf.with_columns([pl.lit(chrom).alias("chrom")])
 
 
 def _read_fb(fn_dict):
     fn = fn_dict["fb.tsv"]
-    header = _types(fn, Q=False)
-    return _read_csv(fn, dtypes=header)
+    return _read_csv(fn, Q=False)
 
 
 def _subset_populations(df: pl.LazyFrame, npops: int) -> np.ndarray:
-    col_names = df.schema.keys()
+    col_names = list(df.schema.keys())
     ncols = len(col_names)
 
     if ncols % npops != 0:
@@ -115,11 +128,9 @@ def _subset_populations(df: pl.LazyFrame, npops: int) -> np.ndarray:
             (pl.col(pop_cols[i]) + pl.col(pop_cols[i + 1])).alias(f"pop{pop_idx}_locus{j}")
             for j, i in enumerate(range(0, len(pop_cols), 2))
         ]
-        # Lazy select; defer collection until end
         pop_lazy = df.select(pop_sum_exprs)
         pop_frames.append(pop_lazy)
 
-    # Collect all at once
     pop_dfs = [lazy.collect() for lazy in pop_frames]
     pop_arrays = [df.to_numpy() for df in pop_dfs]
 
@@ -138,10 +149,12 @@ def simulate_analysis(input_dir: str, task: int):
     X = concat_tables(X_tables)
 
     loci = X.select(["chromosome", "physical_position"])
+    meta_cols = ["chromosome", "physical_position", "genetic_position",
+                 "genetic_marker_index"]
+    meta_in = [c for c in meta_cols if c in X.columns]
 
-    ancestry_df = X.select(pl.col(pl.NUMERIC_DTYPES))
-
-    admix = _subset_populations(ancestry_df, len(pops))
+    ancestry_lf = X.drop(meta_in).select(pl.col(pl.NUMERIC_DTYPES))
+    admix = _subset_populations(ancestry_lf, len(pops))
 
     return loci, g_anc, admix
 
