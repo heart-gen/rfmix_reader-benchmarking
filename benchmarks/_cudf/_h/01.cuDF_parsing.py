@@ -11,6 +11,8 @@ from typing import Callable, List
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
+stats_resource = None # Global variable
+
 def collect_metadata(parser_version, task_id, replicate, label):
     return {
         "parser": parser_version,
@@ -25,6 +27,18 @@ def collect_metadata(parser_version, task_id, replicate, label):
             "psutil": psutil.__version__,
         }
     }
+
+
+def is_oom_error(e: BaseException) -> tuple[bool, str]:
+    """Heuristic classification of OOM vs other error."""
+    msg = str(e).lower()
+    if isinstance(e, MemoryError):
+        return True, "cpu"
+    # cuDF / CuPy / RMM / CUDA messages
+    oom_keywords = ["out of memory", "cuda error: out of memory", "rmm_alloc"]
+    if any(k in msg for k in oom_keywords):
+        return True, "gpu"
+    return False, "unknown"
 
 
 def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
@@ -140,12 +154,18 @@ def get_peak_cpu_memory_mb() -> float:
     return usage.ru_maxrss / 1024.0
 
 
-def init_rmm_with_stats():
-    base = rmm.mr.CudaMemoryResource()
-    pool = rmm.mr.PoolMemoryResource(base)
-    stats = rmm.mr.StatisticsResourceAdapter(pool)
-    rmm.mr.set_current_device_resource(stats)
-    return stats
+def init_gpu_memory_tracking():
+    global stats_resource
+    rmm.reinitialize(pool_allocator=True)
+    base = rmm.mr.get_current_device_resource()
+    stats_resource = rmm.mr.StatisticsResourceAdapter(base)
+    rmm.mr.set_current_device_resource(stats_resource)
+
+
+def get_peak_gpu_memory_mb() -> float:
+    if stats_resource is None:
+        return 0.0
+    return stats_resource.get_high_watermark() / 1024**2
 
 
 def _dict_to_df_single_row(d: dict[str, float]) -> cudf.DataFrame:
@@ -156,7 +176,7 @@ def run_task(input_dir: str, label: str, task: int):
     output_dir = os.path.join("output", label)
     os.makedirs(output_dir, exist_ok=True)
 
-    global stats_resource
+    init_gpu_memory_tracking()
 
     for replicate in range(3, 6):
         seed = replicate
@@ -165,39 +185,54 @@ def run_task(input_dir: str, label: str, task: int):
 
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
 
+        start = time.time()
+        status = "success"
+        oom_kind = None
+        error_msg = None
+
         try:
-            start = time.time()
             _, g_anc, _ = simulate_analysis(input_dir, task)
+        except Exception as e:
             wall_time = time.time() - start
-            peak_mem = get_peak_cpu_memory_mb()
-            gpu_peak_bytes = stats_resource.get_high_watermark()
-            gpu_peak_mb = gpu_peak_bytes / 1024**2
+            is_oom, kind = is_oom_error(e)
+            status = "oom" if is_oom else "error"
+            oom_kind = kind if is_oom else None
+            error_msg = str(e)[:500]  # truncate
+            logging.exception("Error on replicate %d: %s", replicate, e)
+        else:
+            wall_time = time.time() - start
+            
+        peak_cpu = get_peak_cpu_memory_mb() # Always measure
+        try:
+            peak_gpu = get_peak_gpu_memory_mb()
+        except Exception:
+            peak_gpu = 0.0
 
-            g_anc_means = g_anc.select_dtypes(include=["float64", "float32", "int32", "int64"]).mean().to_pandas().to_dict()
+        meta = collect_metadata("cudf", task, replicate, label)
+        meta["status"] = status
+        meta["oom_type"] = oom_kind
+        meta["wall_time_sec"] = wall_time
+        meta["peak_cpu_memory_MB"] = peak_cpu
+        meta["peak_gpu_memory_MB"] = peak_gpu
 
-            result_path = os.path.join(output_dir, f"result_replicate_{replicate}.csv")
+        if status == "success":
+            g_anc_means = (g_anc.select_dtypes(include=["float64", "float32",
+                                                        "int32", "int64"])
+                           .mean().to_pandas().to_dict())
             df_result = _dict_to_df_single_row(g_anc_means)
-            df_result.to_pandas().to_csv(result_path, index=False)
-
-            meta = collect_metadata("cudf", task, replicate, label)
-            meta["wall_time_sec"] = wall_time
-            meta["peak_cpu_memory_MB"] = peak_mem
-            meta["peak_gpu_memory_MB"] = gpu_mem
-
-            meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
-            with open(meta_path, "w") as f:
-                json.dump(meta, f, indent=2)
-
-            logging.info(
-                "Finished replicate %d in %.2fs, peak RSS: %.2f MB, peak GPU: %.2f MB",
-                replicate, wall_time, peak_mem, gpu_mem
+            df_result.to_pandas().to_csv(
+                os.path.join(output_dir, f"result_replicate_{replicate}.csv"),
+                index=False,
             )
+            
+        meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
+        with open(meta_path, "w") as f:
+            json.dump(meta, f, indent=2)
 
-        except (MemoryError, RuntimeError) as e:
-            if "out of memory" in str(e).lower():
-                logging.error("GPU OOM on replicate %d: %s", replicate, str(e))
-            else:
-                logging.exception("Unexpected error on replicate %d", replicate)
+        logging.info(
+            "Finished replicate %d in %.2fs, peak RSS: %.2f MB, peak GPU: %.2f MB",
+            replicate, wall_time, peak_cpu, peak_gpu
+        )
 
 
 if __name__ == "__main__":
