@@ -7,7 +7,6 @@ import random, json
 import psutil, time
 import polars as pl
 from typing import Callable, List
-from collections import OrderedDict as odict
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -50,7 +49,7 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
 
 
 def _types(fn: str) -> list[str]:
-    """Infer dtypes using Polars sample read, Q only."""
+    """Extract the Q header from a .rfmix.Q file."""
     header_line: str | None = None
     hash_lines_seen = 0
     with open(fn, "r") as f:
@@ -120,7 +119,6 @@ def _subset_populations(df: pl.LazyFrame, npops: int) -> np.ndarray:
     if loci_per_pop % 2 != 0:
         raise ValueError("Number of columns per population must be even.")
 
-    loci = loci_per_pop // 2
     pop_frames = []
     for pop_idx in range(npops):
         pop_cols = col_names[pop_idx::npops]
@@ -148,7 +146,7 @@ def simulate_analysis(input_dir: str, task: int):
     X_tables = _read_file(fn_list, _read_fb)
     X = concat_tables(X_tables)
 
-    loci = X.select(["chromosome", "physical_position"])
+    loci = X.select(["chromosome", "physical_position"]).collect()
     meta_cols = ["chromosome", "physical_position", "genetic_position",
                  "genetic_marker_index"]
     meta_in = [c for c in meta_cols if c in X.columns]
