@@ -52,76 +52,113 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     return prefixes
 
 
-def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict[str, pa.DataType]:
-    """Infer column types from a TSV file using PyArrow, skipping initial comment and reading header from second line."""
+def _split_header_and_data(fn: str, Q: bool = False) -> tuple[list[str], list[str]]:
+    """
+    Return (column_names, data_lines) for an RFMix Q or fb.tsv file.
+
+    For Q=True:
+      - Treat the *second* line starting with '#' as the header.
+    For Q=False (fb.tsv):
+      - Treat the first non-empty, non-comment line as the header.
+    """
     with open(fn, "r") as f:
         lines = f.readlines()
 
-    if len(lines) < 2:
-        raise ValueError("File does not contain enough lines to extract header.")
+    if len(lines) < 1:
+        raise ValueError(f"{fn} is empty")
 
-    # Skip first comment line, clean second line (the header)
-    header_line = lines[1].lstrip()
-    if header_line.startswith("#"):
-        header_line = header_line[1:]
-    column_names = header_line.strip().split()
-
-    # Join the header and a few data lines for in-memory parsing
-    clean_header = "\t".join(column_names) + "\n"
-    data_sample = [clean_header] + lines[2:2 + n_rows]
-    buffer = io.BytesIO("".join(data_sample).encode("utf-8"))
-
-    # Read with PyArrow, using custom column names
-    table = pacsv.read_csv(
-        buffer,
-        read_options=pacsv.ReadOptions(column_names=column_names),
-        parse_options=pacsv.ParseOptions(delimiter="\t"),
-        convert_options=pacsv.ConvertOptions(column_types=None)  # Let PyArrow infer types
-    )
-
-    # Extract inferred schema
-    schema = table.schema
-    types = {}
+    header_line = None
+    header_idx = None
 
     if Q:
-        # Manually set sample_id as categorical
-        for field in schema:
-            if field.name == "sample":
-                types["sample_id"] = pa.string()
-            if field.name != "sample":
-                types[field.name] = field.type
+        hash_seen = 0
+        for i, line in enumerate(lines):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            if stripped.startswith("#"):
+                hash_seen += 1
+                if hash_seen == 2:
+                    header_line = stripped[1:]  # drop leading '#'
+                    header_idx = i
+                    break
+        if header_line is None:
+            raise ValueError(f"Could not find Q header line (second '#') in {fn}")
     else:
-        types = {field.name: field.type for field in schema}
+        for i, line in enumerate(lines):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            if stripped.startswith("#"):
+                continue
+            header_line = stripped
+            header_idx = i
+            break
+        if header_line is None:
+            raise ValueError(f"Could not find header line in {fn}")
+
+    # Split header into column names (whitespace or tabs)
+    if "\t" in header_line:
+        column_names = header_line.split("\t")
+    else:
+        column_names = header_line.split()
+
+    if Q and column_names: # Normalize first column name for Q
+        if column_names[0] != "sample_id":
+            column_names[0] = "sample_id"
+
+    # All lines after the header are data
+    data_start = header_idx + 1
+    data_lines = lines[data_start:]
+
+    return column_names, data_lines
+
+
+def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict[str, pa.DataType]:
+    """
+    Infer column types using a small sample of data, with header removed.
+    """
+    column_names, data_lines = _split_header_and_data(fn, Q=Q)
+
+    sample_lines = data_lines[:n_rows]
+    buffer = io.BytesIO("".join(sample_lines).encode("utf-8"))
+
+    table = pacsv.read_csv(
+        buffer,
+        read_options=pacsv.ReadOptions(
+            column_names=column_names,  # no header row in buffer
+            use_threads=True,
+        ),
+        parse_options=pacsv.ParseOptions(delimiter="\t"),
+        convert_options=pacsv.ConvertOptions(column_types=None),  # let Arrow infer
+    )
+
+    schema = table.schema
+    types: dict[str, pa.DataType] = {
+        field.name: field.type for field in schema
+    }
+
+    if Q and "sample_id" in types:
+        types["sample_id"] = pa.string()
 
     return types
 
 
 def _read_arrow_table(fn: str, Q: bool = False) -> pa.Table:
+    column_names, data_lines = _split_header_and_data(fn, Q=Q)
     inferred_types = _types(fn, Q=Q, n_rows=100)
-    with open(fn, "r") as f:
-        lines = f.readlines()
 
-    if len(lines) < 2:
-        raise ValueError("File does not contain enough lines for header and data.")
-
-    header_line = lines[1].lstrip()
-    if header_line.startswith("#"):
-        header_line = header_line[1:]
-    column_names = header_line.strip().split()
-
-    if Q and column_names[0] == "sample":
-        column_names[0] = "sample_id"
-
-    clean_header = "\t".join(column_names) + "\n"
-    content = [clean_header] + lines[2:]
-    buffer = io.BytesIO("".join(content).encode("utf-8"))
-
-    return pacsv.read_csv(
+    buffer = io.BytesIO("".join(data_lines).encode("utf-8"))
+    table = pacsv.read_csv(
         buffer,
-        read_options=pacsv.ReadOptions(column_names=column_names, use_threads=True),
+        read_options=pacsv.ReadOptions(
+            column_names=column_names,  # names for all columns
+            use_threads=True,
+        ),
         parse_options=pacsv.ParseOptions(delimiter="\t"),
-        convert_options=pacsv.ConvertOptions(column_types=inferred_types)
+        convert_options=pacsv.ConvertOptions(column_types=inferred_types),
     )
+    return table
 
 
 def _read_file(fn_list: List[dict], read_func: Callable) -> List[pa.Table]:
