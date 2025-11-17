@@ -39,20 +39,20 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     prefixes = []
     for chrom in chroms:
         prefixes.append({
-            "rfmix.Q": os.path.join(input_dir, f"chr{chrom}.Q"),
+            "rfmix.Q": os.path.join(input_dir, f"chr{chrom}.rfmix.Q"),
             "fb.tsv":  os.path.join(input_dir, f"chr{chrom}.fb.tsv"),
         })
 
     if verbose:
-        logging.info("Task %d -> %d chromosomes: %s", task, len(chroms), chroms)
+        logging.info("Task %d -> %d chromosome(s): %s", task, len(chroms), chroms)
 
     return prefixes
 
 
 def _read_csv(fn: str, header=None, Q: bool = False) -> pd.DataFrame:
     return pd.read_csv(
-        fn, sep=r"\s+", header=None if not Q, engine="c", dtype=header, comment="#",
-        names=list(header.keys()), memory_map=True, low_memory=False,
+        fn, sep=r"\s+", header=None if Q else 0, engine="c", dtype=header,
+        comment="#", names=list(header.keys()), memory_map=True, low_memory=False,
     )
 
 
@@ -131,7 +131,6 @@ def simulate_analysis(input_dir: str, task: int):
     ancestry_df = X.drop(columns=drop_cols)
     ancestry_df = ancestry_df.select_dtypes(include=[np.number])
 
-
     ancestry_matrix = table_to_numpy(ancestry_df, dtype=np.float32)
     admix = _subset_populations(ancestry_matrix, len(pops))
 
@@ -152,10 +151,9 @@ def run_task(input_dir: str, label: str, task: int):
     output_dir = os.path.join("output", label)
     os.makedirs(output_dir, exist_ok=True)
 
-    for replicate in range(3, 6):
-        seed = replicate
-        random.seed(seed)
-        np.random.seed(seed)
+    for replicate in range(1, 6):
+        seed = replicate + 13
+        random.seed(seed); np.random.seed(seed)
 
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
 
