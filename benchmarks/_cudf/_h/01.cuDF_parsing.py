@@ -8,8 +8,13 @@ import cupy as cp
 import json, random
 import psutil, time
 from typing import Callable, List
+import rmm.statistics as rmm_stats
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+def configure_rmm():
+    rmm.reinitialize(pool_allocator=True)
+
 
 def collect_metadata(parser_version, task_id, replicate, label):
     return {
@@ -60,22 +65,26 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
 
 
 def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict:
-    # Rough type inference using cudf sample
-    sample = cudf.read_csv(fn, sep='\t', skiprows=1, nrows=n_rows)
+    """Rough type inference using cudf sample."""
     if Q:
-        header = {"sample_id": "category"}
-        header.update({k: str(v) for k, v in zip(sample.columns[1:], sample.dtypes[1:])})
+        sample = cudf.read_csv(fn, sep="\t", skiprows=1, nrows=n_rows)
+        dtypes = {}
+        dtypes["sample_id"] = "category"
+        for col, dt in zip(sample.columns[1:], sample.dtypes[1:]):
+            dtypes[str(col)] = dt
+        return dtypes
     else:
-        header = {k: str(v) for k, v in zip(sample.columns, sample.dtypes)}
-    return header
+        sample = cudf.read_csv(fn, sep="\t", nrows=n_rows, header=0)
+        return {str(col): dt for col, dt in zip(sample.columns, sample.dtypes)}
 
 
-def _read_csv(fn: str, header=None, Q: bool = False) -> cudf.DataFrame:
-    col_names = list(header.keys())
-    dtypes = {i: header[name] for i, name in enumerate(col_names)}
+def _read_csv(fn: str, dtypes: dict, Q: bool = False) -> cudf.DataFrame:
     if Q:
-        df = cudf.read_csv(fn, sep='\t', header=None, comment="#",
-                           names=col_names, dtype=dtypes)
+        col_names = (dtypes.keys())
+        df = cudf.read_csv(
+            fn, sep='\t', header=None, comment="#",
+            names=col_names, dtype=dtypes
+        )
     else:
         df = cudf.read_csv(fn, sep="\t", comment="#", dtype=dtypes)
     return df
@@ -91,8 +100,8 @@ def concat_tables(tables: List[cudf.DataFrame]) -> cudf.DataFrame:
 
 def _read_Q(fn_dict):
     fn = fn_dict["rfmix.Q"]
-    header = _types(fn, Q=True)
-    df = _read_csv(fn, header=header, Q=True)
+    dtypes = _types(fn, Q=True)
+    df = _read_csv(fn, dtypes=dtypes, Q=True)
     chrom_match = re.search(r'chr(\d+)', fn)
     chrom = chrom_match.group(0) if chrom_match else None
     df["chrom"] = chrom
@@ -101,8 +110,8 @@ def _read_Q(fn_dict):
 
 def _read_fb(fn_dict):
     fn = fn_dict["fb.tsv"]
-    header = _types(fn, Q=False)
-    return _read_csv(fn, header=header, Q=False)
+    dtypes = _types(fn, Q=False)
+    return _read_csv(fn, dtypes=dtypes, Q=False)
 
 
 def table_to_cupy(df: cudf.DataFrame, dtype=cp.float32) -> cp.ndarray:
@@ -114,6 +123,7 @@ def _subset_populations(X: cp.ndarray, npops: int) -> cp.ndarray:
     ncols = X.shape[1]
     if ncols % npops != 0:
         raise ValueError("Number of columns in X must be divisible by npops.")
+
     for pop_start in range(npops):
         X0 = X[:, pop_start::npops]
         if X0.shape[1] % 2 != 0:
@@ -152,20 +162,6 @@ def get_peak_cpu_memory_mb() -> float:
     return usage.ru_maxrss / 1024.0
 
 
-def init_gpu_memory_tracking():
-    global stats_resource
-    rmm.reinitialize(pool_allocator=True)
-    base = rmm.mr.get_current_device_resource()
-    stats_resource = rmm.mr.StatisticsResourceAdapter(base)
-    rmm.mr.set_current_device_resource(stats_resource)
-
-
-def get_peak_gpu_memory_mb() -> float:
-    if stats_resource is None:
-        return 0.0
-    return stats_resource.get_high_watermark() / 1024**2
-
-
 def _dict_to_df_single_row(d: dict[str, float]) -> cudf.DataFrame:
     return cudf.DataFrame([d])
 
@@ -173,42 +169,34 @@ def _dict_to_df_single_row(d: dict[str, float]) -> cudf.DataFrame:
 def run_task(input_dir: str, output_path: str, label: str, task: int):
     output_dir = os.path.join(output_path, label)
     os.makedirs(output_dir, exist_ok=True)
+    configure_rmm()
 
-    init_gpu_memory_tracking()
-
-    for replicate in range(3, 6):
-        if stats_resource is not None:
-            stats_resource.reset()
-
-        seed = replicate
-        random.seed(seed)
-        cp.random.seed(seed)
-
+    for replicate in range(1, 6):
+        seed = replicate + 13
+        random.seed(seed); cp.random.seed(seed)
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
 
-        start = time.time()
-        status = "success"
-        oom_kind = None
-        error_msg = None
-
-        try:
-            _, g_anc, _ = simulate_analysis(input_dir, task)
-        except Exception as e:
-            wall_time = time.time() - start
-            is_oom, kind = is_oom_error(e)
-            status = "oom" if is_oom else "error"
-            oom_kind = kind if is_oom else None
-            error_msg = str(e)[:500]  # truncate
-            logging.exception("Error on replicate %d: %s", replicate, e)
-        else:
-            wall_time = time.time() - start
+        with rmm_stats.statistics():
+            start = time.time()
+            status = "success"
+            oom_kind = error_msg = None
+            try:
+                _, _, _ = simulate_analysis(input_dir, task)
+            except Exception as e:
+                wall_time = time.time() - start
+                is_oom, kind = is_oom_error(e)
+                status = "oom" if is_oom else "error"
+                oom_kind = kind if is_oom else None
+                error_msg = str(e)[:500]  # truncate
+                logging.exception("Error on replicate %d: %s", replicate, e)
+            finally:
+                wall_time = time.time() - start
+                stats = rmm_stats.get_statistics()
+                peak_gpu = float(stats.peak_bytes) / (1024 ** 2)
             
         peak_cpu = get_peak_cpu_memory_mb() # Always measure
-        try:
-            peak_gpu = get_peak_gpu_memory_mb()
-        except Exception:
-            peak_gpu = 0.0
 
+        # Collect meta data
         meta = collect_metadata("cudf", task, replicate, label)
         meta["status"] = status
         meta["oom_type"] = oom_kind
