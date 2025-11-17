@@ -39,7 +39,7 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 log_message "**** Run analysis ****"
 TASK="${SLURM_ARRAY_TASK_ID}"
 INPUT_DIR="../../../input/simulations/three_populations/_m/rfmix-files/"
-OUTDIR="two_pop/no_binaries"
+OUTDIR="three_pop/no_binaries"
 
 python ../_h/01.rfmix_parsing.py --input "${INPUT_DIR}" \
        --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}" --gpu
