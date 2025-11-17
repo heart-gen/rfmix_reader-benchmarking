@@ -2,7 +2,7 @@
 #SBATCH --partition=RM-shared
 #SBATCH --job-name=pandas_2pop
 #SBATCH --mail-type=FAIL
-#SBATCH --mail-user=jbenja13@jh.edu
+#SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
 #SBATCH --array=1-3
 #SBATCH --time=02:00:00
