@@ -11,8 +11,6 @@ from typing import Callable, List
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-stats_resource = None # Global variable
-
 def collect_metadata(parser_version, task_id, replicate, label):
     return {
         "parser": parser_version,
@@ -179,6 +177,9 @@ def run_task(input_dir: str, label: str, task: int):
     init_gpu_memory_tracking()
 
     for replicate in range(3, 6):
+        if stats_resource is not None:
+            stats_resource.reset()
+
         seed = replicate
         random.seed(seed)
         cp.random.seed(seed)

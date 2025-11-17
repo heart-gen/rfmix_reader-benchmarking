@@ -49,9 +49,9 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     return prefixes
 
 
-def _read_csv(fn: str, header=None) -> pd.DataFrame:
+def _read_csv(fn: str, header=None, Q: bool = False) -> pd.DataFrame:
     return pd.read_csv(
-        fn, sep=r"\s+", header=None, engine="c", dtype=header, comment="#",
+        fn, sep=r"\s+", header=None if not Q, engine="c", dtype=header, comment="#",
         names=list(header.keys()), memory_map=True, low_memory=False,
     )
 

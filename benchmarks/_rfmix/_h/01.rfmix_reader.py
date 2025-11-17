@@ -20,6 +20,7 @@ def collect_metadata(parser_version, task_id, replicate, label, GPU):
         versions["cupy"] = cp.__version__
         backend = "GPU"
     else:
+        import numpy as cp
         versions["pandas"] = pd.__version__
         backend = "CPU"
     return {
