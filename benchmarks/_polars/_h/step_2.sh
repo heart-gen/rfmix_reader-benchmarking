@@ -34,7 +34,7 @@ TASK="${SLURM_ARRAY_TASK_ID}"
 INPUT_DIR="../../../input/simulations/three_populations/_m/rfmix-files/"
 
 python ../_h/01.polars_parsing.py --input "${INPUT_DIR}" \
-       --label "task_${TASK}" --task "${TASK}"
+       --output "three_pop" --label "task_${TASK}" --task "${TASK}"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
