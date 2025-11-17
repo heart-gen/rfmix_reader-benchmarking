@@ -7,7 +7,7 @@
 #SBATCH --ntasks-per-node=5
 #SBATCH --array=1-3
 #SBATCH --time=06:00:00
-#SBATCH --output=logs/rfmix.three_pop.no_bin.%A_%a.log
+#SBATCH --output=logs/rfmix.three_pop.bin.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -39,10 +39,10 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 log_message "**** Run analysis ****"
 TASK="${SLURM_ARRAY_TASK_ID}"
 INPUT_DIR="../../../input/simulations/three_populations/_m/rfmix-files/"
-OUTDIR="two_pop/no_binaries"
+OUTDIR="two_pop/binaries"
 
 python ../_h/01.rfmix_parsing.py --input "${INPUT_DIR}" \
-       --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}" --gpu
+       --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}" --gpu --binaries
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
