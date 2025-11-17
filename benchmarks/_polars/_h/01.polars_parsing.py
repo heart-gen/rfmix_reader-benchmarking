@@ -44,7 +44,7 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
         })
 
     if verbose:
-        logging.info("Task %d -> %d chromosomes: %s", task, len(chroms), chroms)
+        logging.info("Task %d -> %d chromosome(s): %s", task, len(chroms), chroms)
 
     return prefixes
 
