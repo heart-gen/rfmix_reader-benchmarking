@@ -143,10 +143,6 @@ def get_peak_cpu_memory_mb() -> float:
     return usage.ru_maxrss / 1024.0
 
 
-def _dict_to_df_single_row(d: dict[str, float]) -> pd.DataFrame:
-    return pd.DataFrame([d])
-
-
 def run_task(input_dir: str, label: str, task: int):
     output_dir = os.path.join("output", label)
     os.makedirs(output_dir, exist_ok=True)
@@ -158,17 +154,11 @@ def run_task(input_dir: str, label: str, task: int):
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
 
         start = time.time()
-        _, g_anc, _ = simulate_analysis(input_dir, task)
+        _, _, _ = simulate_analysis(input_dir, task)
         wall_time = time.time() - start
         peak_mem = get_peak_cpu_memory_mb()
 
-        # Compute means per column excluding non-numeric ones
-        g_anc_means = g_anc.select_dtypes(include=[np.number]).mean().to_dict()
-
-        result_path = os.path.join(output_dir, f"result_replicate_{replicate}.csv")
-        df_result = _dict_to_df_single_row(g_anc_means)
-        df_result.to_csv(result_path, index=False)
-
+        # Save meta data
         meta = collect_metadata("pandas", task, replicate, label)
         meta["wall_time_sec"] = wall_time
         meta["peak_cpu_memory_MB"] = peak_mem
