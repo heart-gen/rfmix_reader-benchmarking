@@ -13,9 +13,65 @@ import pyarrow.compute as pc
 from typing import Callable, List
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+pa.set_cpu_count(16)       # Cap GPU threads
+pa.set_io_thread_count(16) # Cap IO threads
+
+def collect_cpu_info() -> dict:
+    info: dict[str, object] = {}
+    # OS / psutil view of cores
+    info["os_cpu_count"] = os.cpu_count()
+    try:
+        info["psutil_cpu_count_logical"] = psutil.cpu_count(logical=True)
+        info["psutil_cpu_count_physical"] = psutil.cpu_count(logical=False)
+    except Exception:
+        pass
+
+    # SLURM environment (if present)
+    for name in (
+        "SLURM_CPUS_PER_TASK",
+        "SLURM_JOB_CPUS_PER_NODE",
+        "SLURM_NTASKS",
+        "SLURM_TASKS_PER_NODE",
+    ):
+        val = os.environ.get(name)
+        if val is not None:
+            info[name] = val
+
+    # Thread-related environment variables
+    for name in (
+        "POLARS_MAX_THREADS",
+        "RAYON_NUM_THREADS",
+        "OMP_NUM_THREADS",
+        "MKL_NUM_THREADS",
+        "OPENBLAS_NUM_THREADS",
+    ):
+        val = os.environ.get(name)
+        if val is not None:
+            info[f"env_{name}"] = val
+
+    # Library-specific thread pools (if available)
+    try:
+        import polars as pl
+        if hasattr(pl, "thread_pool_size"):
+            info["polars_thread_pool_size"] = pl.thread_pool_size()
+        elif hasattr(pl, "threadpool_size"):
+            info["polars_thread_pool_size"] = pl.threadpool_size()
+    except Exception:
+        pass
+
+    try:
+        import pyarrow as pa
+        info["pyarrow_cpu_count"] = pa.cpu_count()
+        if hasattr(pa, "io_thread_count"):
+            info["pyarrow_io_thread_count"] = pa.io_thread_count()
+    except Exception:
+        pass
+
+    return info
+
 
 def collect_metadata(parser_version, task_id, replicate, label):
-    return {
+    meta = {
         "parser": parser_version,
         "task": task_id,
         "replicate": replicate,
@@ -27,6 +83,8 @@ def collect_metadata(parser_version, task_id, replicate, label):
             "psutil": psutil.__version__,
         }
     }
+    meta["cpu_info"] = collect_cpu_info()
+    return meta
 
 
 def is_oom_error(e: BaseException) -> tuple[bool, str]:
@@ -252,12 +310,11 @@ def run_task(input_dir: str, output_path: str, label: str, task: int):
         random.seed(seed); np.random.seed(seed)
 
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
+        logging.info("CPU info: %s", collect_cpu_info())
 
-        start = time.time()
         status = "success"
-        oom_kind = None
-        error_msg = None
-
+        oom_kind = error_msg = None
+        start = time.time()
         try:
             _, _, _ = simulate_analysis(input_dir, task)
         except Exception as e:

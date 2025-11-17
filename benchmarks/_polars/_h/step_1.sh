@@ -5,7 +5,7 @@
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
 #SBATCH --array=1-3
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --output=logs/polars.two_pop.%A_%a.log
 
 log_message() {
@@ -13,6 +13,11 @@ log_message() {
 }
 
 log_message "**** Job starts ****"
+export POLARS_MAX_THREADS=16
+export RAYON_NUM_THREADS=16
+export OMP_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
 
 log_message "**** Bridges-2 info ****"
 echo "User: ${USER}"
