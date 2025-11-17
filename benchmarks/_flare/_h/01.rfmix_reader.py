@@ -72,8 +72,8 @@ def get_peak_gpu_memory_mb() -> float:
     return stats_resource.get_high_watermark() / 1024**2
 
 
-def run_task(input_dir: str, label: str, task: int, GPU: bool):
-    output_dir = os.path.join("output", label)
+def run_task(input_dir: str, output_path: str, label: str, task: int, GPU: bool):
+    output_dir = os.path.join(output_path, label)
     os.makedirs(output_dir, exist_ok=True)
 
     init_gpu_memory_tracking()
@@ -143,6 +143,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Large File RFMix-Reader Processor")
     parser.add_argument("--input", type=str, required=True,
                         help="Input directory with data files")
+    parser.add_argument("--output", type=str, required=True, help="Output directory")
     parser.add_argument("--label", type=str, required=True,
                         help="Label for output directory")
     parser.add_argument("--task", type=int, choices=[1, 2, 3], required=True,
@@ -150,4 +151,4 @@ if __name__ == "__main__":
     parser.add_argument('--gpu', action="store_true", help="Run with GPU")
     args = parser.parse_args()
 
-    run_task(args.input, args.label, args.task, args.gpu)
+    run_task(args.input, args.output, args.label, args.task, args.gpu)

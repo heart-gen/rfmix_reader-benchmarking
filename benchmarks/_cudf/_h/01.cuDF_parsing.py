@@ -49,7 +49,7 @@ def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
     else:
         raise ValueError(f"Unsupported task id: {task}")
 
-    prefixes = [{"rfmix.Q": os.path.join(input_dir, f"chr{chrom}.Q"),
+    prefixes = [{"rfmix.Q": os.path.join(input_dir, f"chr{chrom}.rfmix.Q"),
                  "fb.tsv": os.path.join(input_dir, f"chr{chrom}.fb.tsv")}
                 for chrom in chroms]
 
@@ -170,8 +170,8 @@ def _dict_to_df_single_row(d: dict[str, float]) -> cudf.DataFrame:
     return cudf.DataFrame([d])
 
 
-def run_task(input_dir: str, label: str, task: int):
-    output_dir = os.path.join("output", label)
+def run_task(input_dir: str, output_path: str, label: str, task: int):
+    output_dir = os.path.join(output_path, label)
     os.makedirs(output_dir, exist_ok=True)
 
     init_gpu_memory_tracking()
@@ -240,10 +240,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Large File cuDF Processor")
     parser.add_argument("--input", type=str, required=True,
                         help="Input directory with data files")
+    parser.add_argument("--output", type=str, required=True,
+                        help="Output directory")
     parser.add_argument("--label", type=str, required=True,
                         help="Label for output directory")
     parser.add_argument("--task", type=int, choices=[1, 2, 3], required=True,
                         help="Task type: 1=small chrom, 2=large chrom, 3=all chroms")
     args = parser.parse_args()
 
-    run_task(args.input, args.label, args.task)
+    run_task(args.input, args.output, args.label, args.task)
