@@ -37,7 +37,7 @@ python ../_h/01.pandas_parsing.py --input "${INPUT_DIR}" \
        --label "task_${TASK}" --task "${TASK}"
 
 if [ $? -ne 0 ]; then
-    echo "R script failed. Check the error logs."
+    echo "Python script failed. Check the error logs."
     exit 1
 fi
 
