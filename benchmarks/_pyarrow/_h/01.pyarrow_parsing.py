@@ -308,9 +308,19 @@ def run_task(input_dir: str, output_path: str, label: str, task: int):
     for replicate in range(1, 6):
         seed = replicate + 13
         random.seed(seed); np.random.seed(seed)
+        meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
 
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
         logging.info("CPU info: %s", collect_cpu_info())
+
+        # Initial meta
+        meta = collect_metadata("pyarrow", task, replicate, label)
+        meta["status"] = "running"
+        meta["oom_type"] = None
+        meta["wall_time_sec"] = None
+        meta["peak_cpu_memory_MB"] = None
+        with open(meta_path, "w") as f:
+            json.dump(meta, f, indent=2)
 
         status = "success"
         oom_kind = error_msg = None
@@ -318,29 +328,26 @@ def run_task(input_dir: str, output_path: str, label: str, task: int):
         try:
             _, _, _ = simulate_analysis(input_dir, task)
         except Exception as e:
-            wall_time = time.time() - start
             is_oom, kind = is_oom_error(e)
             status = "oom" if is_oom else "error"
             oom_kind = kind if is_oom else None
             error_msg = str(e)[:500]
             logging.exception("Error on replicate %d: %s", replicate, e)
-        else:
+        finally:
             wall_time = time.time() - start
+            peak_mem = get_peak_cpu_memory_mb()
 
-        peak_mem = get_peak_cpu_memory_mb()
+            # Update meta (overwrite file)
+            meta = collect_metadata("pyarrow", task, replicate, label)
+            meta["status"] = status
+            meta["oom_type"] = oom_kind
+            meta["wall_time_sec"] = wall_time
+            meta["peak_cpu_memory_MB"] = peak_mem
+            if error_msg:
+                meta["error"] = error_msg
 
-        # Save metadata
-        meta = collect_metadata("pyarrow", task, replicate, label)
-        meta["status"] = status
-        meta["oom_type"] = oom_kind
-        meta["wall_time_sec"] = wall_time
-        meta["peak_cpu_memory_MB"] = peak_mem
-        if error_msg:
-            meta["error"] = error_msg
-
-        meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
-        with open(meta_path, "w") as f:
-            json.dump(meta, f, indent=2)
+            with open(meta_path, "w") as f:
+                json.dump(meta, f, indent=2)
 
         logging.info(
             "Finished replicate %d in %.2fs, peak RSS: %.2f MB",
