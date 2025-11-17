@@ -1,187 +1,201 @@
-# This script will test the memory usage and executive time for
-# RFMix-reader.
-from time import time
-from pyhere import here
-from cupy import ndarray
+import rmm
+import cudf
+import os, re
+import logging
+import platform
+import argparse
+import cupy as cp
+import json, random
+import psutil, time
 from typing import Callable, List
-from torch.cuda import is_available
-from memory_profiler import profile
-from rfmix_reader import get_prefixes
-from collections import OrderedDict as odict
-from cudf import DataFrame, read_csv, concat
 
-@profile
-def read_data(prefix_path, verbose=True):
-    fn = get_prefixes(prefix_path, verbose)
-    rf_q = _read_file(fn, lambda f: _read_Q(f["rfmix.Q"]))
-    pops = rf_q[0].drop(["sample_id", "chrom"], axis=1).columns.values
-    rf_q = concat(rf_q, axis=0, ignore_index=True)
-    X = _read_file(fn, lambda f: _read_fb(f["fb.tsv"]))
-    X = concat(X, axis=0, ignore_index=True)
-    loci = X.loc[:, ["chromosome", "physical_position"]]
-    X = X.iloc[:, 4:].values
-    admix = _subset_populations(X, len(pops))
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-
-def _read_file(fn: List[str], read_func: Callable) -> List:
-    """
-    Read data from multiple files using a provided read function.
-
-    Parameters:
-    ----------
-    fn (List[str]): A list of file paths to read.
-    read_func (Callable): A function to read data from each file.
-
-    Returns:
-    -------
-    List: A list containing the data read from each file.
-    """
-    data = [];
-    for file_name in fn:
-        data.append(read_func(file_name))
-    return data
+def collect_metadata(parser_version, task_id, replicate, label):
+    return {
+        "parser": parser_version,
+        "task": task_id,
+        "replicate": replicate,
+        "label": label,
+        "hardware": platform.platform(),
+        "software_versions": {
+            "python": platform.python_version(),
+            "cudf": cudf.__version__,
+            "cupy": cp.__version__,
+            "psutil": psutil.__version__,
+        }
+    }
 
 
-def _read_fb(fn: str) -> DataFrame:
-    header = odict(_types(fn, False))
-    return _read_tsv(fn, header)
-
-
-def _read_Q(fn: str) -> DataFrame:
-    """
-    Read the Q matrix from a file and add the chromosome information.
-
-    Parameters:
-    ----------
-    fn (str): The file path of the Q matrix file.
-
-    Returns:
-    -------
-    DataFrame: The Q matrix with the chromosome information added.
-    """
-    from re import search
-    
-    header = odict(_types(fn))
-    df = _read_csv(fn, header)
-    match = search(r'chr(\d+)', fn)
-    if match:
-        chrom = match.group(0)
-        df["chrom"] = chrom
+def get_prefixes(input_dir: str, task: int, verbose: bool = True) -> list[dict]:
+    if task == 1:
+        chroms = [21]
+    elif task == 2:
+        chroms = [1]
+    elif task == 3:
+        chroms = list(range(1, 23))
     else:
-        print(f"Warning: Could not extract chromosome information from '{fn}'")
-    return df
+        raise ValueError(f"Unsupported task id: {task}")
+
+    prefixes = [{"rfmix.Q": os.path.join(input_dir, f"chr{chrom}.Q"),
+                 "fb.tsv": os.path.join(input_dir, f"chr{chrom}.fb.tsv")}
+                for chrom in chroms]
+
+    if verbose:
+        logging.info("Task %d -> %d chromosomes: %s", task, len(chroms), chroms)
+
+    return prefixes
 
 
-def _read_csv(fn: str, header: dict) -> DataFrame:
-    """
-    Read a CSV file into a pandas DataFrame with specified data types.
-
-    Parameters:
-    ----------
-    fn (str): The file path of the CSV file.
-    header (dict): A dictionary mapping column names to data types.
-
-    Returns:
-    -------
-    DataFrame: The data read from the CSV file as a pandas DataFrame.
-    """
-    if is_available():
-        df = read_csv(fn,sep="\t",header=None,names=list(header.keys()),
-                      dtype=header,comment="#")
-    else:
-        df = read_csv(fn,delim_whitespace=True,header=None,
-                      names=list(header.keys()),dtype=header,comment="#",
-                      compression=None, engine="c",iterator=False)
-    return df
-
-
-def _read_tsv(fn: str, header: dict) -> DataFrame:
-    """
-    Read a TSV file into a pandas DataFrame.
-
-    Parameters:
-    ----------
-    fn (str): File name of the TSV file.
-
-    Returns:
-    -------
-    DataFrame: DataFrame containing specified columns from the TSV file.
-    """
-    if is_available():
-        df = read_csv(fn,sep="\t",header=0, names=list(header.keys()),
-                      dtype=header,comment="#")
-    else:
-        chunks = read_csv(fn,delim_whitespace=True, header=0,
-                          names=list(header.keys()),dtype=header,comment="#",
-                          chunksize=100000)
-        # Concatenate chunks into single DataFrame
-        df = concat(chunks, ignore_index=True)
-    return df
-
-
-def _types(fn: str, Q: bool = True) -> dict:
-    """
-    Infer the data types of columns in a TSV file.
-
-    Parameters:
-    ----------
-    fn (str) : File name of the TSV file.
-
-    Returns:
-    -------
-    dict : Dictionary mapping column names to their inferred data types.
-    """
-    from pandas import StringDtype
-
-    if is_available():
-        df = read_csv(fn,sep="\t",nrows=2,skiprows=1)
-    else:
-        df = read_csv(fn,delim_whitespace=True,nrows=2,skiprows=1)
+def _types(fn: str, Q: bool = False, n_rows: int = 100) -> dict:
+    # Rough type inference using cudf sample
+    sample = cudf.read_csv(fn, sep='\s+', skiprows=1, nrows=n_rows)
     if Q:
-        # Initialize the header dictionary with the sample_id column
-        header = {"sample_id": StringDtype()}
-        # Update the header dictionary with the data types of the remaining columns
-        header.update(df.dtypes[1:].to_dict())
+        header = {"sample_id": "category"}
+        header.update({k: str(v) for k, v in zip(sample.columns[1:], sample.dtypes[1:])})
     else:
-        header = df.dtypes.to_dict()
+        header = {k: str(v) for k, v in zip(sample.columns, sample.dtypes)}
     return header
 
 
-def _subset_populations(X: ndarray, npops: int) -> ndarray:
-    """
-    Subset and process the input array X based on populations.
+def _read_csv(fn: str, header=None, Q: bool = False) -> cudf.DataFrame:
+    col_names = list(header.keys())
+    dtypes = {i: header[name] for i, name in enumerate(col_names)}
+    df = cudf.read_csv(fn, sep=r'\s+', header=None if not Q, comment="#",
+                       names=col_names, dtype=dtypes)
+    return df
 
-    Parameters:
-    X (dask.array): Input array where columns represent data for different populations.
-    npops (int): Number of populations for column processing.
 
-    Returns:
-    dask.array: Processed array with adjacent columns summed for each population subset.
-    """
-    from cupy import concatenate
+def _read_file(fn_list: List[dict], read_func: Callable) -> List[cudf.DataFrame]:
+    return [read_func(f) for f in fn_list]
 
+
+def concat_tables(tables: List[cudf.DataFrame]) -> cudf.DataFrame:
+    return cudf.concat(tables, ignore_index=True)
+
+
+def _read_Q(fn_dict):
+    fn = fn_dict["rfmix.Q"]
+    header = _types(fn, Q=True)
+    df = _read_csv(fn, header=header, Q=True)
+    chrom_match = re.search(r'chr(\d+)', fn)
+    chrom = chrom_match.group(0) if chrom_match else None
+    df["chrom"] = chrom
+    return df
+
+
+def _read_fb(fn_dict):
+    fn = fn_dict["fb.tsv"]
+    header = _types(fn, Q=False)
+    return _read_csv(fn, header=header, Q=False)
+
+
+def table_to_cupy(df: cudf.DataFrame, dtype=cp.float32) -> cp.ndarray:
+    return cp.asarray(df.to_numpy(), dtype=dtype)
+
+
+def _subset_populations(X: cp.ndarray, npops: int) -> cp.ndarray:
     pop_subset = []
-    pop_start = 0
     ncols = X.shape[1]
     if ncols % npops != 0:
-        raise ValueError("The number of columns in X must be divisible by npops.")
-    while pop_start < npops:
-        X0 = X[:, pop_start::npops] # Subset based on populations
+        raise ValueError("Number of columns in X must be divisible by npops.")
+    for pop_start in range(npops):
+        X0 = X[:, pop_start::npops]
         if X0.shape[1] % 2 != 0:
-            raise ValueError("Number of columns must be even.")
-        X0_summed = X0[:, ::2] + X0[:, 1::2] # Sum adjacent columns
+            raise ValueError("Number of columns per population must be even.")
+        X0_summed = X0[:, ::2] + X0[:, 1::2]
         pop_subset.append(X0_summed)
-        pop_start += 1
-    return concatenate(pop_subset, 1)
+    return cp.stack(pop_subset, axis=2)
 
 
-def main():
-    prefix_path = here("input/simulations/two_populations/_m/")
-    start_time = time()
-    _ = read_data(prefix_path)
-    end_time = time()
-    print(f"Execution time: {end_time - start_time} seconds")
+def simulate_analysis(input_dir: str, task: int):
+    fn_list = get_prefixes(input_dir, task)
+    g_anc_tables = _read_file(fn_list, _read_Q)
+    g_anc = concat_tables(g_anc_tables)
+
+    pops = [col for col in g_anc.columns if col not in ("sample_id", "chrom")]
+
+    X_tables = _read_file(fn_list, _read_fb)
+    X = concat_tables(X_tables)
+
+    loci = X[["chromosome", "physical_position"]]
+    drop_cols = [c for c in ["chromosome", "physical_position", "genetic_position",
+                             "genetic_marker_index"] if c in X.columns]
+    ancestry_df = X.drop(columns=drop_cols)
+    ancestry_df = ancestry_df.select_dtypes(include=["float64", "float32",
+                                                     "int32", "int64"])
+
+    ancestry_matrix = table_to_cupy(ancestry_df)
+    admix = _subset_populations(ancestry_matrix, len(pops))
+
+    return loci, g_anc, admix
+
+
+def get_peak_cpu_memory_mb() -> float:
+    import resource
+    usage = resource.getrusage(resource.RUSAGE_SELF)
+    return usage.ru_maxrss / 1024.0
+
+
+def _dict_to_df_single_row(d: dict[str, float]) -> cudf.DataFrame:
+    return cudf.DataFrame([d])
+
+
+def run_task(input_dir: str, label: str, task: int):
+    output_dir = os.path.join("output", label)
+    os.makedirs(output_dir, exist_ok=True)
+
+    rmm.reinitialize(pool_allocator=True)
+
+    for replicate in range(3, 6):
+        seed = replicate
+        random.seed(seed)
+        cp.random.seed(seed)
+
+        logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
+
+        try:
+            start = time.time()
+            _, g_anc, _ = simulate_analysis(input_dir, task)
+            wall_time = time.time() - start
+            peak_mem = get_peak_cpu_memory_mb()
+            gpu_mem = rmm.mr.get_current_device_resource().get_high_watermark() / 1024**2
+
+            g_anc_means = g_anc.select_dtypes(include=["float64", "float32", "int32", "int64"]).mean().to_pandas().to_dict()
+
+            result_path = os.path.join(output_dir, f"result_replicate_{replicate}.csv")
+            df_result = _dict_to_df_single_row(g_anc_means)
+            df_result.to_pandas().to_csv(result_path, index=False)
+
+            meta = collect_metadata("cudf", task, replicate, label)
+            meta["wall_time_sec"] = wall_time
+            meta["peak_cpu_memory_MB"] = peak_mem
+            meta["peak_gpu_memory_MB"] = gpu_mem
+
+            meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
+            with open(meta_path, "w") as f:
+                json.dump(meta, f, indent=2)
+
+            logging.info(
+                "Finished replicate %d in %.2fs, peak RSS: %.2f MB, peak GPU: %.2f MB",
+                replicate, wall_time, peak_mem, gpu_mem
+            )
+
+        except (MemoryError, RuntimeError) as e:
+            if "out of memory" in str(e).lower():
+                logging.error("GPU OOM on replicate %d: %s", replicate, str(e))
+            else:
+                logging.exception("Unexpected error on replicate %d", replicate)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Large File Pandas Processor")
+    parser.add_argument("--input", type=str, required=True,
+                        help="Input directory with data files")
+    parser.add_argument("--label", type=str, required=True,
+                        help="Label for output directory")
+    parser.add_argument("--task", type=int, choices=[1, 2, 3], required=True,
+                        help="Task type: 1=small chrom, 2=large chrom, 3=all chroms")
+    args = parser.parse_args()
+
+    run_task(args.input, args.label, args.task)
