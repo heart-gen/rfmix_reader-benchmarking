@@ -6,7 +6,7 @@
 #SBATCH --gpus=h100-80:1
 #SBATCH --ntasks-per-node=5
 #SBATCH --array=1-3
-#SBATCH --time=06:00:00
+#SBATCH --time=18:00:00
 #SBATCH --output=logs/flare.three_pop.gpu.%A_%a.log
 
 log_message() {
