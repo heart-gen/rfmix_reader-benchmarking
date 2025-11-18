@@ -1,0 +1,82 @@
+2025-11-17 22:55:23 - **** Job starts ****
+2025-11-17 22:55:23 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36040036
+Job name: rfmix_2pop
+Node name: 
+Hostname: w005
+Task id: 1
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1   2) cuda/12.6.1
+
+ 
+
+2025-11-17 22:55:24 - **** Loading conda environment ****
+2025-11-17 22:55:24 - **** Run analysis ****
+2025-11-17 22:57:26,127 - INFO - Replicate 1: Reading files from ../../../input/simulations/two_populations/task_1/rfmix-files/
+2025-11-17 22:57:30,587 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:10<00:00, 10.10s/it]Mapping loci information: 100%|██████████| 1/1 [00:10<00:00, 10.12s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.32it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.32it/s]
+Created binary files at: two_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [01:27<00:00, 87.49s/it]100%|██████████| 1/1 [01:27<00:00, 87.49s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  8.66it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  8.65it/s]
+2025-11-17 22:59:16,381 - INFO - Finished replicate 1 in 105.78s, peak RSS: 2599.94 MB, peak GPU: 2711.52 MB
+2025-11-17 22:59:16,381 - INFO - Replicate 2: Reading files from ../../../input/simulations/two_populations/task_1/rfmix-files/
+2025-11-17 22:59:16,383 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]Mapping loci information: 100%|██████████| 1/1 [00:00<00:00,  2.44it/s]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 15.75it/s]
+Created binary files at: two_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:31<00:00, 31.76s/it]100%|██████████| 1/1 [00:31<00:00, 31.76s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 13.99it/s]
+2025-11-17 22:59:50,174 - INFO - Finished replicate 2 in 33.78s, peak RSS: 2659.34 MB, peak GPU: 2711.52 MB
+2025-11-17 22:59:50,175 - INFO - Replicate 3: Reading files from ../../../input/simulations/two_populations/task_1/rfmix-files/
+2025-11-17 22:59:50,176 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:00<00:00,  4.04it/s]Mapping loci information: 100%|██████████| 1/1 [00:00<00:00,  4.03it/s]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 170.34it/s]
+Created binary files at: two_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:32<00:00, 32.01s/it]100%|██████████| 1/1 [00:32<00:00, 32.01s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 13.82it/s]
+2025-11-17 23:00:23,973 - INFO - Finished replicate 3 in 33.79s, peak RSS: 2659.34 MB, peak GPU: 2711.52 MB
+2025-11-17 23:00:23,974 - INFO - Replicate 4: Reading files from ../../../input/simulations/two_populations/task_1/rfmix-files/
+2025-11-17 23:00:23,975 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:00<00:00,  3.96it/s]Mapping loci information: 100%|██████████| 1/1 [00:00<00:00,  3.96it/s]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 169.53it/s]
+Created binary files at: two_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:31<00:00, 31.98s/it]100%|██████████| 1/1 [00:31<00:00, 31.98s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 13.26it/s]
+2025-11-17 23:00:57,856 - INFO - Finished replicate 4 in 33.86s, peak RSS: 2660.46 MB, peak GPU: 2711.52 MB
+2025-11-17 23:00:57,856 - INFO - Replicate 5: Reading files from ../../../input/simulations/two_populations/task_1/rfmix-files/
+2025-11-17 23:00:57,858 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:00<00:00,  4.03it/s]Mapping loci information: 100%|██████████| 1/1 [00:00<00:00,  4.03it/s]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 169.51it/s]
+Created binary files at: two_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:32<00:00, 32.13s/it]100%|██████████| 1/1 [00:32<00:00, 32.13s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 13.52it/s]
+2025-11-17 23:01:31,786 - INFO - Finished replicate 5 in 33.92s, peak RSS: 2660.46 MB, peak GPU: 2711.52 MB
+2025-11-17 23:01:43 - Job finished at: Mon Nov 17 23:01:43 EST 2025

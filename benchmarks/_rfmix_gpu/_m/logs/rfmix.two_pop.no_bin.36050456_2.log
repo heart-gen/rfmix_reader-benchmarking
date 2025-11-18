@@ -1,0 +1,62 @@
+2025-11-18 07:37:13 - **** Job starts ****
+2025-11-18 07:37:13 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36050479
+Job name: rfmix_2pop
+Node name: 
+Hostname: w009
+Task id: 2
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1   2) cuda/12.6.1
+
+ 
+
+2025-11-18 07:37:14 - **** Loading conda environment ****
+2025-11-18 07:37:14 - **** Run analysis ****
+2025-11-18 07:37:18,147 - INFO - Replicate 1: Reading files from ../../../input/simulations/two_populations/task_2/rfmix-files/
+2025-11-18 07:37:18,257 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [01:23<00:00, 83.94s/it]Mapping loci information: 100%|██████████| 1/1 [01:23<00:00, 83.94s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 17.87it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.88it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.88it/s]
+2025-11-18 07:39:49,163 - INFO - Finished replicate 1 in 150.89s, peak RSS: 9338.20 MB, peak GPU: 15386.48 MB
+2025-11-18 07:39:49,164 - INFO - Replicate 2: Reading files from ../../../input/simulations/two_populations/task_2/rfmix-files/
+2025-11-18 07:39:49,165 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:42<00:00, 42.86s/it]Mapping loci information: 100%|██████████| 1/1 [00:42<00:00, 42.86s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 145.09it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.91it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.91it/s]
+2025-11-18 07:40:41,577 - INFO - Finished replicate 2 in 52.39s, peak RSS: 9356.44 MB, peak GPU: 15386.48 MB
+2025-11-18 07:40:41,577 - INFO - Replicate 3: Reading files from ../../../input/simulations/two_populations/task_2/rfmix-files/
+2025-11-18 07:40:41,579 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:01<00:00,  1.69s/it]Mapping loci information: 100%|██████████| 1/1 [00:01<00:00,  1.69s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 170.60it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]
+2025-11-18 07:40:52,972 - INFO - Finished replicate 3 in 11.39s, peak RSS: 9373.42 MB, peak GPU: 15386.48 MB
+2025-11-18 07:40:52,972 - INFO - Replicate 4: Reading files from ../../../input/simulations/two_populations/task_2/rfmix-files/
+2025-11-18 07:40:52,974 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:01<00:00,  1.19s/it]Mapping loci information: 100%|██████████| 1/1 [00:01<00:00,  1.19s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 173.48it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.95it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.95it/s]
+2025-11-18 07:41:03,325 - INFO - Finished replicate 4 in 10.34s, peak RSS: 9397.54 MB, peak GPU: 15386.48 MB
+2025-11-18 07:41:03,326 - INFO - Replicate 5: Reading files from ../../../input/simulations/two_populations/task_2/rfmix-files/
+2025-11-18 07:41:03,327 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+GPU 0: NVIDIA H100 80GB HBM3
+  Total memory: 79.21 GB
+  CUDA capability: 9.0
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:01<00:00,  1.21s/it]Mapping loci information: 100%|██████████| 1/1 [00:01<00:00,  1.21s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 171.25it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.93it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.93it/s]
+2025-11-18 07:41:13,987 - INFO - Finished replicate 5 in 10.65s, peak RSS: 9397.54 MB, peak GPU: 15386.48 MB
+2025-11-18 07:41:15 - Job finished at: Tue Nov 18 07:41:15 EST 2025
