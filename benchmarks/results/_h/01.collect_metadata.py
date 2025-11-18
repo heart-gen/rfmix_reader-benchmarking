@@ -16,7 +16,7 @@ def collect_general_metrics(rootdir: str, outfile: str):
             try:
                 m_index = path_parts.index("_m")
                 framework = path_parts[m_index - 1].lstrip("_")
-                pop_model = path_parts[m_index + ] # two or three population
+                pop_model = path_parts[m_index + 1] # two or three population
                 # Detect if backend (cpu, gpu, binaries, no_binaries)
                 maybe_backend = path_parts[m_index + 2]
                 if maybe_backend.startswith("task_"):
