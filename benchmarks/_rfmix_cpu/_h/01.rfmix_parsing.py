@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import os, logging, rmm
 import argparse, platform
@@ -137,7 +138,7 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
         logging.info("CPU info: %s", collect_cpu_info())
         
         # Initial meta
-        meta = collect_metadata("rfmix_reader", task, replicate, label)
+        meta = collect_metadata("rfmix_reader", task, replicate, label, GPU)
         meta["status"] = "running"
         meta["oom_type"] = None
         meta["wall_time_sec"] = None
