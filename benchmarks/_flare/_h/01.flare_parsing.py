@@ -1,4 +1,4 @@
-import cup as cp
+import cupy as cp
 import numpy as np
 import pandas as pd
 import os, logging, rmm

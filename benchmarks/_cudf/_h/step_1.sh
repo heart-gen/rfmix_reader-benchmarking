@@ -3,7 +3,7 @@
 #SBATCH --job-name=cudf_2pop
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --gpus=v100-32:1
+#SBATCH --gpus=h100-80:1
 #SBATCH --ntasks-per-node=5
 #SBATCH --array=1-3
 #SBATCH --time=12:00:00
