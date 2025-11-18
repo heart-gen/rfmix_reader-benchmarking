@@ -1,0 +1,37 @@
+2025-11-17 18:02:09 - **** Job starts ****
+2025-11-17 18:02:09 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36036491
+Job name: polars_2pop
+Node name: 
+Hostname: r238
+Task id: 1
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-11-17 18:02:10 - **** Loading conda environment ****
+2025-11-17 18:02:10 - **** Run analysis ****
+2025-11-17 18:02:35,686 - INFO - Replicate 1: Reading files from ../../../input/simulations/two_populations/_m/rfmix-out/
+2025-11-17 18:02:45,302 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:02:45,308 - INFO - Task 1 -> 1 chromosome(s): [21]
+2025-11-17 18:06:59,308 - INFO - Finished replicate 1 in 253.98s, peak RSS: 6413.96 MB
+2025-11-17 18:06:59,308 - INFO - Replicate 2: Reading files from ../../../input/simulations/two_populations/_m/rfmix-out/
+2025-11-17 18:06:59,310 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:06:59,340 - INFO - Task 1 -> 1 chromosome(s): [21]
+2025-11-17 18:07:03,581 - INFO - Finished replicate 2 in 4.24s, peak RSS: 9156.00 MB
+2025-11-17 18:07:03,581 - INFO - Replicate 3: Reading files from ../../../input/simulations/two_populations/_m/rfmix-out/
+2025-11-17 18:07:03,583 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:07:03,586 - INFO - Task 1 -> 1 chromosome(s): [21]
+2025-11-17 18:07:07,848 - INFO - Finished replicate 3 in 4.26s, peak RSS: 9205.05 MB
+2025-11-17 18:07:07,848 - INFO - Replicate 4: Reading files from ../../../input/simulations/two_populations/_m/rfmix-out/
+2025-11-17 18:07:07,850 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:07:07,854 - INFO - Task 1 -> 1 chromosome(s): [21]
+2025-11-17 18:07:12,038 - INFO - Finished replicate 4 in 4.18s, peak RSS: 9254.24 MB
+2025-11-17 18:07:12,038 - INFO - Replicate 5: Reading files from ../../../input/simulations/two_populations/_m/rfmix-out/
+2025-11-17 18:07:12,041 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:07:12,044 - INFO - Task 1 -> 1 chromosome(s): [21]
+2025-11-17 18:07:16,331 - INFO - Finished replicate 5 in 4.28s, peak RSS: 9256.61 MB
+2025-11-17 18:07:17 - Job finished at: Mon Nov 17 18:07:17 EST 2025

@@ -1,0 +1,37 @@
+2025-11-17 18:06:17 - **** Job starts ****
+2025-11-17 18:06:17 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36036500
+Job name: polars_3pop
+Node name: 
+Hostname: r068
+Task id: 2
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-11-17 18:06:18 - **** Loading conda environment ****
+2025-11-17 18:06:18 - **** Run analysis ****
+2025-11-17 18:06:31,392 - INFO - Replicate 1: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:06:37,169 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:06:37,175 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 18:07:12,048 - INFO - Finished replicate 1 in 34.87s, peak RSS: 9621.76 MB
+2025-11-17 18:07:12,048 - INFO - Replicate 2: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:07:12,050 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:07:12,054 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 18:07:20,751 - INFO - Finished replicate 2 in 8.69s, peak RSS: 14299.44 MB
+2025-11-17 18:07:20,751 - INFO - Replicate 3: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:07:20,754 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:07:20,774 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 18:07:29,571 - INFO - Finished replicate 3 in 8.79s, peak RSS: 14460.31 MB
+2025-11-17 18:07:29,571 - INFO - Replicate 4: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:07:29,573 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:07:29,576 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 18:07:38,330 - INFO - Finished replicate 4 in 8.75s, peak RSS: 14594.78 MB
+2025-11-17 18:07:38,331 - INFO - Replicate 5: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 18:07:38,333 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 18:07:38,336 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 18:07:46,849 - INFO - Finished replicate 5 in 8.51s, peak RSS: 14682.77 MB
+2025-11-17 18:07:48 - Job finished at: Mon Nov 17 18:07:48 EST 2025
