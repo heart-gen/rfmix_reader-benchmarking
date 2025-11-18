@@ -105,8 +105,10 @@ def is_oom_error(e: BaseException) -> tuple[bool, str]:
     return False, "unknown"
 
 
-def load_data(prefix_path, BINARIES):
-    loci, g_anc, admix = read_rfmix(prefix_path, generate_binary=BINARIES)
+def load_data(prefix_path, binary_dir, BINARIES):
+    loci, g_anc, admix = read_rfmix(
+        prefix_path, binary_dir=binary_dir, generate_binary=BINARIES
+    )
     admix = admix.compute()
     return g_anc
 
@@ -115,12 +117,6 @@ def get_peak_cpu_memory_mb() -> float:
     import resource
     usage = resource.getrusage(resource.RUSAGE_SELF)
     return usage.ru_maxrss / 1024.0
-
-
-def get_peak_gpu_memory_mb() -> float:
-    if stats_resource is None:
-        return 0.0
-    return stats_resource.get_high_watermark() / 1024**2
 
 
 def run_task(input_dir: str, output_path: str, label: str, task: int,
@@ -150,7 +146,7 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
         oom_kind = error_msg = None
         start = time.time()
         try:
-            _ = load_data(input_dir, BINARIES)
+            _ = load_data(input_dir, output_dir, BINARIES)
         except Exception as e:
             is_oom, kind = is_oom_error(e)
             status = "oom" if is_oom else "error"
@@ -160,7 +156,7 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
         finally:
             wall_time = time.time() - start
             stats = rmm_stats.get_statistics() if GPU else 0.0
-            peak_gpu = float(stats.peak_bytes) / (1024 ** 2)            
+            peak_gpu = float(stats.peak_bytes) / (1024 ** 2) if GPU else 0.0
             peak_cpu = get_peak_cpu_memory_mb()
 
             # Update meta (overwrite file)

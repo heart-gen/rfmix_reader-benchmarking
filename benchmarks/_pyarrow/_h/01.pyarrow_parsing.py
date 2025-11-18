@@ -13,7 +13,7 @@ import pyarrow.compute as pc
 from typing import Callable, List
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-pa.set_cpu_count(16)       # Cap GPU threads
+pa.set_cpu_count(16)       # Cap CPU threads
 pa.set_io_thread_count(16) # Cap IO threads
 
 def collect_cpu_info() -> dict:
