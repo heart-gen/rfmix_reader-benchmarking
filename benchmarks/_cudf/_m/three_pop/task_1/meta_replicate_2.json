@@ -1,0 +1,34 @@
+{
+  "parser": "cudf",
+  "task": 1,
+  "replicate": 2,
+  "label": "task_1",
+  "hardware": "Linux-4.18.0-553.36.1.el8_10.x86_64-x86_64-with-glibc2.28",
+  "software_versions": {
+    "python": "3.11.13",
+    "cudf": "25.10.00",
+    "cupy": "13.6.0",
+    "psutil": "6.1.1"
+  },
+  "cpu_info": {
+    "os_cpu_count": 104,
+    "psutil_cpu_count_logical": 104,
+    "psutil_cpu_count_physical": 104,
+    "SLURM_JOB_CPUS_PER_NODE": "5",
+    "SLURM_NTASKS": "5",
+    "SLURM_TASKS_PER_NODE": "5",
+    "env_POLARS_MAX_THREADS": "16",
+    "env_RAYON_NUM_THREADS": "16",
+    "env_OMP_NUM_THREADS": "1",
+    "env_MKL_NUM_THREADS": "1",
+    "env_OPENBLAS_NUM_THREADS": "1",
+    "polars_thread_pool_size": 16,
+    "pyarrow_cpu_count": 1,
+    "pyarrow_io_thread_count": 8
+  },
+  "status": "success",
+  "oom_type": null,
+  "wall_time_sec": 0.26366186141967773,
+  "peak_cpu_memory_MB": 788.1171875,
+  "peak_gpu_memory_MB": 3618.0782470703125
+}

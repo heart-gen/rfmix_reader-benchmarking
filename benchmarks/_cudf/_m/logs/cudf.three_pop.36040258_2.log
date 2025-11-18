@@ -1,0 +1,37 @@
+2025-11-17 23:51:37 - **** Job starts ****
+2025-11-17 23:51:37 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36042977
+Job name: cudf_3pop
+Node name: 
+Hostname: w004
+Task id: 2
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1   2) cuda/12.6.1
+
+ 
+
+2025-11-17 23:51:38 - **** Loading conda environment ****
+2025-11-17 23:51:39 - **** Run analysis ****
+2025-11-17 23:51:41,007 - INFO - Replicate 1: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 23:51:41,131 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 23:51:41,136 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 23:51:44,504 - INFO - Finished replicate 1 in 3.36s, peak RSS: 748.10 MB, peak GPU: 20706.01 MB
+2025-11-17 23:51:44,504 - INFO - Replicate 2: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 23:51:44,506 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 23:51:44,509 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 23:51:45,231 - INFO - Finished replicate 2 in 0.72s, peak RSS: 748.14 MB, peak GPU: 20706.01 MB
+2025-11-17 23:51:45,231 - INFO - Replicate 3: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 23:51:45,233 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 23:51:45,235 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 23:51:46,031 - INFO - Finished replicate 3 in 0.79s, peak RSS: 748.62 MB, peak GPU: 20706.01 MB
+2025-11-17 23:51:46,031 - INFO - Replicate 4: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 23:51:46,033 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 23:51:46,035 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 23:51:46,783 - INFO - Finished replicate 4 in 0.74s, peak RSS: 748.66 MB, peak GPU: 20706.01 MB
+2025-11-17 23:51:46,783 - INFO - Replicate 5: Reading files from ../../../input/simulations/three_populations/_m/rfmix-files/
+2025-11-17 23:51:46,784 - INFO - CPU info: {'os_cpu_count': 104, 'psutil_cpu_count_logical': 104, 'psutil_cpu_count_physical': 104, 'SLURM_JOB_CPUS_PER_NODE': '5', 'SLURM_NTASKS': '5', 'SLURM_TASKS_PER_NODE': '5', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+2025-11-17 23:51:46,787 - INFO - Task 2 -> 1 chromosome(s): [1]
+2025-11-17 23:51:47,583 - INFO - Finished replicate 5 in 0.79s, peak RSS: 748.82 MB, peak GPU: 20706.01 MB
+2025-11-17 23:51:48 - Job finished at: Mon Nov 17 23:51:48 EST 2025
