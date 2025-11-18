@@ -77,7 +77,6 @@ def collect_metadata(parser_version, task_id, replicate, label, GPU):
         versions["cupy"] = cp.__version__
         backend = "GPU"
     else:
-        import numpy as cp
         versions["pandas"] = pd.__version__
         backend = "CPU"
     meta = {
@@ -131,7 +130,7 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
 
     for replicate in range(1, 6):
         seed = replicate + 13
-        random.seed(seed); cp.random.seed(seed)
+        random.seed(seed); np.random.seed(seed)
         meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
 
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
