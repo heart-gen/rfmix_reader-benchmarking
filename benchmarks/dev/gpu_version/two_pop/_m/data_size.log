@@ -1,26 +1,0 @@
-**** Job starts ****
-Fri Jul 12 10:35:42 AM EDT 2024
-**** JHPCE info ****
-User: jbenjami
-Job id: 8574009
-Job name: rfmix_gpu
-Node name: 
-Hostname: compute-126
-Task id: 
-
-Currently Loaded Modules:
-  1) JHPCE_ROCKY9_DEFAULT_ENV   2) JHPCE_tools/3.0
-
- 
-
-GPU 0: NVIDIA A100 80GB PCIe
-  Total memory: 79.15 GB
-  CUDA capability: 8.0
-Multiple files read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
-Mapping loci files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping loci files:   5%|▍         | 1/22 [00:33<11:40, 33.36s/it]Mapping loci files:   9%|▉         | 2/22 [00:51<08:13, 24.69s/it]Mapping loci files:  14%|█▎        | 3/22 [01:10<06:57, 21.97s/it]Mapping loci files:  18%|█▊        | 4/22 [01:30<06:22, 21.23s/it]Mapping loci files:  23%|██▎       | 5/22 [01:50<05:53, 20.80s/it]Mapping loci files:  27%|██▋       | 6/22 [02:08<05:13, 19.58s/it]Mapping loci files:  32%|███▏      | 7/22 [02:22<04:29, 17.97s/it]Mapping loci files:  36%|███▋      | 8/22 [02:33<03:41, 15.79s/it]Mapping loci files:  41%|████      | 9/22 [02:44<03:02, 14.05s/it]Mapping loci files:  45%|████▌     | 10/22 [02:53<02:30, 12.54s/it]Mapping loci files:  50%|█████     | 11/22 [03:00<01:59, 10.85s/it]Mapping loci files:  55%|█████▍    | 12/22 [03:27<02:39, 15.99s/it]Mapping loci files:  59%|█████▉    | 13/22 [03:35<02:01, 13.46s/it]Mapping loci files:  64%|██████▎   | 14/22 [03:40<01:26, 10.85s/it]Mapping loci files:  68%|██████▊   | 15/22 [03:45<01:04,  9.19s/it]Mapping loci files:  73%|███████▎  | 16/22 [04:08<01:18, 13.16s/it]Mapping loci files:  77%|███████▋  | 17/22 [04:30<01:19, 15.88s/it]Mapping loci files:  82%|████████▏ | 18/22 [04:50<01:08, 17.09s/it]Mapping loci files:  86%|████████▋ | 19/22 [05:09<00:53, 17.68s/it]Mapping loci files:  91%|█████████ | 20/22 [05:27<00:35, 17.85s/it]Mapping loci files:  95%|█████████▌| 21/22 [05:45<00:17, 17.83s/it]Mapping loci files: 100%|██████████| 22/22 [05:59<00:00, 16.73s/it]Mapping loci files: 100%|██████████| 22/22 [05:59<00:00, 16.34s/it]
-Mapping Q files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping Q files:  45%|████▌     | 10/22 [00:00<00:00, 92.85it/s]Mapping Q files:  91%|█████████ | 20/22 [00:00<00:00, 84.01it/s]Mapping Q files: 100%|██████████| 22/22 [00:00<00:00, 87.58it/s]
-Mapping fb files:   0%|          | 0/22 [00:00<?, ?it/s]Mapping fb files:   5%|▍         | 1/22 [00:00<00:12,  1.64it/s]Mapping fb files:   9%|▉         | 2/22 [00:00<00:08,  2.34it/s]Mapping fb files:  14%|█▎        | 3/22 [00:01<00:07,  2.42it/s]Mapping fb files:  18%|█▊        | 4/22 [00:01<00:06,  2.77it/s]Mapping fb files:  23%|██▎       | 5/22 [00:01<00:05,  3.20it/s]Mapping fb files:  27%|██▋       | 6/22 [00:02<00:04,  3.20it/s]Mapping fb files:  32%|███▏      | 7/22 [00:02<00:04,  3.72it/s]Mapping fb files:  36%|███▋      | 8/22 [00:02<00:03,  3.96it/s]Mapping fb files:  41%|████      | 9/22 [00:02<00:02,  4.35it/s]Mapping fb files:  45%|████▌     | 10/22 [00:02<00:02,  4.74it/s]Mapping fb files:  50%|█████     | 11/22 [00:03<00:02,  4.41it/s]Mapping fb files:  55%|█████▍    | 12/22 [00:03<00:03,  3.18it/s]Mapping fb files:  59%|█████▉    | 13/22 [00:03<00:02,  3.81it/s]Mapping fb files:  68%|██████▊   | 15/22 [00:04<00:01,  4.59it/s]Mapping fb files:  73%|███████▎  | 16/22 [00:04<00:01,  3.71it/s]Mapping fb files:  77%|███████▋  | 17/22 [00:04<00:01,  3.25it/s]Mapping fb files:  82%|████████▏ | 18/22 [00:05<00:01,  2.65it/s]Mapping fb files:  86%|████████▋ | 19/22 [00:05<00:01,  2.67it/s]Mapping fb files:  91%|█████████ | 20/22 [00:06<00:00,  2.71it/s]Mapping fb files:  95%|█████████▌| 21/22 [00:06<00:00,  2.79it/s]Mapping fb files: 100%|██████████| 22/22 [00:07<00:00,  2.57it/s]Mapping fb files: 100%|██████████| 22/22 [00:07<00:00,  3.12it/s]
-Loci size: 12317365
-Execution time: 370.62040877342224 seconds
-**** Job ends ****
-Fri Jul 12 10:44:20 AM EDT 2024
