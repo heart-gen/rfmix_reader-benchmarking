@@ -1,3 +1,4 @@
+import cupy as cp
 import pandas as pd
 import os, logging, rmm
 import argparse, platform
@@ -77,7 +78,6 @@ def collect_metadata(parser_version, task_id, replicate, label, GPU):
         versions["cupy"] = cp.__version__
         backend = "GPU"
     else:
-        import numpy as cp
         versions["pandas"] = pd.__version__
         backend = "CPU"
     meta = {
@@ -105,8 +105,10 @@ def is_oom_error(e: BaseException) -> tuple[bool, str]:
     return False, "unknown"
 
 
-def load_data(prefix_path, BINARIES):
-    loci, g_anc, admix = read_rfmix(prefix_path, generate_binary=BINARIES)
+def load_data(prefix_path, binary_dir, BINARIES):
+    loci, g_anc, admix = read_rfmix(
+        prefix_path, binary_dir=binary_dir, generate_binary=BINARIES
+    )
     admix = admix.compute()
     return g_anc
 
@@ -124,7 +126,7 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
     if GPU: configure_rmm()
 
     for replicate in range(1, 6):
-        seed = replicate + 14
+        seed = replicate + 13
         random.seed(seed); cp.random.seed(seed)
         meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
 
@@ -132,7 +134,7 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
         logging.info("CPU info: %s", collect_cpu_info())
 
         # Initial meta
-        meta = collect_metadata("cudf", task, replicate, label)
+        meta = collect_metadata("rfmix_reader", task, replicate, label, GPU)
         meta["status"] = "running"
         meta["oom_type"] = None
         meta["wall_time_sec"] = None
@@ -145,7 +147,7 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
             oom_kind = error_msg = None
             start = time.time()
             try:
-                _ = load_data(input_dir, BINARIES)
+                _ = load_data(input_dir, output_dir, BINARIES)
             except Exception as e:
                 is_oom, kind = is_oom_error(e)
                 status = "oom" if is_oom else "error"
@@ -155,7 +157,7 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
             finally:
                 wall_time = time.time() - start
                 stats = rmm_stats.get_statistics() if GPU else 0.0
-                peak_gpu = float(stats.peak_bytes) / (1024 ** 2)            
+                peak_gpu = float(stats.peak_bytes) / (1024 ** 2) if GPU else 0.0
                 peak_cpu = get_peak_cpu_memory_mb()
             
                 # Update meta (overwrite file)
