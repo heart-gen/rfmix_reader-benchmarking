@@ -147,7 +147,8 @@ def run_task(input_dir: str, output_path: str, label: str, task: int,
             oom_kind = error_msg = None
             start = time.time()
             try:
-                _ = load_data(input_dir, output_dir, BINARIES)
+                binaries_path = output_dir.replace("no_binaries", "binaries")
+                _ = load_data(input_dir, binaries_path, BINARIES)
             except Exception as e:
                 is_oom, kind = is_oom_error(e)
                 status = "oom" if is_oom else "error"
