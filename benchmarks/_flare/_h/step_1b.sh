@@ -57,7 +57,7 @@ case "${TASK}" in
     ;;
 esac
 
-python ../_h/01.flare_parsing.py --input "${INPUT_DIR}" \
+python ../_h/02.flare_parsing.py --input "${INPUT_DIR}" \
        --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}" --gpu
 
 if [ $? -ne 0 ]; then

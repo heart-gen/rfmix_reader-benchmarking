@@ -29,7 +29,6 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 
 module purge
 module load anaconda3/2024.10-1
-module load cuda
 module list
 
 log_message "**** Loading conda environment ****"

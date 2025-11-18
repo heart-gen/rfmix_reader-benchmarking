@@ -141,35 +141,36 @@ def run_task(input_dir: str, output_path: str, label: str, task: int, GPU: bool)
         with open(meta_path, "w") as f:
             json.dump(meta, f, indent=2)
 
-        status = "success"
-        oom_kind = error_msg = None
-        start = time.time()
-        try:
-            _ = load_data(input_dir)
-        except Exception as e:
-            is_oom, kind = is_oom_error(e)
-            status = "oom" if is_oom else "error"
-            oom_kind = kind if is_oom else None
-            error_msg = str(e)[:500]  # truncate
-            logging.exception("Error on replicate %d: %s", replicate, e)
-        finally:
-            wall_time = time.time() - start
-            stats = rmm_stats.get_statistics() if GPU else 0.0
-            peak_gpu = float(stats.peak_bytes) / (1024 ** 2) if GPU else 0.0
-            peak_cpu = get_peak_cpu_memory_mb()
+        with rmm_stats.statistics():
+            status = "success"
+            oom_kind = error_msg = None
+            start = time.time()
+            try:
+                _ = load_data(input_dir)
+            except Exception as e:
+                is_oom, kind = is_oom_error(e)
+                status = "oom" if is_oom else "error"
+                oom_kind = kind if is_oom else None
+                error_msg = str(e)[:500]  # truncate
+                logging.exception("Error on replicate %d: %s", replicate, e)
+            finally:
+                wall_time = time.time() - start
+                stats = rmm_stats.get_statistics() if GPU else 0.0
+                peak_gpu = float(stats.peak_bytes) / (1024 ** 2) if GPU else 0.0
+                peak_cpu = get_peak_cpu_memory_mb()
 
-            # Update meta (overwrite file)
-            meta = collect_metadata("flare", task, replicate, label, GPU)
-            meta["status"] = status
-            meta["oom_type"] = oom_kind
-            meta["wall_time_sec"] = wall_time
-            meta["peak_cpu_memory_MB"] = peak_cpu
-            meta["peak_gpu_memory_MB"] = peak_gpu
-            if error_msg:
-                meta["error"] = error_msg
+                # Update meta (overwrite file)
+                meta = collect_metadata("flare", task, replicate, label, GPU)
+                meta["status"] = status
+                meta["oom_type"] = oom_kind
+                meta["wall_time_sec"] = wall_time
+                meta["peak_cpu_memory_MB"] = peak_cpu
+                meta["peak_gpu_memory_MB"] = peak_gpu
+                if error_msg:
+                    meta["error"] = error_msg
 
-            with open(meta_path, "w") as f:
-                json.dump(meta, f, indent=2)
+                with open(meta_path, "w") as f:
+                    json.dump(meta, f, indent=2)
 
         logging.info(
             "Finished replicate %d in %.2fs, peak RSS: %.2f MB, peak GPU: %.2f MB",
