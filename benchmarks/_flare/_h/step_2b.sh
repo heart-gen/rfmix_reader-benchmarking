@@ -1,12 +1,13 @@
 #!/bin/bash
-#SBATCH --partition=RM-shared
-#SBATCH --job-name=rfmix_3pop
+#SBATCH --partition=GPU-shared
+#SBATCH --job-name=flare_3pop
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --ntasks-per-node=64
+#SBATCH --gpus=v100-32:1
+#SBATCH --ntasks-per-node=5
 #SBATCH --array=1-3
 #SBATCH --time=06:00:00
-#SBATCH --output=logs/rfmix.three_pop.bin.%A_%a.log
+#SBATCH --output=logs/flare.three_pop.gpu.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -36,18 +37,18 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 log_message "**** Run analysis ****"
 TASK="${SLURM_ARRAY_TASK_ID}"
-OUTDIR="three_pop/binaries"
+OUTDIR="three_pop/gpu"
 
 # Choose input directory based on TASK
 case "${TASK}" in
   1)
-    INPUT_DIR="../../../input/simulations/three_populations/task_1/rfmix-files/"
+    INPUT_DIR="../../../input/simulations/three_populations/task_1/flare-out/"
     ;;
   2)
-    INPUT_DIR="../../../input/simulations/three_populations/task_2/rfmix-files/"
+    INPUT_DIR="../../../input/simulations/three_populations/task_2/flare-out/"
     ;;
   3)
-    INPUT_DIR="../../../input/simulations/three_populations/_m/rfmix-files/"
+    INPUT_DIR="../../../input/simulations/three_populations/_m/flare-out/"
     ;;
   *)
     echo "Invalid TASK value: ${TASK}"
@@ -55,8 +56,8 @@ case "${TASK}" in
     ;;
 esac
 
-python ../_h/01.rfmix_parsing.py --input "${INPUT_DIR}" \
-       --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}" --binaries
+python ../_h/01.flare_parsing.py --input "${INPUT_DIR}" \
+       --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}" --gpu
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."

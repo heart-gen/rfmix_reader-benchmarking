@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --partition=RM-shared
-#SBATCH --job-name=rfmix_2pop
+#SBATCH --job-name=flare_2pop
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
 #SBATCH --array=1-3
 #SBATCH --time=12:00:00
-#SBATCH --output=logs/rfmix.two_pop.bin.%A_%a.log
+#SBATCH --output=logs/flare.two_pop.cpu.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -36,18 +36,18 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 log_message "**** Run analysis ****"
 TASK="${SLURM_ARRAY_TASK_ID}"
-OUTDIR="two_pop/binaries"
+OUTDIR="two_pop/cpu"
 
 # Choose input directory based on TASK
 case "${TASK}" in
   1)
-    INPUT_DIR="../../../input/simulations/two_populations/task_1/rfmix-files/"
+    INPUT_DIR="../../../input/simulations/two_populations/task_1/flare-out/"
     ;;
   2)
-    INPUT_DIR="../../../input/simulations/two_populations/task_2/rfmix-files/"
+    INPUT_DIR="../../../input/simulations/two_populations/task_2/flare-out/"
     ;;
   3)
-    INPUT_DIR="../../../input/simulations/two_populations/_m/rfmix-out/"
+    INPUT_DIR="../../../input/simulations/two_populations/_m/flare-out/"
     ;;
   *)
     echo "Invalid TASK value: ${TASK}"
@@ -55,8 +55,8 @@ case "${TASK}" in
     ;;
 esac
 
-python ../_h/01.rfmix_parsing.py --input "${INPUT_DIR}" \
-       --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}" --binaries
+python ../_h/01.flare_parsing.py --input "${INPUT_DIR}" \
+       --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
