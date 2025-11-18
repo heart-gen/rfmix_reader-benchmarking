@@ -125,7 +125,8 @@ def run_task(input_dir: str, output_path: str, label: str, task: int, GPU: bool)
 
     for replicate in range(1, 6):
         seed = replicate + 13
-        random.seed(seed); np.random.seed(seed); cp.random.seed(seed)
+        random.seed(seed); np.random.seed(seed)
+        if GPU: cp.random.seed(seed)
         meta_path = os.path.join(output_dir, f"meta_replicate_{replicate}.json")
 
         logging.info(f"Replicate {replicate}: Reading files from {input_dir}")
