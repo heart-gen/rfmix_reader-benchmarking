@@ -1,0 +1,34 @@
+{
+  "parser": "rfmix_reader",
+  "task": 2,
+  "replicate": 4,
+  "label": "task_2",
+  "backend": "CPU",
+  "hardware": "Linux-4.18.0-553.22.1.el8_10.x86_64-x86_64-with-glibc2.28",
+  "software_versions": {
+    "python": "3.11.13",
+    "psutil": "6.1.1",
+    "pandas": "2.3.3"
+  },
+  "cpu_info": {
+    "os_cpu_count": 128,
+    "psutil_cpu_count_logical": 128,
+    "psutil_cpu_count_physical": 128,
+    "SLURM_JOB_CPUS_PER_NODE": "64",
+    "SLURM_NTASKS": "64",
+    "SLURM_TASKS_PER_NODE": "64",
+    "env_POLARS_MAX_THREADS": "16",
+    "env_RAYON_NUM_THREADS": "16",
+    "env_OMP_NUM_THREADS": "1",
+    "env_MKL_NUM_THREADS": "1",
+    "env_OPENBLAS_NUM_THREADS": "1",
+    "polars_thread_pool_size": 16,
+    "pyarrow_cpu_count": 1,
+    "pyarrow_io_thread_count": 8
+  },
+  "status": "success",
+  "oom_type": null,
+  "wall_time_sec": 35.10530424118042,
+  "peak_cpu_memory_MB": 3712.79296875,
+  "peak_gpu_memory_MB": 0.0
+}

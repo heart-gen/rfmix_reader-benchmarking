@@ -1,0 +1,67 @@
+2025-11-17 19:53:01 - **** Job starts ****
+2025-11-17 19:53:01 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36037028
+Job name: rfmix_3pop
+Node name: 
+Hostname: r277
+Task id: 1
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-11-17 19:53:02 - **** Loading conda environment ****
+2025-11-17 19:53:02 - **** Run analysis ****
+2025-11-17 19:53:06,276 - INFO - Replicate 1: Reading files from ../../../input/simulations/three_populations/task_1/rfmix-files/
+2025-11-17 19:53:06,387 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.53s/it]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.53s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 362.67it/s]
+Created binary files at: three_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:18<00:00, 18.35s/it]100%|██████████| 1/1 [00:18<00:00, 18.35s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 21.37it/s]
+2025-11-17 19:53:31,188 - INFO - Finished replicate 1 in 24.79s, peak RSS: 1584.36 MB, peak GPU: 0.00 MB
+2025-11-17 19:53:31,188 - INFO - Replicate 2: Reading files from ../../../input/simulations/three_populations/task_1/rfmix-files/
+2025-11-17 19:53:31,191 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.52s/it]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.52s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 406.31it/s]
+Created binary files at: three_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:18<00:00, 18.69s/it]100%|██████████| 1/1 [00:18<00:00, 18.69s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 21.44it/s]
+2025-11-17 19:53:55,996 - INFO - Finished replicate 2 in 24.78s, peak RSS: 1589.49 MB, peak GPU: 0.00 MB
+2025-11-17 19:53:55,996 - INFO - Replicate 3: Reading files from ../../../input/simulations/three_populations/task_1/rfmix-files/
+2025-11-17 19:53:55,999 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.53s/it]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.53s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 432.85it/s]
+Created binary files at: three_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:18<00:00, 18.66s/it]100%|██████████| 1/1 [00:18<00:00, 18.66s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 21.61it/s]
+2025-11-17 19:54:20,917 - INFO - Finished replicate 3 in 24.91s, peak RSS: 1613.19 MB, peak GPU: 0.00 MB
+2025-11-17 19:54:20,917 - INFO - Replicate 4: Reading files from ../../../input/simulations/three_populations/task_1/rfmix-files/
+2025-11-17 19:54:20,920 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.48s/it]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.48s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 417.47it/s]
+Created binary files at: three_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:18<00:00, 18.85s/it]100%|██████████| 1/1 [00:18<00:00, 18.85s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 20.81it/s]
+2025-11-17 19:54:45,804 - INFO - Finished replicate 4 in 24.88s, peak RSS: 1613.19 MB, peak GPU: 0.00 MB
+2025-11-17 19:54:45,804 - INFO - Replicate 5: Reading files from ../../../input/simulations/three_populations/task_1/rfmix-files/
+2025-11-17 19:54:45,807 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.49s/it]Mapping loci information: 100%|██████████| 1/1 [00:05<00:00,  5.50s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 433.56it/s]
+Created binary files at: three_pop/binaries/task_1
+Converting fb files to binary!
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:19<00:00, 19.07s/it]100%|██████████| 1/1 [00:19<00:00, 19.07s/it]
+Successfully converted 1 files to binary format.
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 21.36it/s]
+2025-11-17 19:55:11,100 - INFO - Finished replicate 5 in 25.29s, peak RSS: 1628.42 MB, peak GPU: 0.00 MB
+2025-11-17 19:55:23 - Job finished at: Mon Nov 17 19:55:23 EST 2025
