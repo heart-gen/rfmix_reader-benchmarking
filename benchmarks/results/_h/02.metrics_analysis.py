@@ -372,7 +372,7 @@ def make_reliability_figure(summary: pd.DataFrame, out_prefix: str | Path) -> No
     x = np.arange(len(agg))
     width = 0.8
 
-    fig, ax = plt.subplots(figsize=(6, 10))
+    fig, ax = plt.subplots(figsize=(6, 9))
 
     bottom = np.zeros(len(agg))
 
