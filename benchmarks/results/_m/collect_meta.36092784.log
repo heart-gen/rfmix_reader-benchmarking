@@ -1,0 +1,26 @@
+2025-11-19 08:01:01 - **** Job starts ****
+2025-11-19 08:01:01 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36092784
+Job name: collect_meta
+Node name: 
+Hostname: r176
+Task id: N/A
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-11-19 08:01:01 - **** Loading conda environment ****
+2025-11-19 08:01:02 - **** Run analysis ****
+Collected 280 runs → metadata.tsv
+-----
+pandas              2.3.3
+session_info        v1.0.1
+-----
+Python 3.11.13 (main, Jun  5 2025, 13:12:00) [GCC 11.2.0]
+Linux-4.18.0-553.22.1.el8_10.x86_64-x86_64-with-glibc2.28
+-----
+Session information updated at 2025-11-19 08:01
+2025-11-19 08:01:33 - Job finished at: Wed Nov 19 08:01:33 EST 2025
