@@ -1,0 +1,47 @@
+2025-11-17 23:21:04 - **** Job starts ****
+2025-11-17 23:21:04 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36041326
+Job name: flare_2pop
+Node name: 
+Hostname: r194
+Task id: 1
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-11-17 23:21:05 - **** Loading conda environment ****
+2025-11-17 23:21:05 - **** Run analysis ****
+2025-11-17 23:22:32,751 - INFO - Replicate 1: Reading files from ../../../input/simulations/two_populations/task_1/flare-out/
+2025-11-17 23:22:34,797 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.91s/it]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.91s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 25.70it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:10<00:00, 10.14s/it]Mapping local ancestry files: 100%|██████████| 1/1 [00:10<00:00, 10.14s/it]
+2025-11-17 23:23:00,385 - INFO - Finished replicate 1 in 25.58s, peak RSS: 1716.25 MB, peak GPU: 0.00 MB
+2025-11-17 23:23:00,385 - INFO - Replicate 2: Reading files from ../../../input/simulations/two_populations/task_1/flare-out/
+2025-11-17 23:23:00,387 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.41s/it]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.41s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 281.33it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:09<00:00,  9.99s/it]Mapping local ancestry files: 100%|██████████| 1/1 [00:09<00:00,  9.99s/it]
+2025-11-17 23:23:23,948 - INFO - Finished replicate 2 in 23.55s, peak RSS: 1873.41 MB, peak GPU: 0.00 MB
+2025-11-17 23:23:23,949 - INFO - Replicate 3: Reading files from ../../../input/simulations/two_populations/task_1/flare-out/
+2025-11-17 23:23:23,951 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.41s/it]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.41s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 256.30it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:10<00:00, 10.05s/it]Mapping local ancestry files: 100%|██████████| 1/1 [00:10<00:00, 10.05s/it]
+2025-11-17 23:23:47,571 - INFO - Finished replicate 3 in 23.61s, peak RSS: 1919.80 MB, peak GPU: 0.00 MB
+2025-11-17 23:23:47,571 - INFO - Replicate 4: Reading files from ../../../input/simulations/two_populations/task_1/flare-out/
+2025-11-17 23:23:47,573 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.38s/it]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.38s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 301.31it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:10<00:00, 10.08s/it]Mapping local ancestry files: 100%|██████████| 1/1 [00:10<00:00, 10.08s/it]
+2025-11-17 23:24:11,182 - INFO - Finished replicate 4 in 23.60s, peak RSS: 1954.28 MB, peak GPU: 0.00 MB
+2025-11-17 23:24:11,182 - INFO - Replicate 5: Reading files from ../../../input/simulations/two_populations/task_1/flare-out/
+2025-11-17 23:24:11,184 - INFO - CPU info: {'os_cpu_count': 128, 'psutil_cpu_count_logical': 128, 'psutil_cpu_count_physical': 128, 'SLURM_JOB_CPUS_PER_NODE': '64', 'SLURM_NTASKS': '64', 'SLURM_TASKS_PER_NODE': '64', 'env_POLARS_MAX_THREADS': '16', 'env_RAYON_NUM_THREADS': '16', 'env_OMP_NUM_THREADS': '1', 'env_MKL_NUM_THREADS': '1', 'env_OPENBLAS_NUM_THREADS': '1', 'polars_thread_pool_size': 16, 'pyarrow_cpu_count': 1, 'pyarrow_io_thread_count': 8}
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.39s/it]Mapping loci information: 100%|██████████| 1/1 [00:09<00:00,  9.39s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 297.72it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:10<00:00, 10.18s/it]Mapping local ancestry files: 100%|██████████| 1/1 [00:10<00:00, 10.18s/it]
+2025-11-17 23:24:34,917 - INFO - Finished replicate 5 in 23.71s, peak RSS: 2011.16 MB, peak GPU: 0.00 MB
+2025-11-17 23:24:47 - Job finished at: Mon Nov 17 23:24:47 EST 2025
