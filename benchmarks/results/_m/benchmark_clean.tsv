@@ -1,0 +1,301 @@
+parser	parser_clean	backend	task	population_model	replicate	label	status	oom_type	wall_time_sec	peak_cpu_memory_MB	peak_gpu_memory_MB	extras
+flare	rfmix-reader [flare]	GPU	1	two_pop	1	task_1	success		147.93210864067078	1718.54296875	542.0347442626953	gpu
+flare	rfmix-reader [flare]	CPU	1	two_pop	1	task_1	success		25.576658964157104	1716.25	0.0	cpu
+flare	rfmix-reader [flare]	GPU	1	two_pop	2	task_1	success		139.7621750831604	1729.9375	542.0346527099609	gpu
+flare	rfmix-reader [flare]	CPU	1	two_pop	2	task_1	success		23.55368399620056	1873.41015625	0.0	cpu
+flare	rfmix-reader [flare]	GPU	1	two_pop	3	task_1	success		143.69324493408203	1734.109375	542.0346527099609	gpu
+flare	rfmix-reader [flare]	CPU	1	two_pop	3	task_1	success		23.61233901977539	1919.796875	0.0	cpu
+flare	rfmix-reader [flare]	GPU	1	two_pop	4	task_1	success		136.67444682121277	1754.9765625	542.0346527099609	gpu
+flare	rfmix-reader [flare]	CPU	1	two_pop	4	task_1	success		23.60107660293579	1954.27734375	0.0	cpu
+flare	rfmix-reader [flare]	GPU	1	two_pop	5	task_1	success		135.1465892791748	1766.58984375	542.0346527099609	gpu
+flare	rfmix-reader [flare]	CPU	1	two_pop	5	task_1	success		23.71406888961792	2011.15625	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	two_pop	1	task_2	success		760.6353225708008	4094.28515625	2909.246612548828	gpu
+flare	rfmix-reader [flare]	CPU	2	two_pop	1	task_2	success		126.50062394142152	6434.1640625	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	two_pop	2	task_2	success		831.2461302280426	4148.44921875	2909.2465209960938	gpu
+flare	rfmix-reader [flare]	CPU	2	two_pop	2	task_2	success		125.61597728729248	6899.06640625	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	two_pop	3	task_2	success		796.6099681854248	4152.02734375	2909.2465209960938	gpu
+flare	rfmix-reader [flare]	CPU	2	two_pop	3	task_2	success		125.66732788085938	6899.06640625	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	two_pop	4	task_2	success		857.6644494533539	4178.0859375	2909.2465209960938	gpu
+flare	rfmix-reader [flare]	CPU	2	two_pop	4	task_2	success		126.18563842773438	7026.9296875	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	two_pop	5	task_2	success		864.4383039474487	4178.78515625	2909.2465209960938	gpu
+flare	rfmix-reader [flare]	CPU	2	two_pop	5	task_2	success		126.01029205322266	7070.140625	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	two_pop	1	task_3	success		9617.233922481537	38061.05859375	36719.26585388184	gpu
+flare	rfmix-reader [flare]	CPU	3	two_pop	1	task_3	success		1621.0675632953644	65253.86328125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	two_pop	2	task_3	success		9788.24160194397	38061.05859375	36719.26448059082	gpu
+flare	rfmix-reader [flare]	CPU	3	two_pop	2	task_3	success		1607.549521446228	65376.453125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	two_pop	3	task_3	success		10953.346261501312	38061.05859375	36719.26448059082	gpu
+flare	rfmix-reader [flare]	CPU	3	two_pop	3	task_3	success		1610.9050328731537	65376.453125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	two_pop	4	task_3	success		10956.03688955307	38061.05859375	36719.26448059082	gpu
+flare	rfmix-reader [flare]	CPU	3	two_pop	4	task_3	success		1604.48872923851	65376.453125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	two_pop	5	task_3	success		10529.397793293	38061.05859375	36719.26448059082	gpu
+flare	rfmix-reader [flare]	CPU	3	two_pop	5	task_3	success		1603.0275764465332	65376.453125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	1	three_pop	1	task_1	success		205.75502276420596	1405.859375	154.91099548339844	gpu
+flare	rfmix-reader [flare]	CPU	1	three_pop	1	task_1	success		11.397154808044434	1152.98828125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	1	three_pop	2	task_1	success		206.98189449310303	1405.859375	154.91090393066406	gpu
+flare	rfmix-reader [flare]	CPU	1	three_pop	2	task_1	success		8.513641834259033	1190.37109375	0.0	cpu
+flare	rfmix-reader [flare]	GPU	1	three_pop	3	task_1	success		190.26052832603452	1405.859375	154.91090393066406	gpu
+flare	rfmix-reader [flare]	CPU	1	three_pop	3	task_1	success		8.476033926010132	1221.84375	0.0	cpu
+flare	rfmix-reader [flare]	GPU	1	three_pop	4	task_1	success		173.17084455490112	1405.859375	154.91090393066406	gpu
+flare	rfmix-reader [flare]	CPU	1	three_pop	4	task_1	success		8.506225109100342	1238.0859375	0.0	cpu
+flare	rfmix-reader [flare]	GPU	1	three_pop	5	task_1	success		185.43510746955872	1405.859375	154.91090393066406	gpu
+flare	rfmix-reader [flare]	CPU	1	three_pop	5	task_1	success		8.512346982955933	1244.36328125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	three_pop	1	task_2	success		850.9971499443054	2342.50390625	832.9074096679688	gpu
+flare	rfmix-reader [flare]	CPU	2	three_pop	1	task_2	success		46.505438566207886	2762.52734375	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	three_pop	2	task_2	success		875.3164052963257	2427.85546875	832.9073181152344	gpu
+flare	rfmix-reader [flare]	CPU	2	three_pop	2	task_2	success		45.0779983997345	2974.70703125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	three_pop	3	task_2	success		855.3454058170319	2431.9609375	832.9073181152344	gpu
+flare	rfmix-reader [flare]	CPU	2	three_pop	3	task_2	success		44.99822998046875	3052.65234375	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	three_pop	4	task_2	success		844.010101556778	2437.91015625	832.9073181152344	gpu
+flare	rfmix-reader [flare]	CPU	2	three_pop	4	task_2	success		45.01350975036621	3125.35546875	0.0	cpu
+flare	rfmix-reader [flare]	GPU	2	three_pop	5	task_2	success		850.2840745449066	2438.765625	832.9073181152344	gpu
+flare	rfmix-reader [flare]	CPU	2	three_pop	5	task_2	success		45.090144872665405	3144.390625	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	three_pop	1	task_3	success		11099.187864780426	15281.08984375	10486.525161743164	gpu
+flare	rfmix-reader [flare]	CPU	3	three_pop	1	task_3	success		594.5293862819672	23416.37109375	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	three_pop	2	task_3	success		11432.611380338669	15281.08984375	10486.523788452148	gpu
+flare	rfmix-reader [flare]	CPU	3	three_pop	2	task_3	success		584.7401361465454	23766.71875	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	three_pop	3	task_3	success		13165.3685195446	15281.08984375	10486.523788452148	gpu
+flare	rfmix-reader [flare]	CPU	3	three_pop	3	task_3	success		585.2253088951111	23857.98828125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	three_pop	4	task_3	success		12449.654412269592	15281.08984375	10486.523788452148	gpu
+flare	rfmix-reader [flare]	CPU	3	three_pop	4	task_3	success		583.5196166038513	23857.98828125	0.0	cpu
+flare	rfmix-reader [flare]	GPU	3	three_pop	5	task_3	success		12131.112464427948	15281.08984375	10486.523788452148	gpu
+flare	rfmix-reader [flare]	CPU	3	three_pop	5	task_3	success		591.1177954673767	23857.98828125	0.0	cpu
+pyarrow	pyarrow	CPU	1	two_pop	1	task_1	success		53.72011113166809	13848.04296875		
+pyarrow	pyarrow	CPU	1	two_pop	2	task_1	success		37.76290130615234	14748.03125		
+pyarrow	pyarrow	CPU	1	two_pop	3	task_1	success		38.4367151260376	14840.546875		
+pyarrow	pyarrow	CPU	1	two_pop	4	task_1	success		38.7061665058136	14995.08203125		
+pyarrow	pyarrow	CPU	1	two_pop	5	task_1	success		38.07405924797058	17602.078125		
+pyarrow	pyarrow	CPU	2	two_pop	1	task_2	success		261.0222752094269	64171.83984375		
+pyarrow	pyarrow	CPU	2	two_pop	2	task_2	success		250.75147461891171	68930.828125		
+pyarrow	pyarrow	CPU	2	two_pop	3	task_2	success		241.92199182510376	69310.87109375		
+pyarrow	pyarrow	CPU	2	two_pop	4	task_2	success		241.4667191505432	69310.87109375		
+pyarrow	pyarrow	CPU	2	two_pop	5	task_2	success		234.8546621799469	84569.04296875		
+pyarrow	pyarrow	CPU	3	two_pop	1	task_3	running					
+pyarrow		CPU	3	two_pop	2		running					
+pyarrow		CPU	3	two_pop	3		running					
+pyarrow		CPU	3	two_pop	4		running					
+pyarrow		CPU	3	two_pop	5		running					
+pyarrow	pyarrow	CPU	1	three_pop	1	task_1	success		13.144218683242798	3421.94140625		
+pyarrow	pyarrow	CPU	1	three_pop	2	task_1	success		5.790214776992798	3691.7109375		
+pyarrow	pyarrow	CPU	1	three_pop	3	task_1	success		5.711350202560425	4498.875		
+pyarrow	pyarrow	CPU	1	three_pop	4	task_1	success		5.737945795059204	4522.3046875		
+pyarrow	pyarrow	CPU	1	three_pop	5	task_1	success		5.594455718994141	4544.98828125		
+pyarrow	pyarrow	CPU	2	three_pop	1	task_2	success		44.8032283782959	17651.0234375		
+pyarrow	pyarrow	CPU	2	three_pop	2	task_2	success		32.4417097568512	18888.32421875		
+pyarrow	pyarrow	CPU	2	three_pop	3	task_2	success		32.3669638633728	24655.53515625		
+pyarrow	pyarrow	CPU	2	three_pop	4	task_2	success		32.288220167160034	24655.53515625		
+pyarrow	pyarrow	CPU	2	three_pop	5	task_2	success		32.81163477897644	24805.21875		
+pyarrow	pyarrow	CPU	3	three_pop	1	task_3	running					
+pyarrow		CPU	3	three_pop	2		running					
+pyarrow		CPU	3	three_pop	3		running					
+pyarrow		CPU	3	three_pop	4		running					
+pyarrow		CPU	3	three_pop	5		running					
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	two_pop	1	task_1	success		26.673667907714844	2632.14453125	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	two_pop	1	task_1	success		75.59159326553345	2795.0625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	two_pop	1	task_1	success		27.91850256919861	2611.75	2711.5227813720703	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	two_pop	1	task_1	success		105.7778377532959	2599.94140625	2711.5227813720703	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	two_pop	2	task_1	success		19.670777320861816	2726.2265625	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	two_pop	2	task_1	success		75.24602031707764	2795.0625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	two_pop	2	task_1	success		4.745388269424439	2654.02734375	2711.5227813720703	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	two_pop	2	task_1	success		33.783957719802856	2659.3359375	2711.5227813720703	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	two_pop	3	task_1	success		19.444315671920776	2729.3046875	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	two_pop	3	task_1	success		77.39555311203003	2795.0625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	two_pop	3	task_1	success		1.8090076446533203	2654.02734375	2711.5227813720703	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	two_pop	3	task_1	success		33.78978514671326	2659.3359375	2711.5227813720703	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	two_pop	4	task_1	success		19.090375661849976	2729.3046875	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	two_pop	4	task_1	success		75.2046308517456	2795.0625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	two_pop	4	task_1	success		1.6892905235290527	2665.5859375	2711.5227813720703	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	two_pop	4	task_1	success		33.8550443649292	2660.46484375	2711.5227813720703	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	two_pop	5	task_1	success		19.431565284729004	2764.484375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	two_pop	5	task_1	success		76.78444194793701	2831.546875	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	two_pop	5	task_1	success		1.690027952194214	2665.5859375	2711.5227813720703	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	two_pop	5	task_1	success		33.9206280708313	2660.46484375	2711.5227813720703	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	two_pop	1	task_2	success		127.92213678359984	9295.14453125	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	two_pop	1	task_2	success		415.5678644180298	9463.03125	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	two_pop	1	task_2	success		150.88617062568665	9338.1953125	15386.48226928711	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	two_pop	1	task_2	success		1118.7918467521667	9345.98046875	15386.48226928711	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	two_pop	2	task_2	success		110.92376565933228	9454.2578125	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	two_pop	2	task_2	success		417.1874542236328	9491.59765625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	two_pop	2	task_2	success		52.39099836349487	9356.44140625	15386.48226928711	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	two_pop	2	task_2	success		196.1278805732727	9391.74609375	15386.48226928711	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	two_pop	3	task_2	success		110.96767473220824	9489.97265625	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	two_pop	3	task_2	success		412.5790493488312	9491.59765625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	two_pop	3	task_2	success		11.385533332824709	9373.421875	15386.48226928711	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	two_pop	3	task_2	success		197.4039821624756	9391.74609375	15386.48226928711	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	two_pop	4	task_2	success		110.80322980880736	9521.0859375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	two_pop	4	task_2	success		417.9946520328522	9491.59765625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	two_pop	4	task_2	success		10.344843864440918	9397.53515625	15386.48226928711	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	two_pop	4	task_2	success		195.29132795333865	9391.74609375	15386.48226928711	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	two_pop	5	task_2	success		110.646142244339	9521.0859375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	two_pop	5	task_2	success		416.78214049339294	9491.59765625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	two_pop	5	task_2	success		10.653025388717651	9397.53515625	15386.48226928711	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	two_pop	5	task_2	success		198.02544355392456	9467.265625	15386.48226928711	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	two_pop	1	task_3	success		2021.9121515750885	100872.7578125	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	two_pop	1	task_3	success		2974.579735994339	100920.66796875	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	two_pop	1	task_3	success		1629.0471317768097	98338.28515625	16388.583374023438	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	two_pop	1	task_3	success		1484.0460126399994	99004.09765625	16388.583374023438	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	two_pop	2	task_3	error		1630.5072729587555	100872.7578125	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	two_pop	2	task_3	success		2948.6192920207977	100958.046875	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	two_pop	2	task_3	success		919.015068769455	98493.03515625	16388.58331298828	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	two_pop	2	task_3	success		1843.5052847862244	102371.51171875	16388.58331298828	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	two_pop	3	task_3	success		1886.9341053962708	103903.3359375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	two_pop	3	task_3	success		3994.345681428909	101109.86328125	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	two_pop	3	task_3	success		753.7299973964691	99140.828125	16388.58331298828	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	two_pop	3	task_3	success		2061.281847715378	102371.51171875	16388.58331298828	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	two_pop	4	task_3	success		1836.979718446732	103903.3359375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	two_pop	4	task_3	success		4445.196703672409	101109.86328125	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	two_pop	4	task_3	success		769.2810010910034	99140.828125	16388.58331298828	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	two_pop	4	task_3	success		1697.3302500247955	102371.51171875	16388.58331298828	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	two_pop	5	task_3	success		1834.633768081665	103903.3359375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	two_pop	5	task_3	success		2775.986412763596	104062.83984375	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	two_pop	5	task_3	success		804.1772599220276	99975.57421875	16388.58331298828	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	two_pop	5	task_3	success		1599.1940369606018	102371.51171875	16388.58331298828	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	three_pop	1	task_1	success		12.786184310913086	1511.359375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	three_pop	1	task_1	success		24.790297269821167	1584.35546875	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	three_pop	1	task_1	success		19.90233683586121	1611.6640625	840.3301391601562	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	three_pop	1	task_1	success		78.92133522033691	1617.09765625	840.3301391601562	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	three_pop	2	task_1	success		6.043342590332031	1622.77734375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	three_pop	2	task_1	success		24.775482892990112	1589.48828125	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	three_pop	2	task_1	success		3.468424797058105	1667.640625	840.3301391601562	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	three_pop	2	task_1	success		14.177600145339966	1669.4375	840.3301391601562	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	three_pop	3	task_1	success		6.159001111984253	1629.02734375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	three_pop	3	task_1	success		24.911335706710812	1613.19140625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	three_pop	3	task_1	success		0.8378422260284424	1667.640625	840.3301391601562	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	three_pop	3	task_1	success		14.547467708587646	1672.84765625	840.3301391601562	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	three_pop	4	task_1	success		6.021450996398926	1640.28125	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	three_pop	4	task_1	success		24.8770809173584	1613.19140625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	three_pop	4	task_1	success		0.8861517906188965	1667.640625	840.3301391601562	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	three_pop	4	task_1	success		14.567890882492064	1672.84765625	840.3301391601562	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	1	three_pop	5	task_1	success		6.165226697921753	1649.78125	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	1	three_pop	5	task_1	success		25.285658597946167	1628.421875	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	1	three_pop	5	task_1	success		0.8187456130981445	1672.3125	840.3301391601562	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	1	three_pop	5	task_1	success		13.561570644378662	1672.84765625	840.3301391601562	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	three_pop	1	task_2	success		50.92343878746033	3601.22265625	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	three_pop	1	task_2	success		147.21408462524414	3663.97265625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	three_pop	1	task_2	success		42.77776312828064	3701.47265625	4677.772354125977	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	three_pop	1	task_2	success		216.78254055976868	3754.08203125	4677.772354125977	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	three_pop	2	task_2	success		35.478747844696045	3700.01953125	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	three_pop	2	task_2	success		141.6009829044342	3710.203125	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	three_pop	2	task_2	success		9.36144495010376	3784.1484375	4677.772354125977	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	three_pop	2	task_2	success		70.38105058670044	3811.91015625	4677.772354125977	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	three_pop	3	task_2	success		35.59838151931763	3712.79296875	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	three_pop	3	task_2	success		144.45856761932373	3714.44921875	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	three_pop	3	task_2	success		4.772413969039917	3784.1484375	4677.772354125977	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	three_pop	3	task_2	success		71.12895202636719	3819.125	4677.772354125977	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	three_pop	4	task_2	success		35.10530424118042	3712.79296875	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	three_pop	4	task_2	success		142.9623577594757	3714.44921875	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	three_pop	4	task_2	success		4.4492621421813965	3803.5234375	4677.772354125977	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	three_pop	4	task_2	success		68.6063621044159	3819.125	4677.772354125977	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	2	three_pop	5	task_2	success		35.42328500747681	3735.03125	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	2	three_pop	5	task_2	success		142.84188771247864	3714.44921875	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	2	three_pop	5	task_2	success		4.496147871017456	3809.52734375	4677.772354125977	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	2	three_pop	5	task_2	success		68.3014464378357	3823.60546875	4677.772354125977	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	three_pop	1	task_3	success		566.860337972641	32644.8671875	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	three_pop	1	task_3	success		635.6252970695496	32804.17578125	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	three_pop	1	task_3	success		536.9387776851654	32225.50390625	5028.857269287109	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	three_pop	1	task_3	success		497.5110306739807	33151.796875	5028.857269287109	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	three_pop	2	task_3	success		496.9195716381073	32745.29296875	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	three_pop	2	task_3	success		639.7766606807709	32859.76953125	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	three_pop	2	task_3	success		112.51056003570557	33189.5	5028.857208251953	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	three_pop	2	task_3	success		318.35489892959595	33234.2265625	5028.857208251953	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	three_pop	3	task_3	success		490.6708910465241	32833.77734375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	three_pop	3	task_3	success		636.73570728302	32859.76953125	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	three_pop	3	task_3	success		104.01734161376952	34407.94140625	5028.857208251953	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	three_pop	3	task_3	success		327.050302028656	33681.86328125	5028.857208251953	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	three_pop	4	task_3	success		495.7220530509949	32833.77734375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	three_pop	4	task_3	success		727.1926620006561	34185.50390625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	three_pop	4	task_3	success		99.53076982498168	34407.94140625	5028.857208251953	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	three_pop	4	task_3	success		326.6427478790283	35274.16015625	5028.857208251953	binaries
+rfmix_reader	rfmix-reader [no-binaries]	CPU	3	three_pop	5	task_3	success		569.2890663146973	32833.77734375	0.0	no_binaries
+rfmix_reader	rfmix-reader [binaries]	CPU	3	three_pop	5	task_3	success		670.1922190189362	34185.50390625	0.0	binaries
+rfmix_reader	rfmix-reader [no-binaries]	GPU	3	three_pop	5	task_3	success		103.58979749679564	35176.01953125	5028.857208251953	no_binaries
+rfmix_reader	rfmix-reader [binaries]	GPU	3	three_pop	5	task_3	success		318.8555681705475	35274.16015625	5028.857208251953	binaries
+polars	polars	CPU	1	two_pop	1	task_1	success		253.97651052474976	6413.95703125		
+polars	polars	CPU	1	two_pop	2	task_1	success		4.236388921737671	9155.99609375		
+polars	polars	CPU	1	two_pop	3	task_1	success		4.258147954940796	9205.046875		
+polars	polars	CPU	1	two_pop	4	task_1	success		4.180919885635376	9254.23828125		
+polars	polars	CPU	1	two_pop	5	task_1	success		4.283687353134155	9256.60546875		
+polars	polars	CPU	2	two_pop	1	task_2	success		1188.3274655342102	36340.89453125		
+polars	polars	CPU	2	two_pop	2	task_2	success		23.40201497077942	52008.00390625		
+polars	polars	CPU	2	two_pop	3	task_2	success		23.65767192840576	53504.5546875		
+polars	polars	CPU	2	two_pop	4	task_2	success		22.36033654212952	54293.296875		
+polars	polars	CPU	2	two_pop	5	task_2	success		25.09935712814331	54737.2421875		
+polars	polars	CPU	3	two_pop	1	task_3	running					
+polars		CPU	3	two_pop	2		running					
+polars		CPU	3	two_pop	3		running					
+polars		CPU	3	two_pop	4		running					
+polars		CPU	3	two_pop	5		running					
+polars	polars	CPU	1	three_pop	1	task_1	success		59.29193735122681	1898.69921875		
+polars	polars	CPU	1	three_pop	2	task_1	success		1.5912659168243408	2720.359375		
+polars	polars	CPU	1	three_pop	3	task_1	success		1.59434175491333	2750.87109375		
+polars	polars	CPU	1	three_pop	4	task_1	success		1.5666050910949707	2762.875		
+polars	polars	CPU	1	three_pop	5	task_1	success		1.5871038436889648	2768.015625		
+polars	polars	CPU	2	three_pop	1	task_2	success		34.868534088134766	9621.76171875		
+polars	polars	CPU	2	three_pop	2	task_2	success		8.69269061088562	14299.4375		
+polars	polars	CPU	2	three_pop	3	task_2	success		8.792530059814453	14460.3125		
+polars	polars	CPU	2	three_pop	4	task_2	success		8.750030755996704	14594.77734375		
+polars	polars	CPU	2	three_pop	5	task_2	success		8.508555889129639	14682.76953125		
+polars	polars	CPU	3	three_pop	1	task_3	success		416.9393701553345	109171.15234375		
+polars	polars	CPU	3	three_pop	2	task_3	success		1027.80055975914	118721.3515625		
+polars	polars	CPU	3	three_pop	3	task_3	success		776.3153433799744	120717.8828125		
+polars	polars	CPU	3	three_pop	4	task_3	success		1015.698166847229	121119.16796875		
+polars	polars	CPU	3	three_pop	5	task_3	success		1861.150433540344	121119.16796875		
+pandas	pandas	CPU	1	two_pop	1	task_1	success		174.18424606323242	13593.41015625		
+pandas	pandas	CPU	1	two_pop	2	task_1	success		94.17209672927856	14270.65234375		
+pandas	pandas	CPU	1	two_pop	3	task_1	success		95.01909947395325	14270.65234375		
+pandas	pandas	CPU	1	two_pop	4	task_1	success		93.99092936515808	14273.8203125		
+pandas	pandas	CPU	1	two_pop	5	task_1	success		95.40159440040588	14273.8203125		
+pandas	pandas	CPU	2	two_pop	1	task_2	success		921.4240262508392	76859.66015625		
+pandas	pandas	CPU	2	two_pop	2	task_2	success		542.7001605033875	80683.71484375		
+pandas	pandas	CPU	2	two_pop	3	task_2	success		548.6243422031403	80690.78515625		
+pandas	pandas	CPU	2	two_pop	4	task_2	success		547.5660588741302	80690.78515625		
+pandas	pandas	CPU	2	two_pop	5	task_2	success		549.0683114528656	80693.99609375		
+pandas	pandas	CPU	3	two_pop	1	task_3	running					
+pandas		CPU	3	two_pop	2		running					
+pandas		CPU	3	two_pop	3		running					
+pandas		CPU	3	two_pop	4		running					
+pandas		CPU	3	two_pop	5		running					
+pandas	pandas	CPU	1	three_pop	1	task_1	success		30.335844039916992	4237.3984375		
+pandas	pandas	CPU	1	three_pop	2	task_1	success		14.713892459869385	4442.66796875		
+pandas	pandas	CPU	1	three_pop	3	task_1	success		14.003237009048462	4442.66796875		
+pandas	pandas	CPU	1	three_pop	4	task_1	success		14.778653860092165	4442.66796875		
+pandas	pandas	CPU	1	three_pop	5	task_1	success		13.913301229476929	4442.66796875		
+pandas	pandas	CPU	2	three_pop	1	task_2	success		84.2793881893158	23312.79296875		
+pandas	pandas	CPU	2	three_pop	2	task_2	success		82.65600681304932	24459.0		
+pandas	pandas	CPU	2	three_pop	3	task_2	success		81.51731777191162	24472.7265625		
+pandas	pandas	CPU	2	three_pop	4	task_2	success		81.0074565410614	24472.7265625		
+pandas	pandas	CPU	2	three_pop	5	task_2	success		81.345463514328	24475.8046875		
+pandas	pandas	CPU	3	three_pop	1	task_3	running					
+pandas		CPU	3	three_pop	2		running					
+pandas		CPU	3	three_pop	3		running					
+pandas		CPU	3	three_pop	4		running					
+pandas		CPU	3	three_pop	5		running					
+cudf	cudf	GPU	1	two_pop	1	task_1	success		4.007541179656982	794.34765625	12038.183990478516	
+cudf	cudf	GPU	1	two_pop	2	task_1	success		0.8021097183227539	794.34765625	12038.18389892578	
+cudf	cudf	GPU	1	two_pop	3	task_1	success		0.7440886497497559	794.34765625	12038.18389892578	
+cudf	cudf	GPU	1	two_pop	4	task_1	success		0.7825403213500977	794.34765625	12038.18389892578	
+cudf	cudf	GPU	1	two_pop	5	task_1	success		0.7417881488800049	794.34765625	12038.18389892578	
+cudf	cudf	GPU	2	two_pop	1	task_2	success		38.73566293716431	779.140625	68895.11625671387	
+cudf	cudf	GPU	2	two_pop	2	task_2	success		2.464539766311645	779.140625	68895.11616516113	
+cudf	cudf	GPU	2	two_pop	3	task_2	oom	cpu	2.0431854724884038	779.140625	61246.14686584473	
+cudf	cudf	GPU	2	two_pop	4	task_2	oom	cpu	1.953899621963501	779.140625	61246.14686584473	
+cudf	cudf	GPU	2	two_pop	5	task_2	oom	cpu	1.911435842514038	779.140625	61246.14686584473	
+cudf	cudf	GPU	3	two_pop	1	task_3	oom	cpu	173.50628542900083	766.4609375	71235.18949890137	
+cudf	cudf	GPU	3	two_pop	2	task_3	oom	cpu	9.051745653152466	766.65625	71235.18876647949	
+cudf	cudf	GPU	3	two_pop	3	task_3	oom	cpu	6.931595087051392	766.734375	71235.18876647949	
+cudf	cudf	GPU	3	two_pop	4	task_3	oom	cpu	6.956622838973999	766.765625	71235.18876647949	
+cudf	cudf	GPU	3	two_pop	5	task_3	oom	cpu	6.854966163635254	766.765625	71235.18876647949	
+cudf	cudf	GPU	1	three_pop	1	task_1	success		5.660429954528809	787.89453125	3618.078338623047	
+cudf	cudf	GPU	1	three_pop	2	task_1	success		0.2636618614196777	788.1171875	3618.078247070313	
+cudf	cudf	GPU	1	three_pop	3	task_1	success		0.331899881362915	788.1171875	3618.078247070313	
+cudf	cudf	GPU	1	three_pop	4	task_1	success		0.2354071140289306	788.46484375	3618.078247070313	
+cudf	cudf	GPU	1	three_pop	5	task_1	success		0.2671010494232178	788.46484375	3618.078247070313	
+cudf	cudf	GPU	2	three_pop	1	task_2	success		3.364673852920532	748.1015625	20706.01390075684	
+cudf	cudf	GPU	2	three_pop	2	task_2	success		0.7192659378051758	748.14453125	20706.0138092041	
+cudf	cudf	GPU	2	three_pop	3	task_2	success		0.7928111553192139	748.62109375	20706.0138092041	
+cudf	cudf	GPU	2	three_pop	4	task_2	success		0.7444455623626709	748.6640625	20706.0138092041	
+cudf	cudf	GPU	2	three_pop	5	task_2	success		0.7931537628173828	748.82421875	20706.0138092041	
+cudf	cudf	GPU	3	three_pop	1	task_3	oom	cpu	190.85184168815613	787.90234375	80072.0841217041	
+cudf	cudf	GPU	3	three_pop	2	task_3	oom	cpu	10.721820831298828	787.984375	80260.02299499512	
+cudf	cudf	GPU	3	three_pop	3	task_3	oom	cpu	8.497400522232056	788.01171875	80260.02299499512	
+cudf	cudf	GPU	3	three_pop	4	task_3	oom	cpu	8.446176290512085	790.05859375	80260.02299499512	
+cudf	cudf	GPU	3	three_pop	5	task_3	oom	cpu	8.494090557098389	790.05859375	80260.02299499512	

@@ -1,0 +1,34 @@
+2025-11-19 10:37:09 - **** Job starts ****
+2025-11-19 10:37:09 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36093685
+Job name: clean_meta
+Node name: 
+Hostname: r193
+Task id: N/A
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-11-19 10:37:10 - **** Loading conda environment ****
+2025-11-19 10:37:10 - **** Run analysis ****
+/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/results/_m/../_h/02.metrics_analysis.py:320: UserWarning: set_ticklabels() should only be used with a fixed number of ticks, i.e. after set_ticks() or using a FixedLocator.
+  ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
+[INFO] Wrote cleaned per-run table to: benchmark_clean.tsv
+[INFO] Wrote summary table to: benchmark_summary.tsv
+[INFO] Wrote performance figures to: benchmark_summary.png and benchmark_summary.pdf
+[INFO] Wrote reliability figures to: benchmark_reliability.png and benchmark_reliability.pdf
+-----
+matplotlib          3.10.7
+numpy               2.2.6
+pandas              2.3.3
+seaborn             0.13.2
+session_info        v1.0.1
+-----
+Python 3.11.13 (main, Jun  5 2025, 13:12:00) [GCC 11.2.0]
+Linux-4.18.0-553.22.1.el8_10.x86_64-x86_64-with-glibc2.28
+-----
+Session information updated at 2025-11-19 10:37
+2025-11-19 10:37:17 - Job finished at: Wed Nov 19 10:37:17 EST 2025
