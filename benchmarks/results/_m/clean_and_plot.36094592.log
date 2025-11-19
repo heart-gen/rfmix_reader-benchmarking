@@ -1,0 +1,28 @@
+2025-11-19 12:15:06 - **** Job starts ****
+2025-11-19 12:15:06 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36094592
+Job name: clean_meta
+Node name: 
+Hostname: r185
+Task id: N/A
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-11-19 12:15:07 - **** Loading conda environment ****
+2025-11-19 12:15:07 - **** Run analysis ****
+[INFO] Wrote cleaned per-run table to: benchmark_clean.tsv
+Traceback (most recent call last):
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/results/_m/../_h/02.metrics_analysis.py", line 435, in <module>
+    main()
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/results/_m/../_h/02.metrics_analysis.py", line 421, in main
+    summary = summarize(df)
+              ^^^^^^^^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/benchmarks/results/_m/../_h/02.metrics_analysis.py", line 188, in summarize
+    "cpu_mem_mean_mb": cpu_mem_mean_mb,
+                       ^^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'cpu_mem_mean_mb' where it is not associated with a value
+Python script failed. Check the error logs.
