@@ -44,6 +44,9 @@ def clean_parser(row: pd.Series) -> str:
             return "rfmix-reader [binaries]"
         else:
             return "rfmix-reader [no-binaries]"
+
+    if "flare" in p_raw:
+        return "rfmix-reader [flare]"
     return p_raw
 
 
@@ -193,23 +196,65 @@ def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
     return summary
 
 
+def format_task_pop(task, population_model) -> str:
+    # Map raw population_model to pretty text
+    pop_map = {
+        "two_pop": "Two Ancestries",
+        "three_pop": "Three Ancestries",
+    }
+    pretty_pop = pop_map.get(
+        str(population_model),
+        str(population_model).replace("_", " ").title()
+    )
+    return f"Task {task}\n({pretty_pop})"
+
+
 def make_figure(summary: pd.DataFrame, out_prefix: str | Path) -> None:
     """
-    Create a figure with:
-      * Panel A: runtime median (+ IQR) by parser/backend/task (faceted by population_model)
-      * Panel B: CPU memory median (+ IQR)
-      * Panel C: GPU memory median (+ IQR, GPU only)
+    Performance figure faceted by backend, colored by parser_clean.
     """
     sns.set(style="whitegrid", context="talk")
 
-    summary = summary.copy()
-    summary["task_pop"] = summary["task"].astype(str) + " (" + summary["population_model"].astype(str) + ")"
+    df = summary.copy()
+    df["task_pop"] = df.apply(
+        lambda r: format_task_pop(r["task"], r["population_model"]),
+        axis=1,
+    )
 
+    backends = ["CPU", "GPU"]
+    metric_specs = [
+        {
+            "name": "Runtime",
+            "y": "wall_time_median_sec",
+            "q1": "wall_time_q1_sec",
+            "q3": "wall_time_q3_sec",
+            "title": "A. Runtime (median [IQR])",
+            "ylabel": "Runtime (s)",
+        },
+        {
+            "name": "CPU memory",
+            "y": "cpu_mem_median_mb",
+            "q1": "cpu_mem_q1_mb",
+            "q3": "cpu_mem_q3_mb",
+            "title": "B. Peak CPU memory (median [IQR])",
+            "ylabel": "Peak CPU memory (MB)",
+        },
+        {
+            "name": "GPU memory",
+            "y": "gpu_mem_median_mb",
+            "q1": "gpu_mem_q1_mb",
+            "q3": "gpu_mem_q3_mb",
+            "title": "C. Peak GPU memory (median [IQR])",
+            "ylabel": "Peak GPU memory (MB)",
+        },
+    ]
     fig, axes = plt.subplots(
-        nrows=3, ncols=1, figsize=(12, 16), sharex=True, constrained_layout=True,
+        nrows=3, ncols=2, figsize=(14, 16), sharex='col', constrained_layout=True,
     )
 
     def add_iqr_errorbars(ax, data, median_col, q1_col, q3_col):
+        if data.empty:
+            return
         for patch, (_, row) in zip(ax.patches, data.iterrows()):
             x = patch.get_x() + patch.get_width() / 2
             y = row[median_col]
@@ -217,47 +262,62 @@ def make_figure(summary: pd.DataFrame, out_prefix: str | Path) -> None:
             upper = row[q3_col] - y
             ax.errorbar(x, y, yerr=[[lower], [upper]], fmt="none", capsize=4)
 
-    # Panel A: Runtime
-    ax = axes[0]
-    runtime_df = summary
-    sns.barplot(
-        data=runtime_df, x="task_pop", y="wall_time_median_sec", hue="backend", ax=ax,
-    )
-    add_iqr_errorbars(
-        ax, runtime_df, "wall_time_median_sec", "wall_time_q1_sec", "wall_time_q3_sec",
-    )
-    ax.set_ylabel("Runtime (s, median [IQR])")
-    ax.set_xlabel("")
-    ax.set_title("A. Runtime by task, population model, parser, and backend")
-    ax.legend(title="Backend")
+    for row_idx, spec in enumerate(metric_specs):
+        ycol = spec["y"]
+        q1col = spec["q1"]
+        q3col = spec["q3"]
 
-    # Panel B: CPU memory
-    ax = axes[1]
-    cpu_df = summary
-    sns.barplot(
-        data=cpu_df, x="task_pop", y="cpu_mem_median_mb", hue="backend", ax=ax,
-    )
-    add_iqr_errorbars(
-        ax, cpu_df, "cpu_mem_median_mb", "cpu_mem_q1_mb", "cpu_mem_q3_mb",
-    )
-    ax.set_ylabel("Peak CPU memory (MB)")
-    ax.set_xlabel("")
-    ax.set_title("B. Peak CPU memory")
-    ax.legend_.remove()
+        for col_idx, backend in enumerate(backends):
+            ax = axes[row_idx, col_idx]
+            sub = df[df["backend"] == backend].copy()
 
-    # Panel C: GPU memory (GPU only)
-    ax = axes[2]
-    gpu_df = summary[summary["backend"] == "GPU"].copy()
-    sns.barplot(
-        data=gpu_df, x="task_pop", y="gpu_mem_median_mb", hue="parser_clean", ax=ax,
-    )
-    add_iqr_errorbars(
-        ax, gpu_df, "gpu_mem_median_mb", "gpu_mem_q1_mb", "gpu_mem_q3_mb",
-    )
-    ax.set_ylabel("Peak GPU memory (MB)")
-    ax.set_xlabel("Task (population model)")
-    ax.set_title("C. Peak GPU memory (GPU runs only)")
-    ax.legend(title="Parser")
+            if spec["name"] == "GPU memory" and backend == "CPU":
+                ax.text(
+                    0.5, 0.5, "No GPU memory for CPU runs",
+                    ha="center", va="center",
+                    transform=ax.transAxes,
+                )
+                ax.set_axis_off()
+                continue
+
+            # If no data for this backend/metric, annotate and skip
+            if sub.empty or sub[ycol].isna().all():
+                ax.text(
+                    0.5,
+                    0.5,
+                    f"No data for {backend}",
+                    ha="center",
+                    va="center",
+                    transform=ax.transAxes,
+                )
+                ax.set_axis_off()
+                continue
+
+            sns.barplot(
+                data=sub,
+                x="task_pop",
+                y=ycol,
+                hue="parser_clean",
+                ax=ax,
+            )
+            add_iqr_errorbars(ax, sub, ycol, q1col, q3col)
+
+            if col_idx == 0:
+                ax.set_ylabel(spec["ylabel"])
+            else:
+                ax.set_ylabel("")
+
+            if row_idx == len(metric_specs) - 1:
+                ax.set_xlabel("Task / population model")
+            else:
+                ax.set_xlabel("")
+
+            ax.set_title(f"{spec['title']} - {backend}")
+            if col_idx == 1:
+                ax.legend(title="Parser", fontsize=10)
+            else:
+                ax.legend_.remove()
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
 
     png_path = out_prefix.parent / f"{out_prefix.name}_summary.png"
     pdf_path = out_prefix.parent / f"{out_prefix.name}_summary.pdf"
@@ -268,42 +328,67 @@ def make_figure(summary: pd.DataFrame, out_prefix: str | Path) -> None:
 
 
 def make_reliability_figure(summary: pd.DataFrame, out_prefix: str | Path) -> None:
-    """Fraction of replicates in each outcome category."""
+    """Stacked barplot of reliability per parser/backend"""
+    sns.set(style="whitegrid", context="talk")
     df = summary.copy()
     for col in ["n_success_reliability", "n_oom_reliability", "n_other_fail_reliability"]:
         df[col] = df[col].astype(float)
 
-    df["success_frac"] = df["n_success_reliability"] / df["n_total_reliability"]
-    df["oom_frac"] = df["n_oom_reliability"] / df["n_total_reliability"]
-    df["other_fail_frac"] = df["n_other_fail_reliability"] / df["n_total_reliability"]
-
-    long = df.melt(
-        id_vars=["parser_clean", "backend", "task", "population_model"],
-        value_vars=["success_frac", "oom_frac", "other_fail_frac"],
-        var_name="outcome", value_name="fraction",
+    # Aggregate reliability counts over all tasks/pop models
+    agg = (
+        df.groupby(["parser_clean", "backend"], as_index=False)[
+            [
+                "n_success_reliability",
+                "n_oom_reliability",
+                "n_other_fail_reliability",
+                "n_total_reliability",
+            ]
+        ]
+        .sum()
     )
-    mapping = {
-        "success_frac": "Success", "oom_frac": "OOM",
-        "other_fail_frac": "Other failure",
-    }
-    long["outcome"] = long["outcome"].map(mapping)
+    
+    # Avoid division-by-zero
+    agg = agg[agg["n_total_reliability"] > 0].copy()
 
-    sns.set(style="whitegrid", context="talk")
-    plt.figure(figsize=(10, 6))
-    ax = sns.barplot(
-        data=long, x="parser_clean", y="fraction", hue="outcome",
+    # Fractions
+    agg["success_frac"] = agg["n_success_reliability"] / agg["n_total_reliability"]
+    agg["oom_frac"] = agg["n_oom_reliability"] / agg["n_total_reliability"]
+    agg["other_fail_frac"] = (
+        agg["n_other_fail_reliability"] / agg["n_total_reliability"]
     )
+
+    # Label for x-axis: "rfmix-reader [binaries] (GPU)" etc.
+    agg["label"] = agg["parser_clean"] + " (" + agg["backend"] + ")"
+
+    # Stacked barplot using matplotlib
+    x = np.arange(len(agg))
+    width = 0.8
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    bottom = np.zeros(len(agg))
+
+    for outcome, col in [("Success", "success_frac"),
+                         ("OOM", "oom_frac"),
+                         ("Other failure", "other_fail_frac")]:
+        ax.bar(x, agg[col].values, width, bottom=bottom, label=outcome)
+        bottom += agg[col].values
+
     ax.set_ylabel("Fraction of replicates")
-    ax.set_xlabel("Parser")
-    ax.set_title("Reliability across replicates (per parser)")
-    plt.legend(title="Outcome")
+    ax.set_xlabel("Parser / backend")
+    ax.set_title("Reliability across replicates (per parser/backend)")
+    ax.set_xticks(x)
+    ax.set_xticklabels(agg["label"], rotation=45, ha="right")
+    ax.set_ylim(0, 1.0)
+
+    ax.legend(title="Outcome")
     plt.tight_layout()
 
     png_path = out_prefix.parent / f"{out_prefix.name}_reliability.png"
     pdf_path = out_prefix.parent / f"{out_prefix.name}_reliability.pdf"
-    plt.savefig(png_path, dpi=300)
-    plt.savefig(pdf_path)
-    plt.close()
+    fig.savefig(png_path, dpi=300)
+    fig.savefig(pdf_path)
+    plt.close(fig)
     print(f"[INFO] Wrote reliability figures to: {png_path} and {pdf_path}")
 
 
