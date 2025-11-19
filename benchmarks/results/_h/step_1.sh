@@ -31,7 +31,7 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 log_message "**** Run analysis ****"
 ROOT_DIR="../../"
 
-python ../_h/01.pandas_parsing.py --rootdir "${ROOT_DIR}"
+python ../_h/01.collect_metadata.py --rootdir "${ROOT_DIR}"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
