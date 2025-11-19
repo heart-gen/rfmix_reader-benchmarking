@@ -104,15 +104,16 @@ def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
     group_cols = ["parser_clean", "backend", "task", "population_model"]
 
     def summary_stats(series: pd.Series):
-        """Return (median, q1, q3, iqr) after dropping NaNs; all NaN if no data."""
+        """Return (median, mean, q1, q3, iqr) after dropping NaNs; all NaN if no data."""
         vals = pd.to_numeric(series, errors="coerce").dropna()
         if len(vals) == 0:
             return np.nan, np.nan, np.nan, np.nan
         q1 = vals.quantile(0.25)
         q3 = vals.quantile(0.75)
         median = vals.median()
+        mean = vals.mean()
         iqr = q3 - q1
-        return median, q1, q3, iqr
+        return median, mean, q1, q3, iqr
 
     records = []
     for key, gdf in df.groupby(group_cols):
@@ -146,17 +147,21 @@ def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
             wall_time_median_sec = wall_time_q1_sec = wall_time_q3_sec = wall_time_iqr_sec = np.nan
             cpu_mem_median_mb = cpu_mem_q1_mb = cpu_mem_q3_mb = cpu_mem_iqr_mb = np.nan
             gpu_mem_median_mb = gpu_mem_q1_mb = gpu_mem_q3_mb = gpu_mem_iqr_mb = np.nan
+            wall_time_mean_sec = cpu_mem_mean_mb = gpu_mem_mean_mb = np.nan
         else:
             (
-                wall_time_median_sec, wall_time_q1_sec, wall_time_q3_sec, wall_time_iqr_sec,
+                wall_time_median_sec, wall_time_mean_sec, wall_time_q1_sec,
+                wall_time_q3_sec, wall_time_iqr_sec,
             ) = summary_stats(g_success["wall_time_sec"])
 
             (
-                cpu_mem_median_mb, cpu_mem_q1_mb, cpu_mem_q3_mb, cpu_mem_iqr_mb,
+                cpu_mem_median_mb, cpu_men_mean_mb, cpu_mem_q1_mb,
+                cpu_mem_q3_mb, cpu_mem_iqr_mb,
             ) = summary_stats(g_success["peak_cpu_memory_MB"])
 
             (
-                gpu_mem_median_mb, gpu_mem_q1_mb, gpu_mem_q3_mb, gpu_mem_iqr_mb,
+                gpu_mem_median_mb, gpu_mem_mean_mb, gpu_mem_q1_mb,
+                gpu_mem_q3_mb, gpu_mem_iqr_mb,
             ) = summary_stats(g_success["peak_gpu_memory_MB"])
 
         rec = {
@@ -175,14 +180,17 @@ def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
 
             # performance stats
             "wall_time_median_sec": wall_time_median_sec,
+            "wall_time_mean_sec": wall_time_mean_sec,
             "wall_time_q1_sec": wall_time_q1_sec,
             "wall_time_q3_sec": wall_time_q3_sec,
             "wall_time_iqr_sec": wall_time_iqr_sec,
             "cpu_mem_median_mb": cpu_mem_median_mb,
+            "cpu_mem_mean_mb": cpu_mem_mean_mb,
             "cpu_mem_q1_mb": cpu_mem_q1_mb,
             "cpu_mem_q3_mb": cpu_mem_q3_mb,
             "cpu_mem_iqr_mb": cpu_mem_iqr_mb,
             "gpu_mem_median_mb": gpu_mem_median_mb,
+            "gpu_mem_mean_mb": gpu_mem_mean_mb,
             "gpu_mem_q1_mb": gpu_mem_q1_mb,
             "gpu_mem_q3_mb": gpu_mem_q3_mb,
             "gpu_mem_iqr_mb": gpu_mem_iqr_mb,
