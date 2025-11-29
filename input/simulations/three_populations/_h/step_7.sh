@@ -1,14 +1,12 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=short
-#SBATCH --job-name=clean_files
+#SBATCH --partition=RM-shared
+#SBATCH --job-name=gen_plinks
 #SBATCH --mail-type=FAIL
-#SBATCH --mail-user=kynon.benjamin@northwestern.edu
-#SBATCH --nodes=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=2gb
-#SBATCH --output=logs/clean.log
-#SBATCH --time=00:05:00
+#SBATCH --mail-user=kj.benjamin90@gmail.com
+#SBATCH --ntasks-per-node=32
+#SBATCH --array=1-22
+#SBATCH --time=01:00:00
+#SBATCH --output=logs/plink.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -27,20 +25,24 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 ## List current modules for reproducibility
 
 module purge
+module load anaconda3/2024.10-1
 module list
 
 ## Edit with your job command
-log_message "**** Clean-up files ****"
-mkdir -p simulation-files
-mv -v *bp simulation-files/
-mv -v 1k_sampleinfo.tsv simulation-files/
-mv -v *dat simulation-files/
 
-mkdir -p vcf-files
-mv -v chr* vcf-files/
+# path to your contigs file
+VCFDIR="gt-files"
+OUTDIR="plink-files"
+CHR=${SLURM_ARRAY_TASK_ID}
 
-log_message "**** Clean-up temporary ****"
-rm temp/*
-rmdir temp
+mkdir -p ${OUTDIR}
 
+log_message "Processing ${CHR} ..."
+
+log_message "**** Loading conda environment ****"
+conda activate /ocean/projects/bio250020p/shared/opt/env/genomics
+
+plink2 --vcf "${VCFDIR}/chr${CHR}.vcf.gz" --make-pgen --out "${OUTDIR}/chr${CHR}"
+
+conda deactivate
 log_message "**** Job ends ****"
