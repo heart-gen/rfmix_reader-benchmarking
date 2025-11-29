@@ -43,4 +43,7 @@ log_message "**** Clean-up temporary ****"
 rm temp/*
 rmdir temp
 
+log_message "**** Clean-up PLINK files ****"
+rm merge_list.txt plink-files/chr*
+
 log_message "**** Job ends ****"
