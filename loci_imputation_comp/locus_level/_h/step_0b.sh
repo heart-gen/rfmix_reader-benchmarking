@@ -5,7 +5,7 @@
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
 #SBATCH --time=03:00:00
-#SBATCH --output=logs/create_binaries.three_pop.%J.log
+#SBATCH --output=logs/create_binaries.two_pop.%J.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -28,7 +28,7 @@ log_message "**** Loading conda environment ****"
 conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 log_message "**** Run analysis ****"
-RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files/"
+RFMIX_DIR="../../../input/simulations/two_populations/_m/rfmix-out/"
 
 create-binaries --binary_dir "${RFMIX_DIR}/binary_files" "${RFMIX_DIR}"
 
