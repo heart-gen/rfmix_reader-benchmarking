@@ -1,22 +1,10 @@
-import json
 import logging
 import argparse
-import numpy as np
-import pandas as pd
 import session_info
 from pyhere import here
 from pathlib import Path
+from rfmix_reader import create_binaries
 
-from sklearn.metrics import (
-    f1_score,
-    recall_score,
-    precision_score,
-    confusion_matrix,
-    matthews_corrcoef
-)
-
-from localqtl import PgenReader
-from rfmix_reader import read_rfmix, read_simu, interpolate_array
 
 def configure_logging():
     logging.basicConfig(
