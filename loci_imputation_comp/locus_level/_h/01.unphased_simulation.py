@@ -43,7 +43,6 @@ def load_variants(plink_path):
 
 
 def impute_data(loci_df, variants, admix, zarr_path, method):
-    loci_df = loci_df.rename(columns={"chromosome": "chrom", "physical_position": "pos"})
     if hasattr(loci_df, "to_pandas"):
         loci_df = loci_df.to_pandas()
     variant_df = variants.merge(loci_df, on=["chrom", "pos"], how="outer")
@@ -162,23 +161,36 @@ def main():
     variants_df = load_variants(plink_path)
 
     logging.info("Reading RFMix outputs...")
-    loci_df, _, admix = read_rfmix(here(str(args.rfmix_input)))
-    method_path = args.rfmix_input / args.method
+    binary_path = args.rfmix_input / "binary_files"
+    loci_df,_,admix = read_rfmix(here(str(args.rfmix_input)), binary_dir=str(binary_path))
+    method_path = here(args.rfmix_input / args.method)
     method_path.mkdir(parents=True, exist_ok=True)
     zarr_path = method_path / "imputed_local_ancestry"
 
     logging.info("Interpolating ancestry data...")
+    loci_df = loci_df.rename(columns={"chromosome": "chrom", "physical_position": "pos"})
     variant_loci_df, inferred_anc = impute_data(
-        loci_df, variants_df, admix, zarr_path, args.method
+        loci_df, variants_df, admix, here(str(zarr_path)), args.method
     )
+
+    # Filter and align
+    variant_loci_df = variant_loci_df[variant_loci_df.set_index(["chrom", "pos"]).index.isin(
+        variants_df.set_index(["chrom", "pos"]).index
+    )]
+    idx = variant_loci_df.index.values
+    inferred_anc = da.from_zarr(inferred_anc)[idx, :, :]
+    inferred_anc = inferred_anc.rechunk((50_000, 100, -1)).compute()
 
     # Load ground truth data
     logging.info("Loading ground truth data")
     loci_gt, _, admix_gt = read_simu(here(str(args.simu_input)))
+    loci_gt = loci_gt.rename(columns={"chromosome": "chrom", "physical_position": "pos"})
+    loci_gt = loci_gt[loci_gt.set_index(["chrom", "pos"]).index.isin(
+        variant_loci_df.set_index(["chrom", "pos"]).index
+    )]
+    loci_gt = loci_gt.reset_index(drop=True)
+    true_anc = true_anc[loci_gt.index.values, :, :]
     true_anc = admix_gt.compute()
-
-    # Align variants
-    ##TODO align inferred_anc with true_anc
 
     # Calculate metrics
     logging.info("Computing locus-level metrics...")
