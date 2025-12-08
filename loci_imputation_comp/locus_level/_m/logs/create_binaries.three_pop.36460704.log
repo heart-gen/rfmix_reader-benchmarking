@@ -1,0 +1,20 @@
+2025-12-08 15:43:13 - **** Job starts ****
+2025-12-08 15:43:13 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36460704
+Job name: create_binaries
+Hostname: r009
+Task id: N/A
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-12-08 15:43:14 - **** Loading conda environment ****
+2025-12-08 15:43:14 - **** Run analysis ****
+Created binary files at: ../../../input/simulations/three_populations/_m/rfmix-files//binary_files
+Converting fb files to binary!
+  0%|          | 0/22 [00:00<?, ?it/s]  5%|▍         | 1/22 [01:53<39:35, 113.13s/it]  9%|▉         | 2/22 [03:50<38:27, 115.36s/it] 14%|█▎        | 3/22 [04:06<22:15, 70.28s/it]  73%|███████▎  | 16/22 [05:54<01:29, 14.84s/it]100%|██████████| 22/22 [05:54<00:00, 16.12s/it]
+Successfully converted 22 files to binary format.
+2025-12-08 15:50:45 - Job finished at: Mon Dec  8 15:50:45 EST 2025
