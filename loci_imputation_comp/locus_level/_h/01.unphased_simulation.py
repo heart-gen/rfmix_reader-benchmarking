@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import session_info
 from pyhere import here
+import dask.array as da
 from pathlib import Path
 
 from sklearn.metrics import (
@@ -42,14 +43,25 @@ def load_variants(plink_path):
     return variant_df[~variant_df.duplicated(subset=["chrom", "pos"], keep="first")]
 
 
+def standardize_variant_columns(df):
+    return df.rename(columns={"chromosome": "chrom", "physical_position": "pos"})
+
+
 def impute_data(loci_df, variants, admix, zarr_path, method):
     if hasattr(loci_df, "to_pandas"):
         loci_df = loci_df.to_pandas()
     variant_df = variants.merge(loci_df, on=["chrom", "pos"], how="outer")
     variant_df = variant_df.loc[:, ["chrom", "pos", "i"]]
-    z = interpolate_array(variant_df, admix, zarr_outdir=zarr_path,
+    _ = interpolate_array(variant_df, admix, zarr_outdir=zarr_path,
                           interpolation=method, use_bp_positions=True)
-    return variant_df, z
+    return variant_df
+
+
+def align_variants(df_ref, df_target):
+    ref_idx = df_ref.set_index(["chrom", "pos"])
+    target_idx = df_target.set_index(["chrom", "pos"])
+    common = target_idx.index.intersection(ref_idx.index)
+    return df_target.loc[common].reset_index()
 
 
 def admix_to_haplotypes(admix):
@@ -162,35 +174,33 @@ def main():
 
     logging.info("Reading RFMix outputs...")
     binary_path = args.rfmix_input / "binary_files"
-    loci_df,_,admix = read_rfmix(here(str(args.rfmix_input)), binary_dir=str(binary_path))
+    loci_df,_,admix = read_rfmix(here(args.rfmix_input), binary_dir=str(binary_path))
     method_path = here(args.rfmix_input / args.method)
     method_path.mkdir(parents=True, exist_ok=True)
     zarr_path = method_path / "imputed_local_ancestry"
 
     logging.info("Interpolating ancestry data...")
-    loci_df = loci_df.rename(columns={"chromosome": "chrom", "physical_position": "pos"})
-    variant_loci_df, inferred_anc = impute_data(
-        loci_df, variants_df, admix, here(str(zarr_path)), args.method
+    loci_df = standardize_variant_columns(loci_df)
+    variant_loci_df = impute_data(
+        loci_df, variants_df, admix, zarr_path, args.method
     )
 
     # Filter and align
-    variant_loci_df = variant_loci_df[variant_loci_df.set_index(["chrom", "pos"]).index.isin(
-        variants_df.set_index(["chrom", "pos"]).index
-    )]
+    variant_loci_df = align_variants(variants_df, variant_loci_df)
     idx = variant_loci_df.index.values
-    inferred_anc = da.from_zarr(inferred_anc)[idx, :, :]
+    inferred_anc_path = here(zarr_path / "local-ancestry.zarr")
+    inferred_anc = da.from_zarr(inferred_anc_path)[idx, :, :]
     inferred_anc = inferred_anc.rechunk((50_000, 100, -1)).compute()
 
     # Load ground truth data
     logging.info("Loading ground truth data")
-    loci_gt, _, admix_gt = read_simu(here(str(args.simu_input)))
-    loci_gt = loci_gt.rename(columns={"chromosome": "chrom", "physical_position": "pos"})
-    loci_gt = loci_gt[loci_gt.set_index(["chrom", "pos"]).index.isin(
-        variant_loci_df.set_index(["chrom", "pos"]).index
-    )]
-    loci_gt = loci_gt.reset_index(drop=True)
-    true_anc = true_anc[loci_gt.index.values, :, :]
+    loci_gt, _, admix_gt = read_simu(here(args.simu_input))
+    loci_gt = standardize_variant_columns(loci_gt)
+    loci_gt = align_variants(variant_loci_df, loci_gt)
+    admix_gt = admix_gt[loci_gt.index.values, :, :]
     true_anc = admix_gt.compute()
+
+    assert true_anc.shape[0] == inferred_anc.shape[0], "Mismatch in number of aligned variants"
 
     # Calculate metrics
     logging.info("Computing locus-level metrics...")
