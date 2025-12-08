@@ -4,8 +4,8 @@ import argparse
 import numpy as np
 import pandas as pd
 import session_info
-from pathlib import Path
 from pyhere import here
+from pathlib import Path
 
 from sklearn.metrics import (
     f1_score,
@@ -29,10 +29,28 @@ def parse_parameters():
     parser = argparse.ArgumentParser(description="Locus-Level Imputation Accuracy")
     parser.add_argument("--rfmix-input", type=Path, required=True)
     parser.add_argument("--simu-input", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--population", type=str, choices=["two", "three"], default="three")
-    parser.add_argument("--method", type=str, choices=["linear", "nearest", "stepwise"], default="linear")
+    parser.add_argument("--population", type=str, choices=["two","three"], default="three")
+    parser.add_argument("--method", type=str, choices=["linear", "nearest", "stepwise"],
+                        default="linear")
     return parser.parse_args()
+
+
+def load_variants(plink_path):
+    pgr = PgenReader(plink_path)
+    variant_df = pgr.variant_df.copy()
+    variant_df.loc[:, "chrom"] = "chr" + variant_df.chrom
+    return variant_df[~variant_df.duplicated(subset=["chrom", "pos"], keep="first")]
+
+
+def impute_data(loci_df, variants, admix, zarr_path, method):
+    loci_df = loci_df.rename(columns={"chromosome": "chrom", "physical_position": "pos"})
+    if hasattr(loci_df, "to_pandas"):
+        loci_df = loci_df.to_pandas()
+    variant_df = variants.merge(loci_df, on=["chrom", "pos"], how="outer")
+    variant_df = variant_df.loc[:, ["chrom", "pos", "i"]]
+    z = interpolate_array(variant_df, admix, zarr_outdir=zarr_path,
+                          interpolation=method, use_bp_positions=True)
+    return variant_df, z
 
 
 def admix_to_haplotypes(admix):
@@ -54,19 +72,6 @@ def _to_hard_calls(arr):
     if arr.ndim == 3:
         return admix_to_haplotypes(arr)
     return arr
-
-
-def load_variants(plink_path):
-    pgr = PgenReader(plink_path)
-    variant_df = pgr.variant_df.copy()
-    variant_df.loc[:, "chrom"] = "chr" + variant_df.chrom
-    return variant_df[~variant_df.duplicated(subset=["chrom", "pos"], keep="first")]
-
-
-def impute_data(loci_df, variants, admix, zarr_path, method):
-    variant_df = variants.merge(loci_df.to_pandas(), on=["chrom", "pos"], how="outer")
-    variant_df = variant_df.loc[:, ["chrom", "pos", "i"]]
-    return interpolate_array(variant_df, admix, zarr_outdir=zarr_path, interpolation=method, use_bp_positions=True)
 
 
 def compute_metrics_one_sample(t, p, labels):
@@ -148,27 +153,31 @@ def compute_locus_metrics_json(t, p, method, outfile=None):
 def main():
     configure_logging()
     args = parse_parameters()
-    args.output.mkdir(parents=True, exist_ok=True)
-
-    # Load ground truth data
-    pop_dir = f"{args.population}_populations"
-    logging.info("Loading ground truth...")
-    loci_gt, _, admix_gt = read_simu(str(args.simu_input))
-    true_anc = admix_gt.compute()
+    pop_dir = Path(f"{args.population}_populations")
+    pop_dir.mkdir(parents=True, exist_ok=True)
 
     # Load and impute data
     logging.info("Loading PLINK variants...")
-    plink_path = here("input/simulations", pop_dir, "_m/plink-files/simulated")
+    plink_path = here("input/simulations", pop_dir.name, "_m/plink-files/simulated")
     variants_df = load_variants(plink_path)
 
     logging.info("Reading RFMix outputs...")
-    loci_df, _, admix = read_rfmix(str(args.rfmix_input))
+    loci_df, _, admix = read_rfmix(here(str(args.rfmix_input)))
     method_path = args.rfmix_input / args.method
     method_path.mkdir(parents=True, exist_ok=True)
     zarr_path = method_path / "imputed_local_ancestry"
 
     logging.info("Interpolating ancestry data...")
-    inferred_anc = impute_data(loci_df, variants_df, admix, zarr_path, args.method)
+    variant_loci_df, inferred_anc = impute_data(
+        loci_df, variants_df, admix, zarr_path, args.method
+    )
+
+    # Load ground truth data
+    logging.info("Loading ground truth data")
+    loci_gt, _, admix_gt = read_simu(here(str(args.simu_input)))
+    true_anc = admix_gt.compute()
+
+    # Align variants
     ##TODO align inferred_anc with true_anc
 
     # Calculate metrics
