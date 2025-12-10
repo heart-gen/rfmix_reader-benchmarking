@@ -62,6 +62,7 @@ bcftools reheader -h header.${CHR}.tmp -o "$OUT" "$IN"
 # index
 tabix -p vcf "$OUT"
 
+conda deactivate
 echo "  Fixed header and reindexed: $OUT"
 log_message "**** Job ends ****"
 
