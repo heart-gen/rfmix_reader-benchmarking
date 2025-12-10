@@ -1,11 +1,12 @@
 #!/bin/bash
 #SBATCH --partition=RM-shared
-#SBATCH --job-name=locus_3pop
+#SBATCH --job-name=impute_three_pop
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
 #SBATCH --time=12:00:00
-#SBATCH --output=logs/locus_level.three_pop.%J.log
+#SBATCH --array=0-2
+#SBATCH --output=logs/impute.three_pop.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -21,6 +22,17 @@ echo "Node name: ${SLURM_NODENAME}"
 echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 
+SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
+cd "${SCRIPT_DIR}"
+
+METHODS=("linear" "nearest" "stepwise")
+METHOD="${METHODS[${SLURM_ARRAY_TASK_ID}]}"
+
+if [ -z "${METHOD}" ]; then
+    echo "Invalid method index: ${SLURM_ARRAY_TASK_ID}"
+    exit 1
+fi
+
 module purge
 module load anaconda3/2024.10-1
 module list
@@ -29,13 +41,10 @@ log_message "**** Loading conda environment ****"
 conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 log_message "**** Run analysis ****"
-TASK="${SLURM_ARRAY_TASK_ID}"
-OUTDIR="three_pop"
-RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files/"
-SIMU_DIR="input/simulations/three_populations/_m/gt-files/"
+RFMIX_DIR="../../../input/simulations/three_populations/_m/rfmix-files"
 
-python ../_h/01.rfmix_parsing.py --input "${INPUT_DIR}" \
-       --output "${OUTDIR}" --label "task_${TASK}" --task "${TASK}" --binaries
+python 01.impute_data.py --rfmix-input "${RFMIX_DIR}" --population "three" \
+       --method "${METHOD}"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."

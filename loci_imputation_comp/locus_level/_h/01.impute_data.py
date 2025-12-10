@@ -75,6 +75,7 @@ def main():
     variant_loci_df = impute_data(
         loci_df, variants_df, admix, zarr_path, args.method
     )
+    variant_loci_df = align_variants(variants_df, variant_loci_df)
     variant_path = f"{method_path}/imputed_variant.parquet"
     variant_loci_df.to_parquet(variant_path)
 
