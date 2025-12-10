@@ -38,7 +38,7 @@ log_message "**** Loading conda environment ****"
 conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 log_message "**** Run analysis ****"
-RFMIX_DIR="../../../input/simulations/three_populations/_m/rfmix-files"
+RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
 
 python ../_h/01.impute_data.py \
        --rfmix-input "${RFMIX_DIR}" \

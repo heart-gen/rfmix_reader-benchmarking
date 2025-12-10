@@ -1,12 +1,11 @@
 #!/bin/bash
 #SBATCH --partition=RM-shared
-#SBATCH --job-name=impute_two_pop
+#SBATCH --job-name=create_binaries
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
-#SBATCH --time=12:00:00
-#SBATCH --array=0-2
-#SBATCH --output=logs/impute.two_pop.%A_%a.log
+#SBATCH --time=03:00:00
+#SBATCH --output=logs/create_binaries.two_pop.%J.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -18,20 +17,8 @@ log_message "**** Bridges-2 info ****"
 echo "User: ${USER}"
 echo "Job id: ${SLURM_JOBID}"
 echo "Job name: ${SLURM_JOB_NAME}"
-echo "Node name: ${SLURM_NODENAME}"
 echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
-
-SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
-cd "${SCRIPT_DIR}"
-
-METHODS=("linear" "nearest" "stepwise")
-METHOD="${METHODS[${SLURM_ARRAY_TASK_ID}]}"
-
-if [ -z "${METHOD}" ]; then
-    echo "Invalid method index: ${SLURM_ARRAY_TASK_ID}"
-    exit 1
-fi
 
 module purge
 module load anaconda3/2024.10-1
@@ -41,10 +28,9 @@ log_message "**** Loading conda environment ****"
 conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 log_message "**** Run analysis ****"
-RFMIX_DIR="../../../input/simulations/two_populations/_m/rfmix-out"
+RFMIX_DIR="../../input/simulations/two_populations/_m/rfmix-out/"
 
-python 01.impute_data.py --rfmix-input "${RFMIX_DIR}" --population "two" \
-       --method "${METHOD}"
+create-binaries --binary_dir "${RFMIX_DIR}/binary_files" "${RFMIX_DIR}"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
