@@ -174,7 +174,7 @@ def main():
 
     logging.info("Reading RFMix outputs...")
     binary_path = args.rfmix_input / "binary_files"
-    loci_df,_,admix = read_rfmix(here(args.rfmix_input), binary_dir=str(binary_path))
+    loci_df, _, admix = read_rfmix(here(args.rfmix_input), binary_dir=here(binary_path))
     method_path = here(args.rfmix_input / args.method)
     method_path.mkdir(parents=True, exist_ok=True)
     zarr_path = method_path / "imputed_local_ancestry"
