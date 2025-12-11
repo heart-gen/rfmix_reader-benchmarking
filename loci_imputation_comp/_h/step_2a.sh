@@ -32,7 +32,7 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 log_message "**** Run analysis ****"
 RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
 
-python ../_h/02.phased_data.py \
+python ../_h/02.phase_data.py \
        --rfmix-input "${RFMIX_DIR}" \
        --chrom ${SLURM_ARRAY_TASK_ID}
 
