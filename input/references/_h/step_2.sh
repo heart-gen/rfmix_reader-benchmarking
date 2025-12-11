@@ -3,7 +3,7 @@
 #SBATCH --job-name=convert_references
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --ntasks-per-node=32
+#SBATCH --ntasks-per-node=64
 #SBATCH --array=1-22
 #SBATCH --time=12:00:00
 #SBATCH --output=logs/reference_conversion.three_pop.%A_%a.log
@@ -31,11 +31,11 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 CHR=${SLURM_ARRAY_TASK_ID}
 OUTDIR="three_populations/reference_zarr"
-VCF_DIR="/ocean/projects/bio250020p/shared/resources/1kGP/GRCh38_phased_vcf"
-VCF="${VCF_DIR}/raw/1kGP_high_coverage_Illumina.chr${CHR}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
+VCF_DIR="../../simulations/three_populations/_m/temp"
+VCF="${VCF_DIR}/1kGP.chr${CHR}.filtered.snpsOnly.afr_washington.vcf.gz"
 
 WORKERS=32
-CHUNK_LEN=100000
+CHUNK_LEN=250000
 SAMPLE_CHUNK=2048
 
 mkdir -p "${OUTDIR}"
@@ -51,7 +51,7 @@ prepare-reference \
     --worker-processes ${WORKERS} \
     --verbose "${OUTDIR}" "${VCF}"
 
-cp -v "${VCF_DIR}/local-ancestry-ref/samples_id2" "${OUTDIR}/samples_id2"
+cp -v "${VCF_DIR}/samples_id2" "${OUTDIR}/samples_id2"
 
 conda deactivate
 log_message "Job finished at: $(date)"

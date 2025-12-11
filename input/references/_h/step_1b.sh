@@ -35,7 +35,7 @@ VCF_DIR="/ocean/projects/bio250020p/shared/resources/1kGP/GRCh38_phased_vcf"
 VCF="${VCF_DIR}/raw/1kGP_high_coverage_Illumina.chr${CHR}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
 
 WORKERS=32
-CHUNK_LEN=50000
+CHUNK_LEN=250000
 SAMPLE_CHUNK=2048
 
 mkdir -p "${OUTDIR}"
