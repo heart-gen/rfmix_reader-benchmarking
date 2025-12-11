@@ -29,12 +29,11 @@ def main():
     logging.info("Phase RFMix outputs per chromosome...")
     binary_path = args.rfmix_input / "binary_files"
     phased_path = args.rfmix_input / "phased_files"
-    ref_zarr = args.ref_input / "reference_zarr" / f"chr{args.chrom}"
     sample_annot_path = args.ref_input / "samples_id2"
     output_path = f"{phased_path}/phased_chr{args.chrom}.zarr"
     _ = phase_rfmix_chromosome_to_zarr(
         file_prefix=here(args.rfmix_input),
-        ref_zarr_root=here(ref_zarr),
+        ref_zarr_root=here(args.ref_input),
         binary_dir=here(binary_path),
         sample_annot_path=here(sample_annot_path),
         output_path=here(output_path),
