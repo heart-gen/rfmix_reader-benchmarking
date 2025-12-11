@@ -52,5 +52,7 @@ prepare-reference \
     --worker-processes ${WORKERS} \
     --verbose "${CHR_OUT}" "${VCF}"
 
+cp -v /ocean/projects/bio250020p/shared/resources/1kGP/GRCh38_phased_vcf/local-ancestry-ref/samples_id2 .
+
 conda deactivate
 log_message "Job finished at: $(date)"
