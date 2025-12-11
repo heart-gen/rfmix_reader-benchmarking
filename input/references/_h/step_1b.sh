@@ -5,7 +5,7 @@
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
 #SBATCH --array=2
-#SBATCH --time=24:00:00
+#SBATCH --time=06:00:00
 #SBATCH --output=logs/reference_conversion.two_pop.%A_%a.log
 
 log_message() {
@@ -35,7 +35,7 @@ VCF_DIR="/ocean/projects/bio250020p/shared/resources/1kGP/GRCh38_phased_vcf"
 VCF="${VCF_DIR}/raw/1kGP_high_coverage_Illumina.chr${CHR}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
 
 WORKERS=32
-CHUNK_LEN=250000
+CHUNK_LEN=500000
 SAMPLE_CHUNK=2048
 
 mkdir -p "${OUTDIR}"
