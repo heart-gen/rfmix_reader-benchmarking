@@ -22,9 +22,6 @@ echo "Node name: ${SLURM_NODENAME}"
 echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 
-SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
-cd "${SCRIPT_DIR}"
-
 METHODS=("linear" "nearest" "stepwise")
 METHOD="${METHODS[${SLURM_ARRAY_TASK_ID}]}"
 
@@ -43,8 +40,9 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 log_message "**** Run analysis ****"
 RFMIX_DIR="input/simulations/two_populations/_m/rfmix-out"
 
-python ../_h/01.impute_data.py --rfmix-input "${RFMIX_DIR}" --population "two" \
-       --method "${METHOD}"
+python ../_h/01.impute_data.py \
+       --rfmix-input "${RFMIX_DIR}" \
+       --population "two" --method "${METHOD}"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
