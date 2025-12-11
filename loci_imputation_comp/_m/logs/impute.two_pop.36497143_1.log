@@ -1,0 +1,16 @@
+2025-12-10 22:22:55 - **** Job starts ****
+2025-12-10 22:22:55 - **** Bridges-2 info ****
+User: 
+Job id: 36497145
+Job name: impute_two_pop
+Node name: 
+Hostname: r060
+Task id: 1
+/var/spool/slurm/d/job36497145/slurm_script: line 33: module: command not found
+/var/spool/slurm/d/job36497145/slurm_script: line 34: module: command not found
+/var/spool/slurm/d/job36497145/slurm_script: line 35: module: command not found
+2025-12-10 22:22:55 - **** Loading conda environment ****
+/var/spool/slurm/d/job36497145/slurm_script: line 38: conda: command not found
+2025-12-10 22:22:55 - **** Run analysis ****
+/var/spool/slurm/d/job36497145/slurm_script: line 43: python: command not found
+Python script failed. Check the error logs.
