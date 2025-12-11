@@ -18,6 +18,8 @@ def configure_logging():
 def parse_parameters():
     parser = argparse.ArgumentParser(description="Locus-Level Imputation Accuracy")
     parser.add_argument("--rfmix-input", type=Path, required=True)
+    parser.add_argument("--ref-zarr", type=Path,
+                        default=Path("input/references/_m/reference_zarr"))
     parser.add_argument("--population", type=str, choices=["two","three"], default="three")
     parser.add_argument("--method", type=str, choices=["linear", "nearest", "stepwise"],
                         default="linear")

@@ -1,12 +1,10 @@
 import logging
 import argparse
-import pandas as pd
 import session_info
 from pyhere import here
 from pathlib import Path
+from rfmix_reader import phase_rfmix_chromosome_to_zarr
 
-from localqtl import PgenReader
-from rfmix_reader import read_rfmix, read_simu, interpolate_array
 
 def configure_logging():
     logging.basicConfig(
@@ -18,66 +16,30 @@ def configure_logging():
 def parse_parameters():
     parser = argparse.ArgumentParser(description="Locus-Level Imputation Accuracy")
     parser.add_argument("--rfmix-input", type=Path, required=True)
-    parser.add_argument("--population", type=str, choices=["two","three"], default="three")
-    parser.add_argument("--method", type=str, choices=["linear", "nearest", "stepwise"],
-                        default="linear")
+    parser.add_argument("--ref-input", type=Path, default=Path("input/references/_m"))
+    parser.add_argument("--chrom", type=int, default=21)
     return parser.parse_args()
-
-
-def load_variants(plink_path):
-    pgr = PgenReader(plink_path)
-    variant_df = pgr.variant_df.copy()
-    variant_df.loc[:, "chrom"] = "chr" + variant_df.chrom
-    return variant_df[~variant_df.duplicated(subset=["chrom", "pos"], keep="first")]
-
-
-def standardize_variant_columns(df):
-    return df.rename(columns={"chromosome": "chrom", "physical_position": "pos"})
-
-
-def impute_data(loci_df, variants, admix, zarr_path, method):
-    if hasattr(loci_df, "to_pandas"):
-        loci_df = loci_df.to_pandas()
-    variant_df = variants.merge(loci_df, on=["chrom", "pos"], how="outer")
-    variant_df = variant_df.loc[:, ["chrom", "pos", "i"]]
-    _ = interpolate_array(variant_df, admix, zarr_outdir=zarr_path,
-                          interpolation=method, use_bp_positions=True)
-    return variant_df
-
-
-def align_variants(df_ref, df_target):
-    ref_idx = df_ref.set_index(["chrom", "pos"])
-    target_idx = df_target.set_index(["chrom", "pos"])
-    common = target_idx.index.intersection(ref_idx.index)
-    return target_idx.loc[common].reset_index()
 
 
 def main():
     configure_logging()
     args = parse_parameters()
-    pop_dir = Path(f"{args.population}_populations")
-    pop_dir.mkdir(parents=True, exist_ok=True)
 
-    # Load and impute data
-    logging.info("Loading PLINK variants...")
-    plink_path = here("input/simulations", pop_dir.name, "_m/plink-files/simulated")
-    variants_df = load_variants(plink_path)
-
-    logging.info("Reading RFMix outputs...")
+    # Phase output per chromosome
+    logging.info("Phase RFMix outputs per chromosome...")
     binary_path = args.rfmix_input / "binary_files"
-    loci_df, _, admix = read_rfmix(here(args.rfmix_input), binary_dir=here(binary_path))
-    method_path = here(args.rfmix_input / args.method)
-    method_path.mkdir(parents=True, exist_ok=True)
-    zarr_path = method_path / "imputed_local_ancestry"
-
-    logging.info("Interpolating ancestry data...")
-    loci_df = standardize_variant_columns(loci_df)
-    variant_loci_df = impute_data(
-        loci_df, variants_df, admix, zarr_path, args.method
+    phased_path = args.rfmix_input / "phased_files"
+    ref_zarr = args.ref_input / "reference_zarr"
+    sample_annot_path = args.ref_input / "samples_id2"
+    output_path = f"{phased_path}/phased_chr{args.chrom}.zarr"
+    _ = phase_rfmix_chromosome_to_zarr(
+        file_prefix=here(args.rfmix_input),
+        ref_zarr_root=here(ref_zarr),
+        binary_dir=here(args.ref_zarr),
+        sample_annot_path=here(sample_annot_path),
+        output_path=here(output_path),
+        chrom=str(args.chrom),
     )
-    variant_loci_df = align_variants(variants_df, variant_loci_df)
-    variant_path = f"{method_path}/imputed_variant.parquet"
-    variant_loci_df.to_parquet(variant_path)
 
     # Session information
     session_info.show()
