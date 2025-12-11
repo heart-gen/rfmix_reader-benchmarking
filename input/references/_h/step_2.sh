@@ -6,7 +6,7 @@
 #SBATCH --ntasks-per-node=32
 #SBATCH --array=1-22
 #SBATCH --time=12:00:00
-#SBATCH --output=logs/reference_conversion.two_pop.%A_%a.log
+#SBATCH --output=logs/reference_conversion.three_pop.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -30,7 +30,7 @@ log_message "**** Loading conda environment ****"
 conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 CHR=${SLURM_ARRAY_TASK_ID}
-OUTDIR="two_populations/reference_zarr"
+OUTDIR="three_populations/reference_zarr"
 VCF_DIR="/ocean/projects/bio250020p/shared/resources/1kGP/GRCh38_phased_vcf"
 VCF="${VCF_DIR}/raw/1kGP_high_coverage_Illumina.chr${CHR}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
 
