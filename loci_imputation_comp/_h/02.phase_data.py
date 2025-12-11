@@ -16,6 +16,7 @@ def configure_logging():
 def parse_parameters():
     parser = argparse.ArgumentParser(description="Locus-Level Imputation Accuracy")
     parser.add_argument("--rfmix-input", type=Path, required=True)
+    parser.add_argument("--sample-annot", type=Path, required=True)
     parser.add_argument("--ref-input", type=Path, default=Path("input/references/_m"))
     parser.add_argument("--chrom", type=int, default=21)
     return parser.parse_args()
@@ -29,7 +30,7 @@ def main():
     logging.info("Phase RFMix outputs per chromosome...")
     binary_path = args.rfmix_input / "binary_files"
     phased_path = args.rfmix_input / "phased_files"
-    sample_annot_path = args.ref_input / "samples_id2"
+    sample_annot_path = args.sample_annot
     output_path = f"{phased_path}/phased_chr{args.chrom}.zarr"
     _ = phase_rfmix_chromosome_to_zarr(
         file_prefix=here(args.rfmix_input),

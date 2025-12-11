@@ -32,10 +32,12 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 log_message "**** Run analysis ****"
 CHR=${SLURM_ARRAY_TASK_ID}
 RFMIX_DIR="input/simulations/two_populations/_m/rfmix-out"
+SAMPLE_ANNOT="input/references/_m/two_populations/reference_zarr/samples_id2"
 REF_DIR="input/references/_m/two_populations/reference_zarr/1kGP_high_coverage_Illumina.chr${CHR}.filtered.SNV_INDEL_SV_phased_panel.zarr"
 
 python ../_h/02.phase_data.py \
        --rfmix-input "$RFMIX_DIR" \
+       --sample-annot "$SAMPLE_ANNOT" \
        --chrom ${CHR} --ref-input "$REF_DIR"
 
 if [ $? -ne 0 ]; then
