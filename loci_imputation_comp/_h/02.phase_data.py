@@ -35,7 +35,7 @@ def main():
     _ = phase_rfmix_chromosome_to_zarr(
         file_prefix=here(args.rfmix_input),
         ref_zarr_root=here(ref_zarr),
-        binary_dir=here(args.ref_zarr),
+        binary_dir=here(binary_path),
         sample_annot_path=here(sample_annot_path),
         output_path=here(output_path),
         chrom=str(args.chrom),
