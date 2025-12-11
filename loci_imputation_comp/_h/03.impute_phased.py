@@ -2,6 +2,7 @@ import logging
 import argparse
 import pandas as pd
 import session_info
+import xarray as xr
 from pyhere import here
 from pathlib import Path
 
@@ -66,7 +67,9 @@ def main():
 
     logging.info("Reading RFMix outputs...")
     binary_path = args.rfmix_input / "binary_files"
-    loci_df, _, admix = read_rfmix(here(args.rfmix_input), binary_dir=here(binary_path))
+    loci_df, _, _ = read_rfmix(here(args.rfmix_input), binary_dir=here(binary_path))
+    local_ancestry = xr.open_zarr(here(args.ref_zarr))
+    admix = local_ancestry["local_ancestry"].chunk({"variant": 20_000, "sample": 100})
     method_path = here(args.rfmix_input / args.method)
     method_path.mkdir(parents=True, exist_ok=True)
     zarr_path = method_path / "imputed_local_ancestry"
