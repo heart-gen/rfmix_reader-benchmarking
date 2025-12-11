@@ -30,11 +30,13 @@ log_message "**** Loading conda environment ****"
 conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 log_message "**** Run analysis ****"
+CHR=${SLURM_ARRAY_TASK_ID}
 RFMIX_DIR="input/aanri_data/rfmix-version/_m"
+REF_DIR="input/references/_m/two_populations/reference_zarr/1kGP_high_coverage_Illumina.chr${CHR}.filtered.SNV_INDEL_SV_phased_panel.zarr"
 
 python ../_h/03.phase_data.py \
-       --rfmix-input "${RFMIX_DIR}" \
-       --chrom ${SLURM_ARRAY_TASK_ID}
+       --rfmix-input "$RFMIX_DIR" \
+       --chrom ${CHR} --ref-input "$REF_DIR"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
