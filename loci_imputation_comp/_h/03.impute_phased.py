@@ -19,8 +19,7 @@ def configure_logging():
 def parse_parameters():
     parser = argparse.ArgumentParser(description="Locus-Level Imputation Accuracy")
     parser.add_argument("--rfmix-input", type=Path, required=True)
-    parser.add_argument("--ref-zarr", type=Path,
-                        default=Path("input/references/_m/reference_zarr"))
+    parser.add_argument("--phased-zarr", type=Path, required=True)
     parser.add_argument("--population", type=str, choices=["two","three"], default="three")
     parser.add_argument("--method", type=str, choices=["linear", "nearest", "stepwise"],
                         default="linear")
@@ -68,14 +67,18 @@ def main():
     logging.info("Reading RFMix outputs...")
     binary_path = args.rfmix_input / "binary_files"
     loci_df, _, _ = read_rfmix(here(args.rfmix_input), binary_dir=here(binary_path))
-    local_ancestry = xr.open_zarr(here(args.ref_zarr))
+    loci_df = standardize_variant_columns(loci_df)
+
+    logging.info("Reading phased data...")
+    phased_path = args.phased_zarr / "phased_data.zarr"
+    local_ancestry = xr.open_zarr(here(phased_path))
     admix = local_ancestry["local_ancestry"].chunk({"variant": 20_000, "sample": 100})
-    method_path = here(args.rfmix_input / args.method)
+
+    logging.info("Interpolating ancestry data...")
+    method_path = here(args.rfmix_input) / "phased" / args.method
     method_path.mkdir(parents=True, exist_ok=True)
     zarr_path = method_path / "imputed_local_ancestry"
 
-    logging.info("Interpolating ancestry data...")
-    loci_df = standardize_variant_columns(loci_df)
     variant_loci_df = impute_data(
         loci_df, variants_df, admix, zarr_path, args.method
     )
