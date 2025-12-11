@@ -49,7 +49,7 @@ def align_variants(df_ref, df_target):
     ref_idx = df_ref.set_index(["chrom", "pos"])
     target_idx = df_target.set_index(["chrom", "pos"])
     common = target_idx.index.intersection(ref_idx.index)
-    return df_target.loc[common].reset_index()
+    return target_idx.loc[common].reset_index()
 
 
 def main():
