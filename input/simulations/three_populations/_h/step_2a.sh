@@ -1,12 +1,9 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=short
+#SBATCH --partition=RM-shared
 #SBATCH --job-name=prep_samples
 #SBATCH --mail-type=FAIL
-#SBATCH --mail-user=kynon.benjamin@northwestern.edu
-#SBATCH --nodes=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=2gb
+#SBATCH --mail-user=kj.benjamin90@gmail.com
+#SBATCH --ntasks-per-node=1
 #SBATCH --output=logs/samples_prep.log
 #SBATCH --time=00:05:00
 
@@ -16,11 +13,10 @@ log_message() {
 
 log_message "**** Job starts ****"
 
-log_message "**** Quest info ****"
+log_message "**** Bridges info ****"
 echo "User: ${USER}"
 echo "Job id: ${SLURM_JOBID}"
 echo "Job name: ${SLURM_JOB_NAME}"
-echo "Node name: ${SLURM_NODENAME}"
 echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 

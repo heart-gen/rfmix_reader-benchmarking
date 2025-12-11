@@ -14,7 +14,7 @@ log_message() {
 
 log_message "**** Job starts ****"
 
-log_message "**** Quest info ****"
+log_message "**** Bridges info ****"
 echo "User: ${USER}"
 echo "Job id: ${SLURM_JOBID}"
 echo "Job name: ${SLURM_JOB_NAME}"

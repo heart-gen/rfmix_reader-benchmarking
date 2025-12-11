@@ -1,13 +1,10 @@
 #!/bin/bash
-#SBATCH --account=p32505
-#SBATCH --partition=short
+#SBATCH --partition=RM-shared
 #SBATCH --job-name=prep_data
 #SBATCH --mail-type=FAIL
-#SBATCH --mail-user=kynon.benjamin@northwestern.edu
-#SBATCH --nodes=1
+#SBATCH --mail-user=kj.benjamin90@gmail.com
+#SBATCH --ntasks-per-node=24
 #SBATCH --array=1-22
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=50gb
 #SBATCH --output=logs/prep.%A_%a.log
 #SBATCH --time=01:30:00
 
@@ -17,11 +14,10 @@ log_message() {
 
 log_message "**** Job starts ****"
 
-log_message "**** Quest info ****"
+log_message "**** Bridges info ****"
 echo "User: ${USER}"
 echo "Job id: ${SLURM_JOBID}"
 echo "Job name: ${SLURM_JOB_NAME}"
-echo "Node name: ${SLURM_NODENAME}"
 echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 
@@ -29,8 +25,7 @@ echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 log_message "**** Loading modules ****"
 
 module purge
-module load bcftools/1.10.1
-module load htslib/1.16
+module load anaconda3/2024.10-1
 module list
 
 ## Edit with your job command
@@ -41,9 +36,14 @@ FILTERED_VCF="${TEMPDIR}/chr${CHROM}.biallelic.vcf.gz"
 log_message "**** Prepare samples ****"
 echo -e "Chromosome: ${CHROM}"
 
+log_message "**** Loading conda environment ****"
+conda activate /ocean/projects/bio250020p/shared/opt/env/genomics
+
 bcftools view -v snps -S "${TEMPDIR}/samples_id" -Oz \
          -o "${TEMPDIR}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz" \
          "${FILTERED_VCF}"
 
 tabix -f -p vcf "${TEMPDIR}/1kGP.chr${CHROM}.filtered.snpsOnly.afr_washington.vcf.gz"
+
+conda deactivate
 log_message "**** Job ends ****"
