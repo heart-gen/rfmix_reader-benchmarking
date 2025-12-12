@@ -32,8 +32,8 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 log_message "**** Run analysis ****"
 RFMIX_LABELS=("RFMIX_TWO" "RFMIX_THREE")
 RFMIX_PATHS=(
-    "input/simulations/two_populations/_m/rfmix-out/phased_files"
-    "input/simulations/three_populations/_m/rfmix-files/phased_files"
+    "../../input/simulations/two_populations/_m/rfmix-out/phased_files"
+    "../../input/simulations/three_populations/_m/rfmix-files/phased_files"
 )
 
 TASK_ID=${SLURM_ARRAY_TASK_ID:-0}
