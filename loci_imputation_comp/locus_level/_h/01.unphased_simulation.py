@@ -18,7 +18,7 @@ def configure_logging():
 
 
 def parse_parameters():
-    parser = argparse.ArgumentParser(description="Locus-Level Imputation Accuracy")
+    parser = argparse.ArgumentParser(description="Imputation Accuracy")
     parser.add_argument("--rfmix-input", type=Path, required=True)
     parser.add_argument("--simu-input", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=Path("./"))

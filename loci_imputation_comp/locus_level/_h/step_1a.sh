@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH --partition=RM-shared
-#SBATCH --job-name=comp_impute_three_pop
+#SBATCH --job-name=unphased_metrics_three_pop
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
 #SBATCH --time=12:00:00
-#SBATCH --output=logs/impute.three_pop.%A_%a.log
+#SBATCH --output=logs/unphased_metrics.three_pop.%j.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -37,12 +37,11 @@ log_message "**** Loading conda environment ****"
 conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
 
 log_message "**** Run analysis ****"
-RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
 SIMU_DIR="input/simulations/three_populations/_m/gt-files"
+RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
 
-python ../_h/01.impute_data.py \
-       --rfmix-input "${RFMIX_DIR}" \
-       --population "three" --method "${METHOD}"
+python ../_h/01.unphased_simulation.py \
+       --rfmix-input "$RFMIX_DIR" --simu-input "$SIMU_DIR" --population "three"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
