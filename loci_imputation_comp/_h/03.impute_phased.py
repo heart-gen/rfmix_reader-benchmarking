@@ -71,8 +71,7 @@ def main():
 
     logging.info("Reading phased data...")
     phased_path = args.phased_zarr / "phased_data.zarr"
-    local_ancestry = xr.open_zarr(here(phased_path))
-    admix = local_ancestry["local_ancestry"].chunk({"variant": 20_000, "sample": 100})
+    admix = xr.open_zarr(here(phased_path))["local_ancestry"]
 
     logging.info("Interpolating ancestry data...")
     method_path = here(args.rfmix_input) / "phased" / args.method
