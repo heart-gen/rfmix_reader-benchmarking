@@ -29,10 +29,10 @@ def parse_parameters():
     parser = argparse.ArgumentParser(description="Locus-Level Imputation Accuracy")
     parser.add_argument("--rfmix-input", type=Path, required=True)
     parser.add_argument("--simu-input", type=Path, required=True)
+    parser.add_argument("--output", type=Path, default=Path("./"))
     parser.add_argument("--population", type=str, choices=["two","three"], default="three")
     parser.add_argument("--method", type=str, choices=["linear", "nearest", "stepwise"],
                         default="linear")
-    parser.add_argument("--output", type=Path, required=True)
     return parser.parse_args()
 
 
@@ -99,24 +99,6 @@ def compute_per_sample_metrics(true_anc, inferred_anc):
     return metrics
 
 
-def write_sample_metrics_tsv(sample_metrics, outfile):
-    rows = []
-    for s, m in sample_metrics.items():
-        row = {
-            "haplotype": s,
-            "accuracy": m["accuracy"],
-            "mcc": m["mcc"],
-            "precision": ",".join(map(str, m["precision"])),
-            "recall": ",".join(map(str, m["recall"])),
-            "f1": ",".join(map(str, m["f1"])),
-            "confusion_matrix": ";".join(
-                ",".join(map(str, row)) for row in m["confusion_matrix"]
-            )
-        }
-        rows.append(row)
-    pd.DataFrame(rows).to_csv(outfile, sep="\t", index=False)
-
-
 def compute_locus_metrics_json(t, p, method, outfile=None):
     t_hard = _to_hard_calls(t)
     p_hard = _to_hard_calls(p)
@@ -144,17 +126,33 @@ def compute_locus_metrics_json(t, p, method, outfile=None):
     return metrics
 
 
+def write_sample_metrics_tsv(sample_metrics, outfile):
+    rows = []
+    for s, m in sample_metrics.items():
+        row = {
+            "haplotype": s,
+            "accuracy": m["accuracy"],
+            "mcc": m["mcc"],
+            "precision": ",".join(map(str, m["precision"])),
+            "recall": ",".join(map(str, m["recall"])),
+            "f1": ",".join(map(str, m["f1"])),
+            "confusion_matrix": ";".join(
+                ",".join(map(str, row)) for row in m["confusion_matrix"]
+            )
+        }
+        rows.append(row)
+    pd.DataFrame(rows).to_csv(outfile, sep="\t", index=False)
+
+
 def main():
     configure_logging()
     args = parse_parameters()
-    pop_dir = Path(f"{args.population}_populations")
+    pop_dir = args.output / Path(f"{args.population}_populations")
     pop_dir.mkdir(parents=True, exist_ok=True)
-    args.output.mkdir(parents=True, exist_ok=True)
 
     # Load imputed data
     method_path = here(args.rfmix_input / args.method)
-    method_path.mkdir(parents=True, exist_ok=True)
-    zarr_path = method_path / "imputed_local_ancestry"
+    zarr_path   = method_path / "imputed_local_ancestry"
     variant_path = method_path / "imputed_variant.parquet"
 
     logging.info("Loading imputed variants and ancestry data...")
@@ -162,13 +160,13 @@ def main():
     idx = variant_loci_df.index.values
     inferred_anc_path = here(zarr_path / "local-ancestry.zarr")
     inferred_anc = da.from_zarr(inferred_anc_path)[idx, :, :]
-    inferred_anc = inferred_anc.rechunk((50_000, 100, -1)).compute()
+    inferred_anc = inferred_anc.rechunk((50_000, 500, -1)).compute()
 
     # Load ground truth data
     logging.info("Loading ground truth data")
     loci_gt, _, admix_gt = read_simu(here(args.simu_input))
-    loci_gt = standardize_variant_columns(loci_gt)
-    loci_gt = align_variants(variant_loci_df, loci_gt)
+    loci_gt  = standardize_variant_columns(loci_gt)
+    loci_gt  = align_variants(variant_loci_df, loci_gt)
     admix_gt = admix_gt[loci_gt.index.values, :, :]
     true_anc = admix_gt.compute()
 
@@ -176,12 +174,12 @@ def main():
 
     # Calculate metrics
     logging.info("Computing locus-level metrics...")
-    json_outfile = args.output / "locus_metrics.json"
+    json_outfile = pop_dir / "locus_metrics.json"
     compute_locus_metrics_json(true_anc, inferred_anc, args.method, outfile=json_outfile)
 
     logging.info("Computing per-haplotype metrics...")
     sample_metrics = compute_per_sample_metrics(true_anc, inferred_anc)
-    tsv_outfile = args.output / "per_haplotype_metrics.tsv"
+    tsv_outfile = pop_dir / "per_haplotype_metrics.tsv"
     write_sample_metrics_tsv(sample_metrics, tsv_outfile)
 
     # Session information
