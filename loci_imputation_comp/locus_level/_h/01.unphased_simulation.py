@@ -8,14 +8,6 @@ from pyhere import here
 import dask.array as da
 from pathlib import Path
 
-from sklearn.metrics import (
-    f1_score,
-    recall_score,
-    precision_score,
-    confusion_matrix,
-    matthews_corrcoef
-)
-
 from rfmix_reader import read_simu
 
 def configure_logging():
@@ -47,140 +39,195 @@ def align_variants(df_ref, df_target):
     return df_target.loc[common].reset_index()
 
 
-def admix_to_haplotypes(admix):
+def admix_counts_to_haplotypes_numpy(admix):
+    """
+    admix: (V, S, A) integer counts summing to 2
+    returns: (V, 2S) haplotype labels or -1
+    """
     V, S, A = admix.shape
-    haplo = np.full((V, S * 2), -1, dtype=np.int8)
-    for v in range(V):
-        for s in range(S):
-            counts = admix[v, s]
-            labels = []
-            for a, count in enumerate(counts):
-                labels.extend([a] * int(count))
-            if len(labels) == 2:
-                haplo[v, s * 2] = labels[0]
-                haplo[v, s * 2 + 1] = labels[1]
-    return haplo
+    out = np.full((V, 2 * S), -1, dtype=np.int8)
+
+    admix = admix.astype(np.int16, copy=False)
+    valid = admix.sum(axis=2) == 2
+
+    csum = np.cumsum(admix, axis=2)
+    hap0 = (csum >= 1).argmax(axis=2)
+    hap1 = (csum >= 2).argmax(axis=2)
+
+    out[:, 0::2] = np.where(valid, hap0, -1)
+    out[:, 1::2] = np.where(valid, hap1, -1)
+    return out
 
 
 def _to_hard_calls(arr):
+    """Convert (V,S,A) -> (V, 2S) lazily"""
     if arr.ndim == 3:
-        return admix_to_haplotypes(arr)
+        return da.map_blocks(
+            admix_counts_to_haplotypes_numpy,
+            arr,
+            dtype=np.int8,
+            chunks=(arr.chunks[0], (arr.shape[1] * 2,)),
+            drop_axis=2,
+        )
     return arr
 
 
-def compute_metrics_one_sample(t, p, labels):
-    cm = confusion_matrix(t, p, labels=labels)
-    prec = precision_score(t, p, labels=labels, average=None, zero_division=0)
-    rec = recall_score(t, p, labels=labels, average=None, zero_division=0)
-    f1 = f1_score(t, p, labels=labels, average=None, zero_division=0)
-    acc = np.mean(t == p)
-    mcc = matthews_corrcoef(t, p)
-    return {
-        "accuracy": acc,
-        "mcc": mcc,
-        "precision": prec,
-        "recall": rec,
-        "f1": f1,
-        "confusion_matrix": cm
-    }
+def _confmat_block(t, p, n_labels):
+    t = t.ravel()
+    p = p.ravel()
+    mask = (t >= 0) & (p >= 0)
+
+    if mask.sum() == 0:
+        return np.zeros(n_labels * n_labels, dtype=np.int64)
+
+    idx = t[mask].astype(np.int64) * n_labels + p[mask].astype(np.int64)
+    return np.bincount(idx, minlength=n_labels * n_labels).astype(np.int64)
 
 
-def compute_per_sample_metrics(true_anc, inferred_anc):
-    true_hard = _to_hard_calls(true_anc)
-    pred_hard = _to_hard_calls(inferred_anc)
-    labels = np.unique(true_hard[true_hard >= 0])
-    _, n_samples = true_hard.shape
-    metrics = {}
-    for s in range(n_samples):
-        t = true_hard[:, s]
-        p = pred_hard[:, s]
-        mask = (t >= 0) & (p >= 0)
-        metrics[s] = compute_metrics_one_sample(t[mask], p[mask], labels)
-    return metrics
+def confusion_counts_dask(t_hard, p_hard, n_labels):
+    counts = da.map_blocks(
+        _confmat_block,
+        t_hard,
+        p_hard,
+        dtype=np.int64,
+        chunks=(n_labels * n_labels,),
+        drop_axis=list(range(t_hard.ndim)),
+        new_axis=0,
+        n_labels=n_labels,
+    )
+    return counts.sum(axis=0)
 
 
-def compute_locus_metrics_json(t, p, method, outfile=None):
-    t_hard = _to_hard_calls(t)
-    p_hard = _to_hard_calls(p)
-    labels = list(np.unique(t_hard[t_hard >= 0]))
-    accuracy = np.mean(t_hard == p_hard)
-    cm = confusion_matrix(t_hard.ravel(), p_hard.ravel(), labels=labels).tolist()
-    precision = precision_score(t_hard.ravel(), p_hard.ravel(), labels=labels, average=None, zero_division=0)
-    recall = recall_score(t_hard.ravel(), p_hard.ravel(), labels=labels, average=None, zero_division=0)
-    f1 = f1_score(t_hard.ravel(), p_hard.ravel(), labels=labels, average=None, zero_division=0)
-    mcc = matthews_corrcoef(t_hard.ravel(), p_hard.ravel())
+def metrics_from_confusion(cm):
+    K = cm.shape[0]
+    total = cm.sum()
+    acc = np.trace(cm) / total if total else np.nan
+
+    tp = np.diag(cm).astype(float)
+    fp = cm.sum(axis=0) - tp
+    fn = cm.sum(axis=1) - tp
+
+    precision = np.divide(tp, tp + fp, out=np.zeros_like(tp), where=(tp + fp) > 0)
+    recall    = np.divide(tp, tp + fn, out=np.zeros_like(tp), where=(tp + fn) > 0)
+    f1        = np.divide(2 * precision * recall,
+                          precision + recall,
+                          out=np.zeros_like(tp),
+                          where=(precision + recall) > 0)
+
+    # Multiclass MCC (Gorodkin)
+    t_sum = cm.sum(axis=1).astype(float)
+    p_sum = cm.sum(axis=0).astype(float)
+    s = cm.sum().astype(float)
+    c = np.trace(cm).astype(float)
+
+    denom = np.sqrt((s**2 - (p_sum**2).sum()) * (s**2 - (t_sum**2).sum()))
+    mcc = ((c * s) - (t_sum * p_sum).sum()) / denom if denom else np.nan
+
+    return acc, mcc, precision, recall, f1
+
+
+def compute_locus_metrics(true_anc, inferred_anc, n_labels, method, outfile):
+    t_hard = to_hard_calls(true_anc)
+    p_hard = to_hard_calls(inferred_anc)
+
+    flat = confusion_counts_dask(t_hard, p_hard, n_labels).compute()
+    cm = flat.reshape((n_labels, n_labels))
+
+    acc, mcc, precision, recall, f1 = metrics_from_confusion(cm)
+
     metrics = {
         "method": method,
-        "labels": labels,
-        "overall_accuracy": float(accuracy),
-        "confusion_matrix": cm,
-        "precision": {int(k): float(v) for k, v in zip(labels, precision)},
-        "recall": {int(k): float(v) for k, v in zip(labels, recall)},
-        "f1": {int(k): float(v) for k, v in zip(labels, f1)},
+        "labels": list(range(n_labels)),
+        "overall_accuracy": float(acc),
+        "confusion_matrix": cm.tolist(),
+        "precision": {i: float(v) for i, v in enumerate(precision)},
+        "recall": {i: float(v) for i, v in enumerate(recall)},
+        "f1": {i: float(v) for i, v in enumerate(f1)},
         "mcc": float(mcc),
-        "shape": list(map(int, t.shape))
+        "shape": list(map(int, true_anc.shape)),
     }
-    if outfile:
-        with open(outfile, "w") as f:
-            json.dump(metrics, f, indent=4)
+
+    with open(outfile, "w") as f:
+        json.dump(metrics, f, indent=4)
+
     return metrics
 
 
-def write_sample_metrics_tsv(sample_metrics, outfile):
+def per_haplotype_metrics(true_anc, inferred_anc, n_labels, outfile):
+    t_hard = to_hard_calls(true_anc)
+    p_hard = to_hard_calls(inferred_anc)
+
+    H = t_hard.shape[1]
     rows = []
-    for s, m in sample_metrics.items():
-        row = {
-            "haplotype": s,
-            "accuracy": m["accuracy"],
-            "mcc": m["mcc"],
-            "precision": ",".join(map(str, m["precision"])),
-            "recall": ",".join(map(str, m["recall"])),
-            "f1": ",".join(map(str, m["f1"])),
-            "confusion_matrix": ";".join(
-                ",".join(map(str, row)) for row in m["confusion_matrix"]
-            )
-        }
-        rows.append(row)
+
+    for h in range(H):
+        flat = confusion_counts_dask(
+            t_hard[:, h:h+1],
+            p_hard[:, h:h+1],
+            n_labels
+        ).compute()
+
+        cm = flat.reshape((n_labels, n_labels))
+        acc, mcc, precision, recall, f1 = metrics_from_confusion(cm)
+
+        rows.append({
+            "haplotype": h,
+            "accuracy": acc,
+            "mcc": mcc,
+            "precision": ",".join(map(str, precision)),
+            "recall": ",".join(map(str, recall)),
+            "f1": ",".join(map(str, f1)),
+            "confusion_matrix": ";".join(",".join(map(str, r)) for r in cm),
+        })
+
     pd.DataFrame(rows).to_csv(outfile, sep="\t", index=False)
 
 
 def main():
     configure_logging()
     args = parse_parameters()
-    pop_dir = args.output / Path(f"{args.population}_populations")
+
+    pop_dir = args.output / f"{args.population}_populations"
     pop_dir.mkdir(parents=True, exist_ok=True)
 
-    # Load imputed data
-    method_path = here(args.rfmix_input / args.method)
-    zarr_path   = method_path / "imputed_local_ancestry"
-    variant_path = method_path / "imputed_variant.parquet"
+    n_labels = 2 if args.population == "two" else 3
 
-    logging.info("Loading imputed variants and ancestry data...")
-    variant_loci_df = pd.read_parquet(variant_path)
-    idx = variant_loci_df.index.values
-    inferred_anc_path = here(zarr_path / "local-ancestry.zarr")
-    inferred_anc = da.from_zarr(inferred_anc_path)[idx, :, :]
-    inferred_anc = inferred_anc.rechunk((50_000, 500, -1)).compute()
+    # Load inferred ancestry (lazy)
+    logging.info("Loading imputed variants and ancestry data")
+    method_path  = here(args.rfmix_input) / args.method
+    zarr_path    = method_path / "imputed_local_ancestry" / "local-ancestry.zarr"
 
-    # Load ground truth data
+    variant_df = pd.read_parquet(method_path / "imputed_variant.parquet")
+    inferred   = da.from_zarr(zarr_path)
+    
     logging.info("Loading ground truth data")
+    # Load ground truth data
     loci_gt, _, admix_gt = read_simu(here(args.simu_input))
     loci_gt  = standardize_variant_columns(loci_gt)
-    loci_gt  = align_variants(variant_loci_df, loci_gt)
-    admix_gt = admix_gt[loci_gt.index.values, :, :]
-    true_anc = admix_gt.compute()
+    loci_gt  = align_variants(variant_df, loci_gt)
 
-    assert true_anc.shape[0] == inferred_anc.shape[0], "Mismatch in number of aligned variants"
+    logging.info("Align variants")
+    idx = loci_gt.index.to_numpy()
+    inferred = da.take(inferred, idx, axis=0)
+    true_anc = admix_gt[idx, :, :]
 
     # Calculate metrics
-    logging.info("Computing locus-level metrics...")
-    json_outfile = pop_dir / "locus_metrics.json"
-    compute_locus_metrics_json(true_anc, inferred_anc, args.method, outfile=json_outfile)
+    logging.info("Computing locus-level metrics")
+    compute_locus_metrics(
+        true_anc,
+        inferred,
+        n_labels,
+        args.method,
+        pop_dir / "locus_metrics.json"
+    )
 
-    logging.info("Computing per-haplotype metrics...")
-    sample_metrics = compute_per_sample_metrics(true_anc, inferred_anc)
-    tsv_outfile = pop_dir / "per_haplotype_metrics.tsv"
-    write_sample_metrics_tsv(sample_metrics, tsv_outfile)
+    logging.info("Computing per-haplotype metrics")
+    per_haplotype_metrics(
+        true_anc,
+        inferred,
+        n_labels,
+        pop_dir / "per_haplotype_metrics.tsv"
+    )
 
     # Session information
     session_info.show()
