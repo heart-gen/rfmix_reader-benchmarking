@@ -33,7 +33,8 @@ SIMU_DIR="input/simulations/three_populations/_m/gt-files"
 RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
 
 python ../_h/01.unphased_simulation.py \
-       --rfmix-input "$RFMIX_DIR" --simu-input "$SIMU_DIR" --population "three"
+       --rfmix-input "$RFMIX_DIR" --simu-input "$SIMU_DIR" \
+       --output "unphased" --population "three"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."

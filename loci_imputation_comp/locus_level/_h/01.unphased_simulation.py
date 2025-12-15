@@ -269,7 +269,7 @@ def main():
         method_path =  pop_dir / method
         method_path.mkdir(parents=True, exist_ok=True)
 
-        zarr_path = method_path / "imputed_local_ancestry" / "local-ancestry.zarr"
+        zarr_path = method_path / "local-ancestry.zarr"
         variant_gt, admix_imp = impute_data(
             loci_df, variants_df, admix, zarr_path, method
         )
@@ -292,23 +292,23 @@ def main():
         # Calculate metrics
         logging.info(f"[{method.upper()}] Computing locus-level metrics")
         compute_locus_metrics(
-            true_anc, inferred, labels, method, method_dir / "locus_metrics.json"
+            true_anc, inferred, labels, method, method_path / "locus_metrics.json"
         )
 
         logging.info(f"[{method}] Computing breakpoint distance error")
         bins = [0, 1_000, 5_000, 10_000, 50_000, 100_000, np.inf]
         breakpoint_error_analysis(
-            true_anc, inferred, positions, bins, method_dir / "breakpoint_error.tsv"
+            true_anc, inferred, positions, bins, method_path / "breakpoint_error.tsv"
         )
 
         logging.info(f"[{method}] Computing segment-level metrics")
         segment_metrics(
-            true_anc, inferred, positions, method_dir / "segment_metrics.json",
+            true_anc, inferred, positions, method_path / "segment_metrics.json",
         )
 
         logging.info(f"[{method}] Computing switch error rate")
         switch_error_rate(
-            true_anc, inferred, method_dir / "switch_error_rate.json",
+            true_anc, inferred, method_path / "switch_error_rate.json",
         )
 
     # Session information
