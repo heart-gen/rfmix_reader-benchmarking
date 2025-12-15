@@ -4,7 +4,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
-#SBATCH --time=12:00:00
+#SBATCH --time=02:00:00
 #SBATCH --output=logs/unphased_metrics.three_pop.%j.log
 
 log_message() {
@@ -20,14 +20,6 @@ echo "Job name: ${SLURM_JOB_NAME}"
 echo "Node name: ${SLURM_NODENAME}"
 echo "Hostname: ${HOSTNAME}"
 echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
-
-METHODS=("linear" "nearest" "stepwise")
-METHOD="${METHODS[${SLURM_ARRAY_TASK_ID}]}"
-
-if [ -z "${METHOD}" ]; then
-    echo "Invalid method index: ${SLURM_ARRAY_TASK_ID}"
-    exit 1
-fi
 
 module purge
 module load anaconda3/2024.10-1
