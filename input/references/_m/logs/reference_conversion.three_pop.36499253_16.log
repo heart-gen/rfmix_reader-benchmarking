@@ -1,0 +1,41 @@
+2025-12-11 10:04:38 - **** Job starts ****
+2025-12-11 10:04:38 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36499280
+Job name: convert_references
+Node name: 
+Hostname: r236
+Task id: 16
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-12-11 10:04:39 - **** Loading conda environment ****
+2025-12-11 10:04:39 - Processing chromosome 16
+2025-12-11 10:04:39 - VCF: ../../simulations/three_populations/_m/temp/1kGP.chr16.filtered.snpsOnly.afr_washington.vcf.gz
+2025-12-11 10:04:39 - Zarr output: three_populations/reference_zarr
+[INFO] Converting VCF to Zarr: ../../simulations/three_populations/_m/temp/1kGP.chr16.filtered.snpsOnly.afr_washington.vcf.gz -> three_populations/reference_zarr/1kGP.chr16.filtered.snpsOnly.afr_washington.zarr
+Traceback (most recent call last):
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/bin/prepare-reference", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/ocean/projects/bio250020p/kbenjamin/software/rfmix_reader/rfmix_reader/cli/prepare_reference.py", line 60, in main
+    convert_vcfs_to_zarr(
+  File "/ocean/projects/bio250020p/kbenjamin/software/rfmix_reader/rfmix_reader/io/prepare_reference.py", line 98, in convert_vcfs_to_zarr
+    convert_vcf_to_zarr(
+  File "/ocean/projects/bio250020p/kbenjamin/software/rfmix_reader/rfmix_reader/io/prepare_reference.py", line 37, in convert_vcf_to_zarr
+    v2z.convert(
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/bio2zarr/vcf.py", line 1632, in convert
+    explode(
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/bio2zarr/vcf.py", line 1533, in explode
+    writer.init(
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/bio2zarr/vcf.py", line 1319, in init
+    icf_metadata, header = scan_vcfs(
+                           ^^^^^^^^^^
+  File "/ocean/projects/bio250020p/shared/opt/env/ai_env/lib/python3.11/site-packages/bio2zarr/vcf.py", line 301, in scan_vcfs
+    raise FileNotFoundError(path)
+FileNotFoundError: ../../simulations/three_populations/_m/temp/1kGP.chr16.filtered.snpsOnly.afr_washington.vcf.gz
+'../../simulations/three_populations/_m/temp/samples_id2' -> 'three_populations/reference_zarr/samples_id2'
+2025-12-11 10:04:46 - Job finished at: Thu Dec 11 10:04:46 EST 2025
