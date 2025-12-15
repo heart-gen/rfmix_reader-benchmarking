@@ -277,11 +277,12 @@ def main():
 
     sample_annot_path = args.sample_annot
     output_path = f"{phased_path}/phased_chr{args.chrom}.zarr"
-    admix = phase_rfmix_chromosome_to_zarr(
+    local_array = phase_rfmix_chromosome_to_zarr(
         file_prefix=here(args.rfmix_input), ref_zarr_root=here(args.ref_input),
         binary_dir=here(binary_path), sample_annot_path=here(sample_annot_path),
         output_path=here(output_path), chrom=str(args.chrom),
     )
+    admix = local_array["local_ancestry"].chunk({"variant": 50_000})
 
     for method in ["linear", "stepwise", "nearest"]:
         logging.info(f"Processing method: {method}")
