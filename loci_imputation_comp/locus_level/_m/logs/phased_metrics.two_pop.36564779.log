@@ -1,0 +1,82 @@
+2025-12-15 09:25:08 - **** Job starts ****
+2025-12-15 09:25:08 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36564779
+Job name: phased_metrics_two_pop
+Node name: 
+Hostname: r235
+Task id: N/A
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-12-15 09:25:09 - **** Loading conda environment ****
+2025-12-15 09:25:10 - **** Run analysis ****
+2025-12-15 09:27:03,449 [INFO] Loading PLINK variants...
+2025-12-15 09:30:59,984 [INFO] Loading ground truth data
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:38<00:00, 38.66s/it]Mapping loci information: 100%|██████████| 1/1 [00:38<00:00, 38.68s/it]
+Mapping ancestry data:   0%|          | 0/1 [00:00<?, ?it/s]Mapping ancestry data: 100%|██████████| 1/1 [07:14<00:00, 434.85s/it]Mapping ancestry data: 100%|██████████| 1/1 [07:14<00:00, 434.85s/it]
+2025-12-15 09:38:54,093 [INFO] Phase RFMix outputs per chromosome...
+Multiple RFMIX file sets read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:18<00:00, 18.94s/it]Mapping loci information: 100%|██████████| 1/1 [00:18<00:00, 18.94s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 16.44it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  8.29it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  8.28it/s]
+2025-12-15 09:39:13,393 [INFO] [phase_rfmix_chromosome_to_zarr] Starting phasing for chrom=21 into /ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/phased/two_populations/phased_files/phased_chr21.zarr
+Multiple RFMIX file sets read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [00:18<00:00, 18.27s/it]Mapping loci information: 100%|██████████| 1/1 [00:18<00:00, 18.27s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 383.22it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00, 10.96it/s]
+2025-12-15 09:39:31,821 [INFO] [phase_rfmix_chromosome_to_zarr] Loaded 175179 variants across 500 samples
+2025-12-15 09:39:33,389 [INFO] [phase_rfmix_chromosome_to_zarr] Writing phased data to /ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/phased/two_populations/phased_files/phased_chr21.zarr
+2025-12-15 09:44:45,702 [INFO] Processing method: linear
+[2025-12-15 09:44:46] Starting expansion!
+[2025-12-15 09:44:46] Generate empty Zarr.
+[2025-12-15 09:44:46] Filling Zarr with local ancestry data in batches.
+[2025-12-15 11:17:49] Zarr array successfully populated!
+[2025-12-15 11:17:49] Interpolating data using method='linear'!
+Interpolating chunks:   0%|          | 0/19 [00:00<?, ?chunk/s]Interpolating chunks:   5%|▌         | 1/19 [00:01<00:32,  1.80s/chunk]Interpolating chunks:  11%|█         | 2/19 [00:03<00:29,  1.72s/chunk]Interpolating chunks:  16%|█▌        | 3/19 [00:05<00:26,  1.68s/chunk]Interpolating chunks:  21%|██        | 4/19 [00:06<00:24,  1.66s/chunk]Interpolating chunks:  26%|██▋       | 5/19 [00:08<00:23,  1.66s/chunk]Interpolating chunks:  32%|███▏      | 6/19 [00:10<00:21,  1.65s/chunk]Interpolating chunks:  37%|███▋      | 7/19 [00:11<00:19,  1.64s/chunk]Interpolating chunks:  42%|████▏     | 8/19 [00:13<00:18,  1.67s/chunk]Interpolating chunks:  47%|████▋     | 9/19 [00:15<00:16,  1.66s/chunk]Interpolating chunks:  53%|█████▎    | 10/19 [00:16<00:15,  1.68s/chunk]Interpolating chunks:  58%|█████▊    | 11/19 [00:18<00:13,  1.66s/chunk]Interpolating chunks:  63%|██████▎   | 12/19 [00:19<00:11,  1.64s/chunk]Interpolating chunks:  68%|██████▊   | 13/19 [00:21<00:09,  1.61s/chunk]Interpolating chunks:  74%|███████▎  | 14/19 [00:23<00:07,  1.59s/chunk]Interpolating chunks:  79%|███████▉  | 15/19 [00:24<00:06,  1.58s/chunk]Interpolating chunks:  84%|████████▍ | 16/19 [00:26<00:04,  1.57s/chunk]Interpolating chunks:  89%|████████▉ | 17/19 [00:27<00:03,  1.55s/chunk]Interpolating chunks:  95%|█████████▍| 18/19 [00:29<00:01,  1.54s/chunk]Interpolating chunks: 100%|██████████| 19/19 [00:30<00:00,  1.53s/chunk]Interpolating chunks: 100%|██████████| 19/19 [00:30<00:00,  1.61s/chunk]
+2025-12-15 11:18:32,558 [INFO] [LINEAR] Computing locus-level metrics
+2025-12-15 11:19:28,516 [INFO] [LINEAR] Computing breakpoint distance error
+2025-12-15 11:20:19,655 [INFO] [LINEAR] Computing segment-level metrics
+2025-12-15 11:21:10,505 [INFO] [LINEAR] Computing switch error rate
+2025-12-15 11:22:00,999 [INFO] Processing method: stepwise
+[2025-12-15 11:18:20] Interpolation complete!
+[2025-12-15 11:22:01] Starting expansion!
+[2025-12-15 11:22:01] Generate empty Zarr.
+[2025-12-15 11:22:01] Filling Zarr with local ancestry data in batches.
+[2025-12-15 12:55:15] Zarr array successfully populated!
+[2025-12-15 12:55:15] Interpolating data using method='stepwise'!
+Interpolating chunks:   0%|          | 0/19 [00:00<?, ?chunk/s]Interpolating chunks:   5%|▌         | 1/19 [00:02<00:37,  2.07s/chunk]Interpolating chunks:  11%|█         | 2/19 [00:03<00:30,  1.82s/chunk]Interpolating chunks:  16%|█▌        | 3/19 [00:05<00:27,  1.72s/chunk]Interpolating chunks:  21%|██        | 4/19 [00:06<00:24,  1.66s/chunk]Interpolating chunks:  26%|██▋       | 5/19 [00:08<00:22,  1.63s/chunk]Interpolating chunks:  32%|███▏      | 6/19 [00:09<00:20,  1.60s/chunk]Interpolating chunks:  37%|███▋      | 7/19 [00:11<00:18,  1.57s/chunk]Interpolating chunks:  42%|████▏     | 8/19 [00:13<00:17,  1.55s/chunk]Interpolating chunks:  47%|████▋     | 9/19 [00:14<00:15,  1.57s/chunk]Interpolating chunks:  53%|█████▎    | 10/19 [00:16<00:14,  1.57s/chunk]Interpolating chunks:  58%|█████▊    | 11/19 [00:17<00:12,  1.57s/chunk]Interpolating chunks:  63%|██████▎   | 12/19 [00:19<00:10,  1.56s/chunk]Interpolating chunks:  68%|██████▊   | 13/19 [00:20<00:09,  1.55s/chunk]Interpolating chunks:  74%|███████▎  | 14/19 [00:22<00:07,  1.53s/chunk]Interpolating chunks:  79%|███████▉  | 15/19 [00:23<00:06,  1.53s/chunk]Interpolating chunks:  84%|████████▍ | 16/19 [00:25<00:04,  1.51s/chunk]Interpolating chunks:  89%|████████▉ | 17/19 [00:26<00:02,  1.49s/chunk]Interpolating chunks:  95%|█████████▍| 18/19 [00:28<00:01,  1.49s/chunk]Interpolating chunks: 100%|██████████| 19/19 [00:29<00:00,  1.48s/chunk]Interpolating chunks: 100%|██████████| 19/19 [00:29<00:00,  1.56s/chunk]
+2025-12-15 12:55:58,075 [INFO] [STEPWISE] Computing locus-level metrics
+2025-12-15 12:56:54,770 [INFO] [STEPWISE] Computing breakpoint distance error
+2025-12-15 12:57:46,230 [INFO] [STEPWISE] Computing segment-level metrics
+2025-12-15 12:58:37,950 [INFO] [STEPWISE] Computing switch error rate
+2025-12-15 12:59:29,950 [INFO] Processing method: nearest
+[2025-12-15 12:55:45] Interpolation complete!
+[2025-12-15 12:59:31] Starting expansion!
+[2025-12-15 12:59:31] Generate empty Zarr.
+[2025-12-15 12:59:31] Filling Zarr with local ancestry data in batches.
+[2025-12-15 14:33:20] Zarr array successfully populated!
+[2025-12-15 14:33:20] Interpolating data using method='nearest'!
+Interpolating chunks:   0%|          | 0/19 [00:00<?, ?chunk/s]Interpolating chunks:   5%|▌         | 1/19 [00:02<00:45,  2.53s/chunk]Interpolating chunks:  11%|█         | 2/19 [00:04<00:40,  2.39s/chunk]Interpolating chunks:  16%|█▌        | 3/19 [00:07<00:37,  2.35s/chunk]Interpolating chunks:  21%|██        | 4/19 [00:09<00:35,  2.34s/chunk]Interpolating chunks:  26%|██▋       | 5/19 [00:11<00:32,  2.32s/chunk]Interpolating chunks:  32%|███▏      | 6/19 [00:14<00:30,  2.34s/chunk]Interpolating chunks:  37%|███▋      | 7/19 [00:16<00:28,  2.35s/chunk]Interpolating chunks:  42%|████▏     | 8/19 [00:18<00:25,  2.33s/chunk]Interpolating chunks:  47%|████▋     | 9/19 [00:21<00:23,  2.31s/chunk]Interpolating chunks:  53%|█████▎    | 10/19 [00:23<00:20,  2.27s/chunk]Interpolating chunks:  58%|█████▊    | 11/19 [00:25<00:18,  2.27s/chunk]Interpolating chunks:  63%|██████▎   | 12/19 [00:27<00:16,  2.29s/chunk]Interpolating chunks:  68%|██████▊   | 13/19 [00:30<00:13,  2.26s/chunk]Interpolating chunks:  74%|███████▎  | 14/19 [00:32<00:11,  2.24s/chunk]Interpolating chunks:  79%|███████▉  | 15/19 [00:34<00:08,  2.23s/chunk]Interpolating chunks:  84%|████████▍ | 16/19 [00:36<00:06,  2.22s/chunk]Interpolating chunks:  89%|████████▉ | 17/19 [00:38<00:04,  2.19s/chunk]Interpolating chunks:  95%|█████████▍| 18/19 [00:40<00:02,  2.18s/chunk]Interpolating chunks: 100%|██████████| 19/19 [00:42<00:00,  2.15s/chunk]Interpolating chunks: 100%|██████████| 19/19 [00:42<00:00,  2.26s/chunk]
+2025-12-15 14:34:15,771 [INFO] [NEAREST] Computing locus-level metrics
+2025-12-15 14:35:11,997 [INFO] [NEAREST] Computing breakpoint distance error
+2025-12-15 14:36:03,517 [INFO] [NEAREST] Computing segment-level metrics
+2025-12-15 14:36:54,955 [INFO] [NEAREST] Computing switch error rate
+[2025-12-15 14:34:03] Interpolation complete!
+-----
+dask                2025.9.1
+localqtl            NA
+numpy               2.2.0
+pandas              2.3.3
+pyhere              1.0.3
+rfmix_reader        0.3.1
+session_info        v1.0.1
+-----
+Python 3.11.13 (main, Jun  5 2025, 13:12:00) [GCC 11.2.0]
+Linux-4.18.0-553.22.1.el8_10.x86_64-x86_64-with-glibc2.28
+-----
+Session information updated at 2025-12-15 14:37
+2025-12-15 14:38:31 - Job finished at: Mon Dec 15 14:38:31 EST 2025
