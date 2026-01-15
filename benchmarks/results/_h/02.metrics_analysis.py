@@ -107,7 +107,7 @@ def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
         """Return (median, mean, q1, q3, iqr) after dropping NaNs; all NaN if no data."""
         vals = pd.to_numeric(series, errors="coerce").dropna()
         if len(vals) == 0:
-            return np.nan, np.nan, np.nan, np.nan
+            return np.nan, np.nan, np.nan, np.nan, np.nan
         q1 = vals.quantile(0.25)
         q3 = vals.quantile(0.75)
         median = vals.median()
@@ -155,7 +155,7 @@ def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
             ) = summary_stats(g_success["wall_time_sec"])
 
             (
-                cpu_mem_median_mb, cpu_men_mean_mb, cpu_mem_q1_mb,
+                cpu_mem_median_mb, cpu_mem_mean_mb, cpu_mem_q1_mb,
                 cpu_mem_q3_mb, cpu_mem_iqr_mb,
             ) = summary_stats(g_success["peak_cpu_memory_MB"])
 
