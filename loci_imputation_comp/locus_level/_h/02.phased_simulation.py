@@ -51,9 +51,9 @@ def impute_data(loci_df, variants, admix, zarr_path, method):
         loci_df = loci_df.to_pandas()
     variant_df = variants.merge(loci_df, on=["chrom", "pos"], how="outer")
     variant_df = variant_df.loc[:, ["chrom", "pos", "i"]]
-    _ = interpolate_array(variant_df, admix, zarr_outdir=zarr_path,
-                          interpolation=method, use_bp_positions=True)
-    return variant_df
+    admix = interpolate_array(variant_df, admix, zarr_outdir=zarr_path,
+                              interpolation=method, use_bp_positions=True)
+    return variant_df, admix
 
 
 def admix_counts_to_haplotypes_numpy(admix):
@@ -143,9 +143,9 @@ def compute_locus_metrics(true_anc, inferred_anc, labels, method, outfile):
         "labels": labels,
         "overall_accuracy": float(acc),
         "confusion_matrix": cm.tolist(),
-        "precision": {i: float(v) for i, v in enumerate(precision)},
-        "recall": {i: float(v) for i, v in enumerate(recall)},
-        "f1": {i: float(v) for i, v in enumerate(f1)},
+        "precision": {labels[i]: float(v) for i, v in enumerate(precision)},
+        "recall": {labels[i]: float(v) for i, v in enumerate(recall)},
+        "f1": {labels[i]: float(v) for i, v in enumerate(f1)},
         "mcc": float(mcc),
         "shape": list(map(int, true_anc.shape)),
         "per_ancestry_accuracy": per_ancestry_accuracy,
@@ -315,18 +315,18 @@ def main():
             true_anc, inferred, labels, method, method_path / "locus_metrics.json"
         )
 
-        logging.info(f"[{method}] Computing breakpoint distance error")
+        logging.info(f"[{method.upper()}] Computing breakpoint distance error")
         bins = [0, 1_000, 5_000, 10_000, 50_000, 100_000, np.inf]
         breakpoint_error_analysis(
             true_anc, inferred, positions, bins, method_path / "breakpoint_error.tsv"
         )
 
-        logging.info(f"[{method}] Computing segment-level metrics")
+        logging.info(f"[{method.upper()}] Computing segment-level metrics")
         segment_metrics(
             true_anc, inferred, positions, method_path / "segment_metrics.json",
         )
 
-        logging.info(f"[{method}] Computing switch error rate")
+        logging.info(f"[{method.upper()}] Computing switch error rate")
         switch_error_rate(
             true_anc, inferred, method_path / "switch_error_rate.json",
         )
