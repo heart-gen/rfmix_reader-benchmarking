@@ -16,3 +16,5 @@ cufile.log
 *.tmp
 *.bak
 *fb.tsv
+local-ancestry.zarr
+*.zarr
