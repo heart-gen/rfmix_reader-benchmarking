@@ -1,19 +1,9 @@
 #!/usr/bin/env python3
 import argparse
-import json
-import logging
-from pathlib import Path
-
 import pandas as pd
-
-
-METHOD_LABELS = {
-    "stepwise": "step",
-    "step": "step",
-    "linear": "linear",
-    "nearest": "nearest",
-}
-
+import session_info
+import logging, json
+from pathlib import Path
 
 def configure_logging():
     logging.basicConfig(
@@ -30,15 +20,11 @@ def parse_args():
         )
     )
     parser.add_argument(
-        "--metrics-root",
-        type=Path,
-        default=Path("../_m"),
+        "--metrics-root", type=Path, default=Path("../_m"),
         help="Root directory that contains phased/unphased results.",
     )
     parser.add_argument(
-        "--output",
-        type=Path,
-        default=Path("./combined_metrics"),
+        "--output", type=Path, default=Path("./combined_metrics"),
         help="Output directory for combined CSV files.",
     )
     return parser.parse_args()
@@ -53,40 +39,36 @@ def load_json(path: Path):
 
 
 def normalize_method(method_name: str) -> str:
+    METHOD_LABELS = {
+        "stepwise": "stepwise", "linear": "linear", "nearest": "nearest",
+    }
     return METHOD_LABELS.get(method_name, method_name)
 
 
 def collect_metrics(metrics_root: Path):
-    summary_rows = []
-    breakpoint_rows = []
-
-    if not metrics_root.exists():
-        raise FileNotFoundError(f"Metrics root does not exist: {metrics_root}")
-
+    summary_rows, breakpoint_rows = [], []
     for phase_dir in sorted(metrics_root.iterdir()):
         if not phase_dir.is_dir():
             continue
-        phase = phase_dir.name
 
+        phase = phase_dir.name
         for population_dir in sorted(phase_dir.glob("*_populations")):
             if not population_dir.is_dir():
                 continue
-            population = population_dir.name
 
+            population = population_dir.name
             for method_dir in sorted(population_dir.iterdir()):
                 if not method_dir.is_dir():
                     continue
+
                 method = method_dir.name
                 interpolation_method = normalize_method(method)
-
                 locus_metrics = load_json(method_dir / "locus_metrics.json")
                 segment_metrics = load_json(method_dir / "segment_metrics.json")
                 switch_metrics = load_json(method_dir / "switch_error_rate.json")
 
                 row = {
-                    "phase": phase,
-                    "population": population,
-                    "method": method,
+                    "phase": phase, "population": population, "method": method,
                     "interpolation_method": interpolation_method,
                 }
 
@@ -100,11 +82,9 @@ def collect_metrics(metrics_root: Path):
                     shape = locus_metrics.get("shape")
                     if shape and len(shape) == 3:
                         row.update(
-                            {
-                                "n_variants": shape[0],
-                                "n_samples": shape[1],
-                                "n_labels": shape[2],
-                            }
+                            {"n_variants": shape[0],
+                             "n_samples": shape[1],
+                             "n_labels": shape[2]}
                         )
 
                     per_ancestry = locus_metrics.get("per_ancestry_accuracy", {})
@@ -112,7 +92,7 @@ def collect_metrics(metrics_root: Path):
                         row[f"per_ancestry_accuracy_{label}"] = value
 
                     precision = locus_metrics.get("precision", {})
-                    recall = locus_metrics.get("recall", {})
+                    recall    = locus_metrics.get("recall", {})
                     f1 = locus_metrics.get("f1", {})
                     labels = locus_metrics.get("labels", [])
                     for idx, label in enumerate(labels):
@@ -127,7 +107,6 @@ def collect_metrics(metrics_root: Path):
                     row.update(switch_metrics)
 
                 summary_rows.append(row)
-
                 breakpoint_path = method_dir / "breakpoint_error.tsv"
                 if breakpoint_path.exists():
                     breakpoint_df = pd.read_csv(breakpoint_path, sep="\t")
@@ -146,12 +125,13 @@ def main():
     configure_logging()
     args = parse_args()
 
+    # Parameter setup
     metrics_root = args.metrics_root.resolve()
     output_dir = args.output.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Collect data
     summary_rows, breakpoint_rows = collect_metrics(metrics_root)
-
     if summary_rows:
         summary_df = pd.DataFrame(summary_rows)
         summary_df.sort_values(
@@ -170,6 +150,9 @@ def main():
         )
     else:
         logging.warning("No breakpoint metrics found under %s", metrics_root)
+
+    # Session information
+    session_info.show()
 
 
 if __name__ == "__main__":
