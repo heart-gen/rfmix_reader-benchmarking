@@ -1,0 +1,21 @@
+2025-12-12 07:21:55 - **** Job starts ****
+2025-12-12 07:21:55 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36510254
+Job name: impute_phase_three_pop
+Node name: 
+Hostname: r030
+Task id: 1
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-12-12 07:21:56 - **** Loading conda environment ****
+2025-12-12 07:21:56 - **** Run analysis ****
+usage: 03.impute_phased.py [-h] --rfmix-input RFMIX_INPUT --phased-zarr
+                           PHASED_ZARR [--population {two,three}]
+                           [--method {linear,nearest,stepwise}]
+03.impute_phased.py: error: the following arguments are required: --phased-zarr
+Python script failed. Check the error logs.

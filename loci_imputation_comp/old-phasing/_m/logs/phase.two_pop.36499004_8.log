@@ -1,0 +1,34 @@
+2025-12-11 08:52:39 - **** Job starts ****
+2025-12-11 08:52:39 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36499013
+Job name: phase_two_pop
+Node name: 
+Hostname: r231
+Task id: 8
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-12-11 08:52:40 - **** Loading conda environment ****
+2025-12-11 08:52:41 - **** Run analysis ****
+2025-12-11 08:52:45,633 [INFO] Phase RFMix outputs per chromosome...
+2025-12-11 08:52:45,863 [INFO] [phase_rfmix_chromosome_to_zarr] Starting phasing for chrom=8 into /ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/input/simulations/two_populations/_m/rfmix-out/phased_files/phased_chr8.zarr
+Multiple RFMIX file sets read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [01:19<00:00, 79.50s/it]Mapping loci information: 100%|██████████| 1/1 [01:19<00:00, 79.53s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00, 22.19it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.47it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.47it/s]
+2025-12-11 08:54:06,267 [INFO] [phase_rfmix_chromosome_to_zarr] Loaded 684459 variants across 500 samples
+2025-12-11 08:54:12,443 [INFO] [phase_rfmix_chromosome_to_zarr] Writing phased data to /ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/input/simulations/two_populations/_m/rfmix-out/phased_files/phased_chr8.zarr
+-----
+pyhere              1.0.3
+rfmix_reader        0.2.1
+session_info        v1.0.1
+-----
+Python 3.11.13 (main, Jun  5 2025, 13:12:00) [GCC 11.2.0]
+Linux-4.18.0-553.22.1.el8_10.x86_64-x86_64-with-glibc2.28
+-----
+Session information updated at 2025-12-11 09:16
+2025-12-11 09:16:31 - Job finished at: Thu Dec 11 09:16:31 EST 2025

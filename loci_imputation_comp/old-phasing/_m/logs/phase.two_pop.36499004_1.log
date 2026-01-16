@@ -1,0 +1,34 @@
+2025-12-11 08:50:36 - **** Job starts ****
+2025-12-11 08:50:36 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36499005
+Job name: phase_two_pop
+Node name: 
+Hostname: r263
+Task id: 1
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-12-11 08:50:37 - **** Loading conda environment ****
+2025-12-11 08:50:37 - **** Run analysis ****
+2025-12-11 08:50:41,736 [INFO] Phase RFMix outputs per chromosome...
+2025-12-11 08:50:41,943 [INFO] [phase_rfmix_chromosome_to_zarr] Starting phasing for chrom=1 into /ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/input/simulations/two_populations/_m/rfmix-out/phased_files/phased_chr1.zarr
+Multiple RFMIX file sets read in this order: ['chr1', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr2', 'chr20', 'chr21', 'chr22', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9']
+Mapping loci information:   0%|          | 0/1 [00:00<?, ?it/s]Mapping loci information: 100%|██████████| 1/1 [02:04<00:00, 124.89s/it]Mapping loci information: 100%|██████████| 1/1 [02:05<00:00, 125.16s/it]
+Mapping global ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00,  9.75it/s]Mapping global ancestry files: 100%|██████████| 1/1 [00:00<00:00,  9.73it/s]
+Mapping local ancestry files:   0%|          | 0/1 [00:00<?, ?it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s]Mapping local ancestry files: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s]
+2025-12-11 08:52:48,198 [INFO] [phase_rfmix_chromosome_to_zarr] Loaded 1002577 variants across 500 samples
+2025-12-11 08:52:56,349 [INFO] [phase_rfmix_chromosome_to_zarr] Writing phased data to /ocean/projects/bio250020p/kbenjamin/projects/rfmix_reader-benchmarking/input/simulations/two_populations/_m/rfmix-out/phased_files/phased_chr1.zarr
+-----
+pyhere              1.0.3
+rfmix_reader        0.2.1
+session_info        v1.0.1
+-----
+Python 3.11.13 (main, Jun  5 2025, 13:12:00) [GCC 11.2.0]
+Linux-4.18.0-553.22.1.el8_10.x86_64-x86_64-with-glibc2.28
+-----
+Session information updated at 2025-12-11 09:28
+2025-12-11 09:28:13 - Job finished at: Thu Dec 11 09:28:13 EST 2025

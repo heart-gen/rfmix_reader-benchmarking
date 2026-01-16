@@ -1,0 +1,18 @@
+2025-12-11 20:50:41 - **** Job starts ****
+2025-12-11 20:50:41 - **** Bridges-2 info ****
+User: kbenjamin
+Job id: 36507392
+Job name: phase_merged_data
+Node name: 
+Hostname: r008
+Task id: 0
+
+Currently Loaded Modules:
+  1) anaconda3/2024.10-1
+
+ 
+
+2025-12-11 20:50:42 - **** Loading conda environment ****
+2025-12-11 20:50:43 - **** Run analysis ****
+2025-12-11 20:50:43 - Processing dataset: RFMIX_TWO (../../input/simulations/two_populations/_m/rfmix-out/phased_files)
+2025-12-11 20:55:57 - Job finished at: Thu Dec 11 20:55:57 EST 2025
