@@ -5,7 +5,8 @@
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=64
 #SBATCH --time=02:00:00
-#SBATCH --output=logs/unphased_metrics.two_pop.%j.log
+#SBATCH --array=1-22
+#SBATCH --output=logs/unphased_metrics.two_pop.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -31,10 +32,12 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ml_dev
 log_message "**** Run analysis ****"
 SIMU_DIR="input/simulations/two_populations/_m/gt-files"
 RFMIX_DIR="input/simulations/two_populations/_m/rfmix-out"
+CHR=${SLURM_ARRAY_TASK_ID}
 
 python ../_h/01.unphased_simulation.py \
        --rfmix-input "$RFMIX_DIR" --simu-input "$SIMU_DIR" \
-       --output "unphased" --population "two"
+       --output "unphased" --population "two" \
+       --chrom "$CHR"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."

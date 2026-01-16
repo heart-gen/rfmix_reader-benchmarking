@@ -10,7 +10,7 @@ import dask.array as da
 from pathlib import Path
 
 from localqtl import PgenReader
-from rfmix_reader import read_simu, read_rfmix, interpolate_array
+from rfmix_reader import read_flare, read_rfmix, interpolate_array
 
 def configure_logging():
     logging.basicConfig(
@@ -22,7 +22,7 @@ def configure_logging():
 def parse_parameters():
     parser = argparse.ArgumentParser(description="Imputation Accuracy")
     parser.add_argument("--rfmix-input", type=Path, required=True)
-    parser.add_argument("--simu-input", type=Path, required=True)
+    parser.add_argument("--flare-input", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=Path("./"))
     parser.add_argument("--population", type=str, choices=["two","three"], default="three")
     parser.add_argument("--chrom", type=int, default=None)
@@ -274,13 +274,18 @@ def main():
         logging.info("Processing chromosome %s", chrom_label)
         chrom_variants = variants_df[(variants_df["chrom"] == chrom_label)]
 
-        logging.info("Loading ground truth data")
-        loci_gt, g_anc_gt, admix_gt = read_simu(here(args.simu_input), chrom=chrom)
-        labels   = list(g_anc_gt.drop(["sample_id", "chrom"], axis=1).columns)
-        loci_gt  = standardize_variant_columns(loci_gt)
+        logging.info("Loading FLARE data")
+        loci_gt, g_anc_gt, admix_gt = read_flare(here(args.flare_input))
+        labels = list(
+            g_anc_gt.drop(["sample_id", "chrom"], axis=1, errors="ignore").columns
+        )
+        loci_gt = standardize_variant_columns(loci_gt)
+        chrom_mask = loci_gt["chrom"] == chrom_label
+        loci_gt = loci_gt.loc[chrom_mask].reset_index(drop=True)
+        admix_gt = admix_gt[chrom_mask.to_numpy()]
         dup_mask = ~loci_gt.duplicated(subset=["chrom", "pos"])
-        loci_gt  = loci_gt.loc[dup_mask].reset_index(drop=True)
-        loci_gt  = loci_gt.reset_index(names="_gt_pos")
+        loci_gt = loci_gt.loc[dup_mask].reset_index(drop=True)
+        loci_gt = loci_gt.reset_index(names="_gt_pos")
         admix_gt = admix_gt[dup_mask.to_numpy()]
 
         logging.info("Reading RFMix outputs...")

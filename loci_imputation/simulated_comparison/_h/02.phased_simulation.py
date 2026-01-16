@@ -1,6 +1,7 @@
 import json
 import logging
 import argparse
+import time
 import numpy as np
 import pandas as pd
 import session_info
@@ -31,7 +32,7 @@ def parse_parameters():
     parser.add_argument("--population", type=str, choices=["two","three"], default="three")
     parser.add_argument("--sample-annot", type=Path, required=True)
     parser.add_argument("--ref-input", type=Path, default=Path("input/references/_m"))
-    parser.add_argument("--chrom", type=int, default=21)
+    parser.add_argument("--chrom", type=int, default=None)
     return parser.parse_args()
 
 
@@ -51,9 +52,16 @@ def impute_data(loci_df, variants, admix, zarr_path, method):
         loci_df = loci_df.to_pandas()
     variant_df = variants.merge(loci_df, on=["chrom", "pos"], how="outer")
     variant_df = variant_df.loc[:, ["chrom", "pos", "i"]]
-    admix = interpolate_array(variant_df, admix, zarr_outdir=zarr_path,
-                              interpolation=method, use_bp_positions=True)
-    return variant_df, admix
+    start = time.time()
+    admix = interpolate_array(
+        variant_df,
+        admix,
+        zarr_outdir=zarr_path,
+        interpolation=method,
+        use_bp_positions=True,
+    )
+    runtime_sec = time.time() - start
+    return variant_df, admix, runtime_sec
 
 
 def admix_counts_to_haplotypes_numpy(admix):
@@ -126,7 +134,15 @@ def metrics_from_confusion(cm):
     return acc, mcc, precision, recall, f1
 
 
-def compute_locus_metrics(true_anc, inferred_anc, labels, method, outfile):
+def compute_locus_metrics(
+    true_anc,
+    inferred_anc,
+    labels,
+    method,
+    outfile,
+    chromosome,
+    interpolation_runtime_sec,
+):
     t_hard = to_hard_calls(true_anc)
     p_hard = to_hard_calls(inferred_anc)
 
@@ -149,6 +165,8 @@ def compute_locus_metrics(true_anc, inferred_anc, labels, method, outfile):
         "mcc": float(mcc),
         "shape": list(map(int, true_anc.shape)),
         "per_ancestry_accuracy": per_ancestry_accuracy,
+        "chromosome": chromosome,
+        "interpolation_runtime_sec": float(interpolation_runtime_sec),
     }
     with open(outfile, "w") as f:
         json.dump(metrics, f, indent=4)
@@ -193,7 +211,7 @@ def breakpoint_error_analysis(true_anc, inferred_anc, positions, bins, outfile):
     }).to_csv(outfile, sep="\t", index=False)
 
 
-def segment_metrics(true_anc, inferred_anc, positions, outfile):
+def segment_metrics(true_anc, inferred_anc, positions, outfile, chromosome):
     t0 = to_hard_calls(true_anc)[:, 0]
     p0 = to_hard_calls(inferred_anc)[:, 0]
 
@@ -217,12 +235,13 @@ def segment_metrics(true_anc, inferred_anc, positions, outfile):
         "mean_tract_length_bp": float(np.mean(seg_len)),
         "median_tract_length_bp": float(np.median(seg_len)),
         "n_segments": len(segments),
+        "chromosome": chromosome,
     }
     with open(outfile, "w") as f:
         json.dump(metrics, f, indent=4)
 
 
-def switch_error_rate(true_anc, inferred_anc, outfile):
+def switch_error_rate(true_anc, inferred_anc, outfile, chromosome):
     t0 = to_hard_calls(true_anc)[:, 0]
     p0 = to_hard_calls(inferred_anc)[:, 0]
 
@@ -239,6 +258,7 @@ def switch_error_rate(true_anc, inferred_anc, outfile):
         "switch_error_rate": float(ser),
         "n_true_switches": len(true_switches),
         "n_predicted_switches": len(pred_switches),
+        "chromosome": chromosome,
     }
     with open(outfile, "w") as f:
         json.dump(metrics, f, indent=4)
@@ -255,81 +275,104 @@ def main():
     logging.info("Loading PLINK variants...")
     plink_path = here("input/simulations", pop_dir.name, "_m/plink-files/simulated")
     variants_df = load_variants(plink_path)
-    variants_df = variants_df[(variants_df["chrom"] == f"chr{args.chrom}")]
 
-    logging.info("Loading ground truth data")
-    # Load ground truth data
-    loci_gt, g_anc_gt, admix_gt = read_simu(here(args.simu_input), chrom=args.chrom)
-    labels   = list(g_anc_gt.drop(["sample_id", "chrom"], axis=1).columns)
-    loci_gt  = standardize_variant_columns(loci_gt)
-    dup_mask = ~loci_gt.duplicated(subset=["chrom", "pos"])
-    loci_gt  = loci_gt.loc[dup_mask].reset_index(drop=True)
-    loci_gt  = loci_gt.reset_index(names="_gt_pos")
-    admix_gt = admix_gt[dup_mask.to_numpy()]
+    chroms = [args.chrom] if args.chrom is not None else range(1, 23)
+    for chrom in chroms:
+        chrom_label = f"chr{chrom}"
+        logging.info("Processing chromosome %s", chrom_label)
+        chrom_variants = variants_df[(variants_df["chrom"] == chrom_label)]
 
-    logging.info("Phase RFMix outputs per chromosome...")
-    binary_path = args.rfmix_input / "binary_files"
-    phased_path = pop_dir / "phased_files"
-    loci_df, _, _ = read_rfmix(
-        here(args.rfmix_input), binary_dir=here(binary_path), chrom=args.chrom
-    )
-    loci_df = standardize_variant_columns(loci_df)
+        logging.info("Loading ground truth data")
+        loci_gt, g_anc_gt, admix_gt = read_simu(here(args.simu_input), chrom=chrom)
+        labels   = list(g_anc_gt.drop(["sample_id", "chrom"], axis=1).columns)
+        loci_gt  = standardize_variant_columns(loci_gt)
+        dup_mask = ~loci_gt.duplicated(subset=["chrom", "pos"])
+        loci_gt  = loci_gt.loc[dup_mask].reset_index(drop=True)
+        loci_gt  = loci_gt.reset_index(names="_gt_pos")
+        admix_gt = admix_gt[dup_mask.to_numpy()]
 
-    sample_annot_path = args.sample_annot
-    output_path = f"{phased_path}/phased_chr{args.chrom}.zarr"
-    local_array = phase_rfmix_chromosome_to_zarr(
-        file_prefix=here(args.rfmix_input), ref_zarr_root=here(args.ref_input),
-        binary_dir=here(binary_path), sample_annot_path=here(sample_annot_path),
-        output_path=here(output_path), chrom=str(args.chrom),
-    )
-    admix = local_array["local_ancestry"].chunk({"variant": 50_000})
-
-    for method in ["linear", "stepwise", "nearest"]:
-        logging.info(f"Processing method: {method}")
-        method_path =  pop_dir / method
-        method_path.mkdir(parents=True, exist_ok=True)
-
-        zarr_path = method_path / "local-ancestry.zarr"
-        variant_gt, admix_imp = impute_data(
-            loci_df, variants_df, admix, zarr_path, method
+        logging.info("Phase RFMix outputs per chromosome...")
+        binary_path = args.rfmix_input / "binary_files"
+        phased_path = pop_dir / "phased_files"
+        phased_path.mkdir(parents=True, exist_ok=True)
+        loci_df, _, _ = read_rfmix(
+            here(args.rfmix_input), binary_dir=here(binary_path), chrom=chrom
         )
+        loci_df = standardize_variant_columns(loci_df)
 
-        variant_gt = variant_gt.reset_index(drop=True)
-        variant_gt["_zarr_pos"] = np.arange(len(variant_gt))
-
-        loci_aligned = loci_gt.merge(
-            variant_gt[["chrom", "pos", "_zarr_pos"]],
-            on=["chrom", "pos"], how="inner", sort=False
+        sample_annot_path = args.sample_annot
+        output_path = phased_path / f"phased_chr{chrom}.zarr"
+        local_array = phase_rfmix_chromosome_to_zarr(
+            file_prefix=here(args.rfmix_input),
+            ref_zarr_root=here(args.ref_input),
+            binary_dir=here(binary_path),
+            sample_annot_path=here(sample_annot_path),
+            output_path=here(output_path),
+            chrom=str(chrom),
         )
-        zarr_idx = loci_aligned["_zarr_pos"].to_numpy(dtype=np.int64)
-        gt_idx   = loci_aligned["_gt_pos"].to_numpy(dtype=np.int64)
+        admix = local_array["local_ancestry"].chunk({"variant": 50_000})
 
-        # Lazy reads
-        inferred = admix_imp[zarr_idx, :, :]
-        true_anc = admix_gt[gt_idx, :, :].compute()
-        positions = loci_aligned["pos"].to_numpy()
+        for method in ["linear", "stepwise", "nearest"]:
+            logging.info(f"Processing method: {method}")
+            method_path = pop_dir / method / chrom_label
+            method_path.mkdir(parents=True, exist_ok=True)
 
-        # Calculate metrics
-        logging.info(f"[{method.upper()}] Computing locus-level metrics")
-        compute_locus_metrics(
-            true_anc, inferred, labels, method, method_path / "locus_metrics.json"
-        )
+            zarr_path = method_path / "local-ancestry.zarr"
+            variant_gt, admix_imp, interpolation_runtime_sec = impute_data(
+                loci_df, chrom_variants, admix, zarr_path, method
+            )
 
-        logging.info(f"[{method.upper()}] Computing breakpoint distance error")
-        bins = [0, 1_000, 5_000, 10_000, 50_000, 100_000, np.inf]
-        breakpoint_error_analysis(
-            true_anc, inferred, positions, bins, method_path / "breakpoint_error.tsv"
-        )
+            variant_gt = variant_gt.reset_index(drop=True)
+            variant_gt["_zarr_pos"] = np.arange(len(variant_gt))
 
-        logging.info(f"[{method.upper()}] Computing segment-level metrics")
-        segment_metrics(
-            true_anc, inferred, positions, method_path / "segment_metrics.json",
-        )
+            loci_aligned = loci_gt.merge(
+                variant_gt[["chrom", "pos", "_zarr_pos"]],
+                on=["chrom", "pos"], how="inner", sort=False
+            )
+            zarr_idx = loci_aligned["_zarr_pos"].to_numpy(dtype=np.int64)
+            gt_idx   = loci_aligned["_gt_pos"].to_numpy(dtype=np.int64)
 
-        logging.info(f"[{method.upper()}] Computing switch error rate")
-        switch_error_rate(
-            true_anc, inferred, method_path / "switch_error_rate.json",
-        )
+            inferred = admix_imp[zarr_idx, :, :]
+            true_anc = admix_gt[gt_idx, :, :].compute()
+            positions = loci_aligned["pos"].to_numpy()
+
+            logging.info(f"[{method.upper()}] Computing locus-level metrics")
+            compute_locus_metrics(
+                true_anc,
+                inferred,
+                labels,
+                method,
+                method_path / "locus_metrics.json",
+                chrom,
+                interpolation_runtime_sec,
+            )
+
+            logging.info(f"[{method.upper()}] Computing breakpoint distance error")
+            bins = [0, 1_000, 5_000, 10_000, 50_000, 100_000, np.inf]
+            breakpoint_error_analysis(
+                true_anc,
+                inferred,
+                positions,
+                bins,
+                method_path / "breakpoint_error.tsv",
+            )
+
+            logging.info(f"[{method.upper()}] Computing segment-level metrics")
+            segment_metrics(
+                true_anc,
+                inferred,
+                positions,
+                method_path / "segment_metrics.json",
+                chrom,
+            )
+
+            logging.info(f"[{method.upper()}] Computing switch error rate")
+            switch_error_rate(
+                true_anc,
+                inferred,
+                method_path / "switch_error_rate.json",
+                chrom,
+            )
 
     # Session information
     session_info.show()
