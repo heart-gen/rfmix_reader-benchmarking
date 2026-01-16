@@ -10,7 +10,12 @@ import dask.array as da
 from pathlib import Path
 
 from localqtl import PgenReader
-from rfmix_reader import read_simu, read_rfmix, interpolate_array
+from rfmix_reader import (
+    read_flare,
+    read_rfmix,
+    interpolate_array,
+    phase_rfmix_chromosome_to_zarr
+)
 
 def configure_logging():
     logging.basicConfig(
@@ -22,9 +27,11 @@ def configure_logging():
 def parse_parameters():
     parser = argparse.ArgumentParser(description="Imputation Accuracy")
     parser.add_argument("--rfmix-input", type=Path, required=True)
-    parser.add_argument("--simu-input", type=Path, required=True)
+    parser.add_argument("--flare-input", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=Path("./"))
     parser.add_argument("--population", type=str, choices=["two","three"], default="three")
+    parser.add_argument("--sample-annot", type=Path, required=True)
+    parser.add_argument("--ref-input", type=Path, default=Path("input/references/_m"))
     parser.add_argument("--chrom", type=int, default=None)
     return parser.parse_args()
 
@@ -264,6 +271,7 @@ def main():
     pop_dir = args.output / f"{args.population}_populations"
     pop_dir.mkdir(parents=True, exist_ok=True)
 
+    # Load and impute data
     logging.info("Loading PLINK variants...")
     plink_path = here("input/simulations", pop_dir.name, "_m/plink-files/simulated")
     variants_df = load_variants(plink_path)
@@ -274,21 +282,40 @@ def main():
         logging.info("Processing chromosome %s", chrom_label)
         chrom_variants = variants_df[(variants_df["chrom"] == chrom_label)]
 
-        logging.info("Loading ground truth data")
-        loci_gt, g_anc_gt, admix_gt = read_simu(here(args.simu_input), chrom=chrom)
-        labels   = list(g_anc_gt.drop(["sample_id", "chrom"], axis=1).columns)
-        loci_gt  = standardize_variant_columns(loci_gt)
+        logging.info("Loading FLARE data")
+        loci_gt, g_anc_gt, admix_gt = read_flare(here(args.flare_input))
+        labels = list(
+            g_anc_gt.drop(["sample_id", "chrom"], axis=1, errors="ignore").columns
+        )
+        loci_gt = standardize_variant_columns(loci_gt)
+        chrom_mask = loci_gt["chrom"] == chrom_label
+        loci_gt = loci_gt.loc[chrom_mask].reset_index(drop=True)
+        admix_gt = admix_gt[chrom_mask.to_numpy()]
         dup_mask = ~loci_gt.duplicated(subset=["chrom", "pos"])
-        loci_gt  = loci_gt.loc[dup_mask].reset_index(drop=True)
-        loci_gt  = loci_gt.reset_index(names="_gt_pos")
+        loci_gt = loci_gt.loc[dup_mask].reset_index(drop=True)
+        loci_gt = loci_gt.reset_index(names="_gt_pos")
         admix_gt = admix_gt[dup_mask.to_numpy()]
 
-        logging.info("Reading RFMix outputs...")
+        logging.info("Phase RFMix outputs per chromosome...")
         binary_path = args.rfmix_input / "binary_files"
-        loci_df, _, admix = read_rfmix(
+        phased_path = pop_dir / "phased_files"
+        phased_path.mkdir(parents=True, exist_ok=True)
+        loci_df, _, _ = read_rfmix(
             here(args.rfmix_input), binary_dir=here(binary_path), chrom=chrom
         )
         loci_df = standardize_variant_columns(loci_df)
+
+        sample_annot_path = args.sample_annot
+        output_path = phased_path / f"phased_chr{chrom}.zarr"
+        local_array = phase_rfmix_chromosome_to_zarr(
+            file_prefix=here(args.rfmix_input),
+            ref_zarr_root=here(args.ref_input),
+            binary_dir=here(binary_path),
+            sample_annot_path=here(sample_annot_path),
+            output_path=here(output_path),
+            chrom=str(chrom),
+        )
+        admix = local_array["local_ancestry"].chunk({"variant": 50_000})
 
         for method in ["linear", "stepwise", "nearest"]:
             logging.info(f"Processing method: {method}")
