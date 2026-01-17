@@ -30,7 +30,7 @@ RFMIX_INPUT=${RFMIX_INPUT:-"/path/to/rfmix/input"}
 FLARE_INPUT=${FLARE_INPUT:-"/path/to/flare/input"}
 OUTPUT_DIR=${OUTPUT_DIR:-"./outputs/global_ancestry"}
 
-python ../per_chrom_global_ancestry.py \
+python ../_h/per_chrom_global_ancestry.py \
     --simu-input "${SIM_INPUT}" \
     --rfmix-input "${RFMIX_INPUT}" \
     --flare-input "${FLARE_INPUT}" \
