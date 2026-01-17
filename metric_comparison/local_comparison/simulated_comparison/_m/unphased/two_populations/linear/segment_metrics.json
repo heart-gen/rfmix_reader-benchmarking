@@ -1,7 +1,0 @@
-{
-    "mean_segment_accuracy": 0.030959219015849363,
-    "median_segment_accuracy": 0.03552479429269092,
-    "mean_tract_length_bp": 13883593.0,
-    "median_tract_length_bp": 4252986.0,
-    "n_segments": 3
-}
