@@ -39,8 +39,7 @@ REF_DIR="input/references/_m/two_populations/reference_zarr/1kGP_high_coverage_I
 python ../_h/02.phased_simulation.py \
        --rfmix-input "$RFMIX_DIR" --simu-input "$SIMU_DIR" \
        --sample-annot "$SAMPLE_ANNOT" --ref-input "$REF_DIR" \
-       --output "phased" --population "two" \
-       --chrom "$CHR"
+       --output "phased" --population "two" --chrom "$CHR"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
