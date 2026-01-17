@@ -1,40 +1,47 @@
 #!/bin/bash
-#SBATCH --partition=bluejay,shared
-#SBATCH --job-name=global_ancestry
+#SBATCH --partition=RM-shared
+#SBATCH --job-name=three_global
 #SBATCH --mail-type=FAIL
-#SBATCH --mail-user=jbenja13@jh.edu
-#SBATCH --nodes=1
-#SBATCH --cpus-per-task=2
-#SBATCH --mem=8gb
-#SBATCH --output=global-ancestry.%j.log
-#SBATCH --time=01:00:00
+#SBATCH --mail-user=kj.benjamin90@gmail.com
+#SBATCH --ntasks-per-node=64
+#SBATCH --time=04:00:00
+#SBATCH --output=logs/global-ancestry.three_pop.%j.log
 
-echo "**** Job starts ****"
-date
+log_message() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
+}
 
-echo "**** JHPCE info ****"
+log_message "**** Job starts ****"
+
+log_message "**** Bridges-2 info ****"
 echo "User: ${USER}"
 echo "Job id: ${SLURM_JOBID}"
 echo "Job name: ${SLURM_JOB_NAME}"
 echo "Node name: ${SLURM_NODENAME}"
 echo "Hostname: ${HOSTNAME}"
-echo "Task id: ${SLURM_ARRAY_TASK_ID}"
+echo "Task id: ${SLURM_ARRAY_TASK_ID:-N/A}"
 
-## List current modules for reproducibility
+module purge
+module load anaconda3/2024.10-1
 module list
 
-echo "**** Run global ancestry analysis ****"
+log_message "**** Loading conda environment ****"
+conda activate /ocean/projects/bio250020p/shared/opt/env/ml_dev
 
-SIM_INPUT=${SIM_INPUT:-"/path/to/simulation/input"}
-RFMIX_INPUT=${RFMIX_INPUT:-"/path/to/rfmix/input"}
-FLARE_INPUT=${FLARE_INPUT:-"/path/to/flare/input"}
-OUTPUT_DIR=${OUTPUT_DIR:-"./outputs/global_ancestry"}
+log_message "**** Run analysis ****"
+OUTPUT_DIR="results"
+SIMU_DIR="input/simulations/three_populations/_m/gt-files"
+RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
+FLARE_INPUT="input/simulations/three_populations/_m/flare-out"
 
-python ../_h/per_chrom_global_ancestry.py \
-    --simu-input "${SIM_INPUT}" \
-    --rfmix-input "${RFMIX_INPUT}" \
-    --flare-input "${FLARE_INPUT}" \
-    --output "${OUTPUT_DIR}"
+python ../_h/01.per_chrom_global_ancestry.py \
+    --simu-input "${SIM_INPUT}" --rfmix-input "${RFMIX_INPUT}" \
+    --flare-input "${FLARE_INPUT}" --output "${OUTPUT_DIR}" --population "three"
 
-echo "**** Job ends ****"
-date
+if [ $? -ne 0 ]; then
+    echo "Python script failed. Check the error logs."
+    exit 1
+fi
+
+conda deactivate
+log_message "Job finished at: $(date)"

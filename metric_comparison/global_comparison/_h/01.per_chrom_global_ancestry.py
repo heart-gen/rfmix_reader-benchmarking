@@ -1,22 +1,19 @@
-#!/usr/bin/env python3
-import argparse
 import logging
-from pathlib import Path
-
+import argparse
 import numpy as np
 import pandas as pd
+import session_info
 import seaborn as sns
 from scipy import stats
-
+from pyhere import here
+from pathlib import Path
 from rfmix_reader import read_simu, read_rfmix, read_flare
 
-
 COMPARISON_LABELS = {
-    "sim_vs_rfmix": "Simulation Comparison",
-    "sim_vs_flare": "Simulation Comparison",
+    "simu_vs_rfmix": "Simulation Comparison",
+    "simu_vs_flare": "Simulation Comparison",
     "rfmix_vs_flare": "LAI Comparison",
 }
-
 
 def configure_logging():
     logging.basicConfig(
@@ -33,6 +30,8 @@ def parse_args():
     parser.add_argument("--rfmix-input", type=Path, required=True)
     parser.add_argument("--flare-input", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=Path("./"))
+    parser.add_argument("--population", type=str, choices=["two", "three"],
+                        default="three")
     return parser.parse_args()
 
 
@@ -60,8 +59,7 @@ def choose_corr(x, y):
     if np.allclose(x, x[0]) or np.allclose(y, y[0]):
         return np.nan, np.nan
 
-    nx = len(x)
-    ny = len(y)
+    nx, ny = len(x), len(y)
     if nx < 8 or ny < 8:
         corr, p_val = stats.spearmanr(x, y)
         return corr, p_val
@@ -92,10 +90,8 @@ def tidy_g_anc(df, method):
 
 def compute_comparison_metrics(df_a, df_b, label_a, label_b, comparison_label):
     merged = df_a.merge(
-        df_b,
-        on=["sample_id", "chrom", "ancestry"],
-        how="inner",
-        suffixes=(f"_{label_a}", f"_{label_b}"),
+        df_b, on=["sample_id", "chrom", "ancestry"],
+        how="inner", suffixes=(f"_{label_a}", f"_{label_b}"),
     )
     results = []
     grouped = merged.groupby(["chrom", "ancestry"], dropna=False)
@@ -121,7 +117,8 @@ def compute_comparison_metrics(df_a, df_b, label_a, label_b, comparison_label):
 
 
 def add_identity_line(ax, data_min, data_max):
-    ax.plot([data_min, data_max], [data_min, data_max], linestyle="--", color="gray", linewidth=1)
+    ax.plot([data_min, data_max], [data_min, data_max],
+            linestyle="--", color="gray", linewidth=1)
 
 
 def plot_scatter_per_ancestry(df, output_dir):
@@ -136,10 +133,8 @@ def plot_scatter_per_ancestry(df, output_dir):
         left_df = df[df["method"] == left]
         right_df = df[df["method"] == right]
         merged = left_df.merge(
-            right_df,
-            on=["sample_id", "chrom", "ancestry"],
-            how="inner",
-            suffixes=("_x", "_y"),
+            right_df, on=["sample_id", "chrom", "ancestry"],
+            how="inner", suffixes=("_x", "_y"),
         )
         merged = merged.rename(columns={"g_anc_x": "x", "g_anc_y": "y"})
         merged.loc[:, "comparison"] = label
@@ -147,18 +142,13 @@ def plot_scatter_per_ancestry(df, output_dir):
     plot_df = pd.concat(frames, ignore_index=True)
 
     g = sns.FacetGrid(
-        plot_df,
-        row="ancestry",
-        col="comparison",
-        hue="chrom",
-        height=3.4,
-        aspect=1.1,
-        sharex=False,
-        sharey=False,
+        plot_df, row="ancestry", col="comparison", hue="chrom",
+        height=3.4, aspect=1.1, sharex=False, sharey=False,
         margin_titles=True,
     )
     g.map_dataframe(sns.scatterplot, x="x", y="y", alpha=0.6, s=18)
-    g.map_dataframe(sns.regplot, x="x", y="y", scatter=False, ci=95, color="black")
+    g.map_dataframe(sns.regplot, x="x", y="y", scatter=False,
+                    ci=95, color="black")
     for ax in g.axes.flat:
         data_min = min(ax.get_xlim()[0], ax.get_ylim()[0])
         data_max = max(ax.get_xlim()[1], ax.get_ylim()[1])
@@ -166,7 +156,7 @@ def plot_scatter_per_ancestry(df, output_dir):
         ax.set_xlabel("", fontweight="bold")
         ax.set_ylabel("", fontweight="bold")
     g.set_axis_labels("Global Ancestry (x)", "Global Ancestry (y)")
-    g.add_legend(title="Chrom", fontsize=10, title_fontsize=11)
+    g.add_legend(title="Chromosome", fontsize=11, title_fontsize=12)
 
     png_path = output_dir / "global_ancestry_scatter_by_ancestry.png"
     pdf_path = output_dir / "global_ancestry_scatter_by_ancestry.pdf"
@@ -186,10 +176,8 @@ def plot_scatter_by_comparison(df, output_dir):
         left_df = df[df["method"] == left]
         right_df = df[df["method"] == right]
         merged = left_df.merge(
-            right_df,
-            on=["sample_id", "chrom", "ancestry"],
-            how="inner",
-            suffixes=("_x", "_y"),
+            right_df, on=["sample_id", "chrom", "ancestry"],
+            how="inner", suffixes=("_x", "_y"),
         )
         merged = merged.rename(columns={"g_anc_x": "x", "g_anc_y": "y"})
         merged.loc[:, "comparison"] = label
@@ -197,16 +185,13 @@ def plot_scatter_by_comparison(df, output_dir):
     plot_df = pd.concat(frames, ignore_index=True)
 
     g = sns.FacetGrid(
-        plot_df,
-        col="comparison",
-        hue="ancestry",
-        height=4.0,
-        aspect=1.1,
-        sharex=False,
-        sharey=False,
+        plot_df, col="comparison", hue="ancestry", height=4.0,
+        aspect=1.1, sharex=False, sharey=False,
     )
-    g.map_dataframe(sns.scatterplot, x="x", y="y", alpha=0.6, s=20, style="ancestry")
-    g.map_dataframe(sns.regplot, x="x", y="y", scatter=False, ci=95, color="black")
+    g.map_dataframe(sns.scatterplot, x="x", y="y", alpha=0.6,
+                    s=20, style="ancestry")
+    g.map_dataframe(sns.regplot, x="x", y="y", scatter=False,
+                    ci=95, color="black")
     for ax in g.axes.flat:
         data_min = min(ax.get_xlim()[0], ax.get_ylim()[0])
         data_max = max(ax.get_xlim()[1], ax.get_ylim()[1])
@@ -226,40 +211,24 @@ def plot_boxplots(summary_df, output_dir):
     sns.set_theme(style="whitegrid", context="talk")
     plot_df = summary_df.copy()
     plot_df = plot_df.rename(
-        columns={
-            "comparison": "Comparison",
-            "ancestry": "Ancestry",
-        }
+        columns={"comparison": "Comparison", "ancestry": "Ancestry"}
     )
     plot_df = plot_df.melt(
-        id_vars=["Comparison", "Ancestry"],
-        value_vars=["r2", "bias"],
-        var_name="Metric",
-        value_name="Value",
+        id_vars=["Comparison", "Ancestry"], value_vars=["r2", "bias"],
+        var_name="Metric", value_name="Value",
     )
 
     g = sns.catplot(
-        data=plot_df,
-        x="Comparison",
-        y="Value",
-        hue="Ancestry",
-        col="Metric",
-        kind="box",
-        sharey=False,
-        height=4.0,
+        data=plot_df, x="Comparison", y="Value", hue="Ancestry",
+        col="Metric", kind="box", sharey=False, height=4.0,
         aspect=1.1,
     )
 
     for ax in g.axes.flat:
         sns.stripplot(
             data=plot_df[plot_df["Metric"] == ax.get_title().split(" = ")[-1]],
-            x="Comparison",
-            y="Value",
-            hue="Ancestry",
-            dodge=True,
-            alpha=0.6,
-            size=4,
-            ax=ax,
+            x="Comparison", y="Value", hue="Ancestry", dodge=True,
+            alpha=0.6, size=4, ax=ax,
         )
         ax.set_xlabel("", fontweight="bold")
         ax.set_ylabel("", fontweight="bold")
@@ -277,86 +246,80 @@ def plot_boxplots(summary_df, output_dir):
 def main():
     configure_logging()
     args = parse_args()
-    output_dir = args.output
-    output_dir.mkdir(parents=True, exist_ok=True)
+
+    pop_dir = args.output / f"{args.population}_populations"
+    pop_dir.mkdir(parents=True, exist_ok=True)
 
     logging.info("Loading global ancestry tables.")
-    _, g_anc_sim, _ = read_simu(args.simu_input)
-    _, g_anc_rfmix, _ = read_rfmix(args.rfmix_input)
-    _, g_anc_flare, _ = read_flare(args.flare_input)
+    binary_path = args.rfmix_input / "binary_files"
+    _, g_anc_rfmix, _ = read_rfmix(here(args.rfmix_input), binary_dir=here(binary_path))
+    _, g_anc_flare, _ = read_flare(here(args.flare_input))
+    _, g_anc_simu, _ = read_simu(here(args.simu_input))
 
-    g_anc_sim = sort_g_anc(g_anc_sim)
+    g_anc_simu = sort_g_anc(g_anc_simu)
     g_anc_rfmix = sort_g_anc(g_anc_rfmix)
     g_anc_flare = sort_g_anc(g_anc_flare)
     logging.info(
-        "Loaded shapes - sim: %s, rfmix: %s, flare: %s",
-        g_anc_sim.shape,
-        g_anc_rfmix.shape,
-        g_anc_flare.shape,
+        "Loaded shapes - simu: %s, rfmix: %s, flare: %s",
+        g_anc_simu.shape, g_anc_rfmix.shape, g_anc_flare.shape,
     )
 
-    sim_cols = set(g_anc_sim.columns)
+    simu_cols = set(g_anc_simu.columns)
     rfmix_cols = set(g_anc_rfmix.columns)
     flare_cols = set(g_anc_flare.columns)
 
-    if sim_cols != rfmix_cols or sim_cols != flare_cols:
+    if simu_cols != rfmix_cols or simu_cols != flare_cols:
         raise ValueError("Input g_anc columns do not match across sources.")
 
-    if g_anc_sim.shape != g_anc_rfmix.shape or g_anc_sim.shape != g_anc_flare.shape:
+    if g_anc_simu.shape != g_anc_rfmix.shape or g_anc_simu.shape != g_anc_flare.shape:
         raise ValueError("Input g_anc shapes do not match across sources.")
 
     logging.info("Reshaping global ancestry tables to tidy format.")
     tidy = pd.concat(
         [
-            tidy_g_anc(g_anc_sim, "sim"),
+            tidy_g_anc(g_anc_simu, "simu"),
             tidy_g_anc(g_anc_rfmix, "rfmix"),
             tidy_g_anc(g_anc_flare, "flare"),
         ],
         ignore_index=True,
     )
 
-    sim_df = tidy[tidy["method"] == "sim"].rename(columns={"g_anc": "g_anc_sim"})
+    simu_df = tidy[tidy["method"] == "simu"].rename(columns={"g_anc": "g_anc_simu"})
     rfmix_df = tidy[tidy["method"] == "rfmix"].rename(columns={"g_anc": "g_anc_rfmix"})
     flare_df = tidy[tidy["method"] == "flare"].rename(columns={"g_anc": "g_anc_flare"})
 
     logging.info("Computing per-chromosome metrics for simulation comparisons.")
-    sim_vs_rfmix = compute_comparison_metrics(
-        rfmix_df,
-        sim_df,
-        "rfmix",
-        "sim",
-        COMPARISON_LABELS["sim_vs_rfmix"],
+    simu_vs_rfmix = compute_comparison_metrics(
+        rfmix_df, simu_df, "rfmix", "simu",
+        COMPARISON_LABELS["simu_vs_rfmix"],
     )
-    sim_vs_flare = compute_comparison_metrics(
-        flare_df,
-        sim_df,
-        "flare",
-        "sim",
-        COMPARISON_LABELS["sim_vs_flare"],
+    simu_vs_flare = compute_comparison_metrics(
+        flare_df, simu_df, "flare", "simu",
+        COMPARISON_LABELS["simu_vs_flare"],
     )
     logging.info("Computing per-chromosome metrics for LAI comparison.")
     rfmix_vs_flare = compute_comparison_metrics(
-        rfmix_df,
-        flare_df,
-        "rfmix",
-        "flare",
+        rfmix_df, flare_df, "rfmix", "flare",
         COMPARISON_LABELS["rfmix_vs_flare"],
     )
 
     summary_df = pd.concat(
-        [sim_vs_rfmix, sim_vs_flare, rfmix_vs_flare],
+        [simu_vs_rfmix, simu_vs_flare, rfmix_vs_flare],
         ignore_index=True,
     )
 
-    summary_path = output_dir / "global_ancestry_metrics_per_chrom.tsv"
+    summary_path = pop_dir / "global_ancestry_metrics_per_chrom.tsv"
     summary_df.to_csv(summary_path, sep="\t", index=False)
     logging.info("Wrote summary metrics to %s", summary_path)
 
     logging.info("Generating scatter and boxplot figures.")
-    plot_scatter_per_ancestry(tidy, output_dir)
-    plot_scatter_by_comparison(tidy, output_dir)
-    plot_boxplots(summary_df, output_dir)
-    logging.info("Saved plots to %s", output_dir)
+    plot_scatter_per_ancestry(tidy, pop_dir)
+    plot_scatter_by_comparison(tidy, pop_dir)
+    plot_boxplots(summary_df, pop_dir)
+    logging.info("Saved plots to %s", pop_dir)
+
+    # Session information
+    session_info.show()
 
 
 if __name__ == "__main__":
