@@ -27,7 +27,7 @@ module load anaconda3/2024.10-1
 module list
 
 log_message "**** Loading conda environment ****"
-conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
+conda activate /ocean/projects/bio250020p/shared/opt/env/ml_dev
 
 log_message "**** Run analysis ****"
 CHR=${SLURM_ARRAY_TASK_ID}
