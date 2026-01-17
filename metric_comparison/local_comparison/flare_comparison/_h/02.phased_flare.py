@@ -1,7 +1,6 @@
-import json
 import logging
 import argparse
-import time
+import time, json
 import numpy as np
 import pandas as pd
 import session_info
@@ -50,15 +49,13 @@ def standardize_variant_columns(df):
 def impute_data(loci_df, variants, admix, zarr_path, method):
     if hasattr(loci_df, "to_pandas"):
         loci_df = loci_df.to_pandas()
+
     variant_df = variants.merge(loci_df, on=["chrom", "pos"], how="outer")
     variant_df = variant_df.loc[:, ["chrom", "pos", "i"]]
     start = time.time()
     admix = interpolate_array(
-        variant_df,
-        admix,
-        zarr_outdir=zarr_path,
-        interpolation=method,
-        use_bp_positions=True,
+        variant_df, admix, zarr_outdir=zarr_path,
+        interpolation=method, use_bp_positions=True,
     )
     runtime_sec = time.time() - start
     return variant_df, admix, runtime_sec
@@ -135,13 +132,8 @@ def metrics_from_confusion(cm):
 
 
 def compute_locus_metrics(
-    true_anc,
-    inferred_anc,
-    labels,
-    method,
-    outfile,
-    chromosome,
-    interpolation_runtime_sec,
+    true_anc, inferred_anc, labels, method, outfile,
+    chromosome, interpolation_runtime_sec,
 ):
     t_hard = to_hard_calls(true_anc)
     p_hard = to_hard_calls(inferred_anc)
@@ -155,17 +147,13 @@ def compute_locus_metrics(
     }
 
     metrics = {
-        "method": method,
-        "labels": labels,
-        "overall_accuracy": float(acc),
-        "confusion_matrix": cm.tolist(),
+        "method": method, "labels": labels,
+        "overall_accuracy": float(acc), "confusion_matrix": cm.tolist(),
         "precision": {labels[i]: float(v) for i, v in enumerate(precision)},
         "recall": {labels[i]: float(v) for i, v in enumerate(recall)},
         "f1": {labels[i]: float(v) for i, v in enumerate(f1)},
-        "mcc": float(mcc),
-        "shape": list(map(int, true_anc.shape)),
-        "per_ancestry_accuracy": per_ancestry_accuracy,
-        "chromosome": chromosome,
+        "mcc": float(mcc), "shape": list(map(int, true_anc.shape)),
+        "per_ancestry_accuracy": per_ancestry_accuracy, "chromosome": chromosome,
         "interpolation_runtime_sec": float(interpolation_runtime_sec),
     }
     with open(outfile, "w") as f:
@@ -234,8 +222,7 @@ def segment_metrics(true_anc, inferred_anc, positions, outfile, chromosome):
         "median_segment_accuracy": float(np.median(seg_acc)),
         "mean_tract_length_bp": float(np.mean(seg_len)),
         "median_tract_length_bp": float(np.median(seg_len)),
-        "n_segments": len(segments),
-        "chromosome": chromosome,
+        "n_segments": len(segments), "chromosome": chromosome,
     }
     with open(outfile, "w") as f:
         json.dump(metrics, f, indent=4)
@@ -343,40 +330,27 @@ def main():
 
             logging.info(f"[{method.upper()}] Computing locus-level metrics")
             compute_locus_metrics(
-                true_anc,
-                inferred,
-                labels,
-                method,
+                true_anc, inferred, labels, method,
                 method_path / "locus_metrics.json",
-                chrom,
-                interpolation_runtime_sec,
+                chrom, interpolation_runtime_sec,
             )
 
             logging.info(f"[{method.upper()}] Computing breakpoint distance error")
             bins = [0, 1_000, 5_000, 10_000, 50_000, 100_000, np.inf]
             breakpoint_error_analysis(
-                true_anc,
-                inferred,
-                positions,
-                bins,
+                true_anc, inferred, positions, bins,
                 method_path / "breakpoint_error.tsv",
             )
 
             logging.info(f"[{method.upper()}] Computing segment-level metrics")
             segment_metrics(
-                true_anc,
-                inferred,
-                positions,
-                method_path / "segment_metrics.json",
-                chrom,
+                true_anc, inferred, positions,
+                method_path / "segment_metrics.json", chrom,
             )
 
             logging.info(f"[{method.upper()}] Computing switch error rate")
             switch_error_rate(
-                true_anc,
-                inferred,
-                method_path / "switch_error_rate.json",
-                chrom,
+                true_anc, inferred, method_path / "switch_error_rate.json", chrom,
             )
 
     # Session information

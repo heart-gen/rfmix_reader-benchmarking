@@ -27,7 +27,7 @@ module load anaconda3/2024.10-1
 module list
 
 log_message "**** Loading conda environment ****"
-conda activate /ocean/projects/bio250020p/shared/opt/env/ai_env
+conda activate /ocean/projects/bio250020p/shared/opt/env/ml_dev
 
 log_message "**** Run analysis ****"
 CHR=${SLURM_ARRAY_TASK_ID}
@@ -39,8 +39,7 @@ REF_DIR="input/references/_m/three_populations/reference_zarr/1kGP.chr${CHR}.fil
 python ../_h/02.phased_flare.py \
        --rfmix-input "$RFMIX_DIR" --flare-input "$FLARE_DIR" \
        --sample-annot "$SAMPLE_ANNOT" --ref-input "$REF_DIR" \
-       --output "phased" --population "three" \
-       --chrom "$CHR"
+       --output "phased" --population "three" --chrom "$CHR"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
