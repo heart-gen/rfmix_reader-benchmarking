@@ -32,11 +32,11 @@ log_message "**** Run analysis ****"
 OUTPUT_DIR="unphased"
 SIMU_DIR="input/simulations/three_populations/_m/gt-files"
 RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
-FLARE_INPUT="input/simulations/three_populations/_m/flare-out"
+FLARE_DIR="input/simulations/three_populations/_m/flare-out"
 
 python ../_h/01.unphased_global_ancestry.py \
-    --simu-input "${SIM_INPUT}" --rfmix-input "${RFMIX_INPUT}" \
-    --flare-input "${FLARE_INPUT}" --output "${OUTPUT_DIR}" --population "three"
+    --simu-input "${SIMU_DIR}" --rfmix-input "${RFMIX_DIR}" \
+    --flare-input "${FLARE_DIR}" --output "${OUTPUT_DIR}" --population "three"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
