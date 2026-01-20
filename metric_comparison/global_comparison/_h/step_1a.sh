@@ -3,7 +3,7 @@
 #SBATCH --job-name=three_global
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --ntasks-per-node=32
+#SBATCH --ntasks-per-node=48
 #SBATCH --time=04:00:00
 #SBATCH --output=logs/global-ancestry.three_pop.%j.log
 
@@ -34,7 +34,7 @@ SIMU_DIR="input/simulations/three_populations/_m/gt-files"
 RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
 FLARE_INPUT="input/simulations/three_populations/_m/flare-out"
 
-python ../_h/01.per_chrom_global_ancestry.py \
+python ../_h/01.unphased_global_ancestry.py \
     --simu-input "${SIM_INPUT}" --rfmix-input "${RFMIX_INPUT}" \
     --flare-input "${FLARE_INPUT}" --output "${OUTPUT_DIR}" --population "three"
 
