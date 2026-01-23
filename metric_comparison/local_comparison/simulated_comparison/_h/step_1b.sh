@@ -3,7 +3,7 @@
 #SBATCH --job-name=unphased_metrics_two_pop
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --ntasks-per-node=64
+#SBATCH --ntasks-per-node=8
 #SBATCH --time=02:00:00
 #SBATCH --array=1-22
 #SBATCH --output=logs/unphased_metrics.two_pop.%A_%a.log
