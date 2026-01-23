@@ -62,7 +62,6 @@ def collect_metrics(metrics_root: Path):
                     continue
 
                 method = method_dir.name
-                interpolation_method = normalize_method(method)
                 metrics_dirs = []
                 if (method_dir / "locus_metrics.json").exists():
                     metrics_dirs.append(method_dir)
@@ -80,7 +79,6 @@ def collect_metrics(metrics_root: Path):
                         "phase": phase,
                         "population": population,
                         "method": method,
-                        "interpolation_method": interpolation_method,
                     }
 
                     if locus_metrics:
@@ -130,11 +128,8 @@ def collect_metrics(metrics_root: Path):
                         breakpoint_df.insert(0, "phase", phase)
                         breakpoint_df.insert(1, "population", population)
                         breakpoint_df.insert(2, "method", method)
-                        breakpoint_df.insert(
-                            3, "interpolation_method", interpolation_method
-                        )
                         if "chromosome" in row:
-                            breakpoint_df.insert(4, "chromosome", row["chromosome"])
+                            breakpoint_df.insert(3, "chromosome", row["chromosome"])
                         breakpoint_rows.append(breakpoint_df)
                     else:
                         logging.warning("Missing breakpoint error file: %s", breakpoint_path)
@@ -148,7 +143,7 @@ def main():
 
     # Parameter setup
     metrics_root = args.metrics_root.resolve()
-    output_dir = args.output.resolve()
+    output_dir = metrics_root / args.output
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Collect data
@@ -156,7 +151,7 @@ def main():
     if summary_rows:
         summary_df = pd.DataFrame(summary_rows)
         summary_df.sort_values(
-            ["phase", "population", "interpolation_method"], inplace=True
+            ["phase", "population", "method"], inplace=True
         )
         summary_df.to_csv(output_dir / "summary_metrics.csv", index=False)
         logging.info("Wrote summary metrics to %s", output_dir / "summary_metrics.csv")
