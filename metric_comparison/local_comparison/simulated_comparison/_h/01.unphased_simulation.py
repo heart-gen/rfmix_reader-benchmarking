@@ -263,6 +263,16 @@ def main():
         loci_gt, g_anc_gt, admix_gt = read_simu(here(args.simu_input), chrom=chrom)
         labels   = list(g_anc_gt.drop(["sample_id", "chrom"], axis=1).columns)
         loci_gt  = standardize_variant_columns(loci_gt)
+
+        # Ensure loci_gt and admix_gt have matching lengths before filtering
+        n_loci = len(loci_gt)
+        n_admix = admix_gt.shape[0]
+        if n_loci != n_admix:
+            logging.warning(f"Length mismatch: loci_gt={n_loci}, admix_gt={n_admix}. Truncating to minimum.")
+            min_len = min(n_loci, n_admix)
+            loci_gt = loci_gt.iloc[:min_len]
+            admix_gt = admix_gt[:min_len]
+
         dup_mask = ~loci_gt.duplicated(subset=["chrom", "pos"])
         loci_gt  = loci_gt.loc[dup_mask].reset_index(drop=True)
         loci_gt  = loci_gt.reset_index(names="_gt_pos")
