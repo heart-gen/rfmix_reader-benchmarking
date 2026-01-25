@@ -3,7 +3,7 @@
 #SBATCH --job-name=three_global
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --ntasks-per-node=48
+#SBATCH --ntasks-per-node=28
 #SBATCH --time=04:00:00
 #SBATCH --output=logs/global-ancestry.three_pop.%j.log
 
@@ -29,12 +29,12 @@ log_message "**** Loading conda environment ****"
 conda activate /ocean/projects/bio250020p/shared/opt/env/ml_dev
 
 log_message "**** Run analysis ****"
-OUTPUT_DIR="unphased"
+OUTPUT_DIR="results"
 SIMU_DIR="input/simulations/three_populations/_m/gt-files"
 RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
 FLARE_DIR="input/simulations/three_populations/_m/flare-out"
 
-python ../_h/01.unphased_global_ancestry.py \
+python ../_h/01.global_ancestry.py \
     --simu-input "${SIMU_DIR}" --rfmix-input "${RFMIX_DIR}" \
     --flare-input "${FLARE_DIR}" --output "${OUTPUT_DIR}" --population "three"
 
