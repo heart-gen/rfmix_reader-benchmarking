@@ -3,7 +3,6 @@ import argparse
 import numpy as np
 import pandas as pd
 import session_info
-import seaborn as sns
 from scipy import stats
 from pyhere import here
 from pathlib import Path
@@ -473,16 +472,6 @@ def main():
 
     summary_df.to_csv(summary_path, sep="\t", index=False)
     logging.info("Wrote summary metrics to %s", summary_path)
-
-    # Only generate plots when processing all chromosomes
-    if not single_chrom:
-        logging.info("Generating scatter and boxplot figures.")
-        plot_scatter_per_ancestry(tidy, pop_dir)
-        plot_scatter_by_comparison(tidy, pop_dir)
-        plot_boxplots(summary_df, pop_dir)
-        logging.info("Saved plots to %s", pop_dir)
-    else:
-        logging.info("Skipping plots for single chromosome. Run combine script after all chromosomes complete.")
 
     # Session information
     session_info.show()
