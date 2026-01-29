@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --partition=RM-shared
-#SBATCH --job-name=phased_metrics_three_pop
+#SBATCH --job-name=phased_metrics_two_pop
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
 #SBATCH --ntasks-per-node=32
-#SBATCH --time=08:00:00
+#SBATCH --time=12:00:00
 #SBATCH --array=5-22
-#SBATCH --output=logs/phased_metrics.three_pop.%A_%a.log
+#SBATCH --output=logs/phased_metrics.two_pop.%A_%a.log
 
 log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
@@ -31,15 +31,15 @@ conda activate /ocean/projects/bio250020p/shared/opt/env/ml_dev
 
 log_message "**** Run analysis ****"
 CHR=${SLURM_ARRAY_TASK_ID}
-SIMU_DIR="input/simulations/three_populations/_m/gt-files"
-RFMIX_DIR="input/simulations/three_populations/_m/rfmix-files"
-SAMPLE_ANNOT="input/references/_m/three_populations/reference_zarr/samples_id2"
-REF_DIR="input/references/_m/three_populations/reference_zarr/1kGP.chr${CHR}.filtered.snpsOnly.afr_washington.zarr"
+SIMU_DIR="input/simulations/two_populations/_m/gt-files"
+RFMIX_DIR="input/simulations/two_populations/_m/rfmix-out"
+SAMPLE_ANNOT="input/references/_m/two_populations/reference_zarr/samples_id2"
+REF_DIR="input/references/_m/two_populations/reference_zarr/1kGP_high_coverage_Illumina.chr${CHR}.filtered.SNV_INDEL_SV_phased_panel.zarr"
 
 python ../_h/02.phased_simulation.py \
        --rfmix-input "$RFMIX_DIR" --simu-input "$SIMU_DIR" \
        --sample-annot "$SAMPLE_ANNOT" --ref-input "$REF_DIR" \
-       --output "phased" --population "three" --chrom "$CHR"
+       --output "phased" --population "two" --chrom "$CHR"
 
 if [ $? -ne 0 ]; then
     echo "Python script failed. Check the error logs."
