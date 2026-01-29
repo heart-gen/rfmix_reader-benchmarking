@@ -126,7 +126,7 @@ def main():
     binary_path = args.rfmix_input / "binary_files"
     _, g_anc_rfmix, _ = read_rfmix(here(args.rfmix_input), binary_dir=here(binary_path))
     _, g_anc_flare, _ = read_flare(here(args.flare_input))
-    _, g_anc_simu, _ = read_simu(here(args.simu_input))
+    _, g_anc_simu, _  = read_simu(here(args.simu_input))
 
     logging.info(
         "Loaded shapes - simu: %s, rfmix: %s, flare: %s",

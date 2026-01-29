@@ -35,7 +35,7 @@ RFMIX_DIR="input/simulations/two_populations/_m/rfmix-out"
 FLARE_INPUT="input/simulations/two_populations/_m/flare-out"
 
 python ../_h/01.global_ancestry.py \
-    --simu-input "${SIM_INPUT}" --rfmix-input "${RFMIX_INPUT}" \
+    --simu-input "${SIMU_DIR}" --rfmix-input "${RFMIX_DIR}" \
     --flare-input "${FLARE_INPUT}" --output "${OUTPUT_DIR}" --population "two"
 
 if [ $? -ne 0 ]; then
