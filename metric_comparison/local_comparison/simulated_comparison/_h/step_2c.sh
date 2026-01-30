@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --partition=RM-shared
+#SBATCH --partition=EM
 #SBATCH --job-name=phased_metrics_two_pop
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --ntasks-per-node=32
-#SBATCH --time=12:00:00
-#SBATCH --array=5-22
+#SBATCH --ntasks-per-node=24
+#SBATCH --time=08:00:00
+#SBATCH --array=1-22
 #SBATCH --output=logs/phased_metrics.two_pop.%A_%a.log
 
 log_message() {

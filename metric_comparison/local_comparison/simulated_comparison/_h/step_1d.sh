@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --partition=RM-shared
+#SBATCH --partition=EM
 #SBATCH --job-name=unphased_metrics_two_pop
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --ntasks-per-node=48
-#SBATCH --time=12:00:00
+#SBATCH --ntasks-per-node=24
+#SBATCH --time=08:00:00
 #SBATCH --array=1-4
 #SBATCH --output=logs/unphased_metrics.two_pop.%A_%a.log
 
