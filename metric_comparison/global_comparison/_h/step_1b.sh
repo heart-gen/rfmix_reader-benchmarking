@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --partition=RM-shared
+#SBATCH --partition=RM-512
 #SBATCH --job-name=two_global
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --ntasks-per-node=40
-#SBATCH --time=08:00:00
+#SBATCH --ntasks-per-node=128
+#SBATCH --time=12:00:00
 #SBATCH --output=logs/global-ancestry.two_pop.%j.log
 
 log_message() {

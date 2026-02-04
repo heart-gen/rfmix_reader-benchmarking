@@ -14,6 +14,11 @@ COMPARISON_LABELS = {
     "rfmix_vs_flare": "LAI Comparison",
 }
 
+EXPECTED_ANCESTRIES = {
+    "two":   ["AFR", "EUR"],
+    "three": ["CEU", "PUR", "YRI"],
+}
+
 def configure_logging():
     logging.basicConfig(
         level=logging.INFO,
@@ -42,6 +47,32 @@ def ancestry_columns(df):
     return [c for c in df.columns if c not in {"sample_id", "chrom"}]
 
 
+def validate_and_fix_g_anc(df, method, population):
+    base_cols = ["sample_id", "chrom"]
+    anc_cols = [c for c in df.columns if c not in base_cols]
+    expected = EXPECTED_ANCESTRIES[population]
+    logging.info("[%s] detected ancestry columns: %s", method, anc_cols)
+
+    if anc_cols == expected:
+        logging.info("[%s] ancestry schema OK", method)
+        return df
+
+    if set(anc_cols) == set(expected):
+        logging.warning(
+            "[%s] ancestry column order mismatch; reordering\n"
+            "  detected: %s\n"
+            "  expected: %s",
+            method, anc_cols, expected,
+        )
+        return df[base_cols + expected]
+    raise RuntimeError(
+        f"[{method}] ancestry schema mismatch\n"
+        f"  detected columns: {anc_cols}\n"
+        f"  expected columns: {expected}\n"
+        f"  full df columns:  {list(df.columns)}"
+    )
+
+    
 def r2_score(y_true, y_pred):
     y_true = np.asarray(y_true)
     y_pred = np.asarray(y_pred)
@@ -125,20 +156,18 @@ def main():
     logging.info("Loading global ancestry tables.")
     binary_path = args.rfmix_input / "binary_files"
     _, g_anc_rfmix, _ = read_rfmix(here(args.rfmix_input), binary_dir=here(binary_path))
+    g_anc_rfmix = validate_and_fix_g_anc(g_anc_rfmix, "rfmix", args.population)
+
     _, g_anc_flare, _ = read_flare(here(args.flare_input))
+    g_anc_flare = validate_and_fix_g_anc(g_anc_flare, "flare", args.population)
+
     _, g_anc_simu, _  = read_simu(here(args.simu_input))
+    g_anc_simu  = validate_and_fix_g_anc(g_anc_simu,  "simu", args.population)
 
     logging.info(
         "Loaded shapes - simu: %s, rfmix: %s, flare: %s",
         g_anc_simu.shape, g_anc_rfmix.shape, g_anc_flare.shape,
     )
-
-    simu_cols = set(g_anc_simu.columns)
-    rfmix_cols = set(g_anc_rfmix.columns)
-    flare_cols = set(g_anc_flare.columns)
-
-    if simu_cols != rfmix_cols or simu_cols != flare_cols:
-        raise ValueError("Input g_anc columns do not match across sources.")
 
     if g_anc_simu.shape != g_anc_rfmix.shape or g_anc_simu.shape != g_anc_flare.shape:
         raise ValueError("Input g_anc shapes do not match across sources.")

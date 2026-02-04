@@ -3,7 +3,7 @@
 #SBATCH --job-name=three_global
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=kj.benjamin90@gmail.com
-#SBATCH --ntasks-per-node=28
+#SBATCH --ntasks-per-node=48
 #SBATCH --time=04:00:00
 #SBATCH --output=logs/global-ancestry.three_pop.%j.log
 
