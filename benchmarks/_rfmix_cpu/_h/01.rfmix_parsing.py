@@ -4,7 +4,7 @@ import os, logging, rmm
 import argparse, platform
 import psutil, time, json, random
 import rmm.statistics as rmm_stats
-from rfmix_reader import read_rfmix
+from rfmix_reader import read_rfmix_fb
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -106,7 +106,7 @@ def is_oom_error(e: BaseException) -> tuple[bool, str]:
 
 
 def load_data(prefix_path, binary_dir, BINARIES):
-    loci, g_anc, admix = read_rfmix(
+    loci, g_anc, admix = read_rfmix_fb(
         prefix_path, binary_dir=binary_dir, generate_binary=BINARIES
     )
     admix = admix.compute()

@@ -38,12 +38,14 @@ def clean_parser(row: pd.Series) -> str:
     """Normalize parser names."""
     p_raw = str(row.get("parser", "")).lower()
     extras_raw = str(row.get("extras", "")).lower()
+    input_format = str(row.get("input_format", "")).lower()
 
     if "rfmix_reader" in p_raw:
+        if input_format == "msp":
+            return "rfmix-reader [msp]"
         if extras_raw == "binaries":
-            return "rfmix-reader [binaries]"
-        else:
-            return "rfmix-reader [no-binaries]"
+            return "rfmix-reader [legacy fb binaries]"
+        return "rfmix-reader [legacy fb no-binaries]"
 
     if "flare" in p_raw:
         return "rfmix-reader [flare]"
@@ -56,7 +58,7 @@ def add_missing_replicates(df: pd.DataFrame) -> pd.DataFrame:
 
     # Define the expected combinations
     all_reps = pd.DataFrame({"replicate": [1, 2, 3, 4, 5]})
-    group_keys = ["parser", "task", "population_model"]
+    group_keys = ["parser", "task", "population_model", "input_format", "operation"]
     
     # Create a full index of all group x replicate combinations
     full_index = (
@@ -84,6 +86,16 @@ def load_and_clean_metadata(path: str | Path) -> pd.DataFrame:
     if missing:
         raise ValueError(f"Missing required columns in metadata: {missing}")
 
+    if "input_format" not in df.columns:
+        df["input_format"] = ""
+    if "operation" not in df.columns:
+        df["operation"] = "legacy_dense_read"
+    df.loc[df["input_format"].isna(), "input_format"] = ""
+    df.loc[df["operation"].isna(), "operation"] = "legacy_dense_read"
+
+    legacy_rfmix = df["parser"].astype(str).str.contains("rfmix_reader", case=False, na=False) & df["input_format"].eq("")
+    df.loc[legacy_rfmix, "input_format"] = "fb"
+
     # Infer backend (CPU/GPU)
     df["backend"] = df.apply(infer_backend, axis=1)
 
@@ -101,7 +113,7 @@ def load_and_clean_metadata(path: str | Path) -> pd.DataFrame:
 
 def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
     """Summarize by parser_clean, backend, task, and population_model."""
-    group_cols = ["parser_clean", "backend", "task", "population_model"]
+    group_cols = ["parser_clean", "backend", "input_format", "operation", "task", "population_model"]
 
     def summary_stats(series: pd.Series):
         """Return (median, mean, q1, q3, iqr) after dropping NaNs; all NaN if no data."""
@@ -117,7 +129,7 @@ def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
 
     records = []
     for key, gdf in df.groupby(group_cols):
-        parser_clean, backend, task, pop_model = key
+        parser_clean, backend, input_format, operation, task, pop_model = key
 
         # Logged counts
         n_logged = len(gdf)
@@ -166,6 +178,7 @@ def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
 
         rec = {
             "parser_clean": parser_clean, "backend": backend,
+            "input_format": input_format, "operation": operation,
             "task": task, "population_model": pop_model,
 
             # logged counts
@@ -199,7 +212,7 @@ def summarize(df: pd.DataFrame, expected_reps: int = 5) -> pd.DataFrame:
 
     summary = pd.DataFrame.from_records(records)
     summary = summary.sort_values(
-        ["parser_clean", "population_model", "task", "backend"]
+        ["parser_clean", "input_format", "operation", "population_model", "task", "backend"]
     )
     return summary
 

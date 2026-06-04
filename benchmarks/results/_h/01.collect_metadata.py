@@ -28,10 +28,12 @@ def collect_general_metrics(rootdir: str, outfile: str):
             except (ValueError, IndexError):
                 framework, pop_model, backend, task = "", "", "", ""
 
-            # Attach new fields
+            # Attach fields inferred from the historical directory layout.
             meta["framework"] = framework # should match parser
             meta["population_model"] = pop_model
             meta["extras"] = backend
+            meta.setdefault("input_format", "fb" if framework == "rfmix_cpu" or framework == "rfmix_gpu" else "")
+            meta.setdefault("operation", "legacy_dense_read")
 
             rows.append(meta)
 
